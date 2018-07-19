@@ -14,3 +14,8 @@
 Auth::routes();
 Route::get('/', 'IndexController@index')->name("index");
 Route::get('/home', 'HomeController@index')->name('home');
+
+# Map selector routes
+Route::prefix('map')->group(function (){
+  Route::get('/', 'MapController@index')->name("map.index");
+});
