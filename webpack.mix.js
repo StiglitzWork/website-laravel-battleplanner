@@ -11,19 +11,24 @@ let mix = require('laravel-mix');
  |
  */
 
- // Main
- mix.js('resources/assets/js/app.js', 'public/js')
+// Main
+mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css')
     .copy('resources/assets/js/global/*', 'public/js/global')
     .copy('resources/assets/media/*', 'public/media')
+    .copy('resources/assets/media/thumbs/*', 'public/media/thumbs')
+    .copy('resources/assets/media/maps/*', 'public/media/maps')
+    .copy('resources/assets/media/ops/*', 'public/media/ops')
+    .copy('resources/assets/media/tools/atk/*', 'public/media/tools/atk')
+    .copy('resources/assets/media/tools/def/*', 'public/media/tools/def')
     .copy('resources/assets/sass/global/*', 'public/css/global');
 
 // Index
 mix.copy('resources/assets/js/index/*', 'public/js/index')
-   .copy('resources/assets/sass/index/*', 'public/css/index');
+    .copy('resources/assets/sass/index/*', 'public/css/index');
 
 // Auth
 mix.copy('resources/assets/js/login/*', 'public/js/login')
-  .copy('resources/assets/sass/login/*', 'public/css/login')
-  .copy('resources/assets/js/register/*', 'public/js/register')
-  .copy('resources/assets/sass/register/*', 'public/css/register');
+    .copy('resources/assets/sass/login/*', 'public/css/login')
+    .copy('resources/assets/js/register/*', 'public/js/register')
+    .copy('resources/assets/sass/register/*', 'public/css/register');

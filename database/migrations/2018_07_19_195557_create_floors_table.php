@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMapsTable extends Migration
+class CreateFloorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateMapsTable extends Migration
      */
     public function up()
     {
-        Schema::create('maps', function (Blueprint $table) {
+        Schema::create('floors', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('name');
-            $table->text('thumbsrc');
-            $table->boolean('comp');
+            $table->text('map');
+            $table->text('src');
+            $table->integer('floorNum');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateMapsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('maps');
+        Schema::dropIfExists('floors');
     }
 }

@@ -16,6 +16,7 @@ Route::get('/', 'IndexController@index')->name("index");
 Route::get('/home', 'HomeController@index')->name('home');
 
 # Map selector routes
-Route::prefix('map')->group(function (){
-  Route::get('/', 'MapController@index')->name("map.index");
+Route::prefix('maps')->group(function (){
+  Route::get('/', 'MapController@index')->name("maps.index");
+  Route::get('/{map}', 'MapController@show');
 });

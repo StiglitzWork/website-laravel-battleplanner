@@ -21,7 +21,7 @@
           </div>
           <div class="col-lg-8 mx-auto">
             <p class="text-faded mb-5">Make the difference</p>
-            <a class="btn btn-primary btn-xl js-scroll-trigger" href="/map">Map Planner</a>
+            <a class="btn btn-primary btn-xl js-scroll-trigger" href="/maps">Map Planner</a>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
             <p class="text-faded mb-4">Don't get caught in the action without your game plan.</p>
             <p class="text-faded mb-4">All Rights to Rainbow 6: Siege are property of Ubisoft. This is a non-profit, fan made website.</p>
             <p class="text-faded mb-4">For more information contact erik.aaron.smith@gmail.com</p>
-            <a class="btn btn-light btn-xl js-scroll-trigger" href="/map">Get Started!</a>
+            <a class="btn btn-light btn-xl js-scroll-trigger" href="/maps">Get Started!</a>
           </div>
         </div>
       </div>
