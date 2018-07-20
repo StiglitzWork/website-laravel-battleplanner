@@ -5,7 +5,7 @@
 @endpush
 
 @push('css')
-  <link rel="stylesheet" href="{{asset("css/index/index.css")}}">
+  <link rel="stylesheet" href="{{r_asset("css/index/index.css")}}">
 @endpush
 
 @section('content')
@@ -20,8 +20,8 @@
         <div class="col-md-3 col-xs-12 top-buffer">
           <a href="/maps/{{$map->name}}" class="text-center">
             <div class="container text-center map-container">
-              <img src="/{{$map->thumbsrc}}">
-              <div class="map-name">
+              <img src="/{{$map->thumbsrc}}" class="map-thumb">
+              <div class="map-name stroke-text">
                 {{ucwords($map->name)}}
               </div>
             </div>
@@ -44,8 +44,8 @@
         <div class="col-md-3 col-xs-12 top-buffer">
           <a href="/maps/{{$map->name}}" class="text-center">
             <div class="container text-center map-container">
-              <img src="/{{$map->thumbsrc}}">
-              <div class="map-name">
+              <img src="/{{$map->thumbsrc}}" class="map-thumb">
+              <div class="map-name stroke-text">
                 {{ucwords($map->name)}}
               </div>
             </div>

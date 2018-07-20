@@ -1,11 +1,11 @@
 @extends('layouts.main')
 
 @push('js')
-  <script src="{{asset("js/index/index.js")}}"></script>
+  <script src="{{r_asset("js/index/index.js")}}"></script>
 @endpush
 
 @push('css')
-  <link rel="stylesheet" href="{{asset("css/index/index.css")}}">
+  <link rel="stylesheet" href="{{r_asset("css/index/index.css")}}">
 @endpush
 
 @section('content')

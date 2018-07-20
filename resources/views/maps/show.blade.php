@@ -5,9 +5,9 @@
 @endpush
 
 @push('css')
-  <link rel="stylesheet" href="{{asset("css/index/index.css")}}">
+  <link rel="stylesheet" href="{{r_asset("css/index/index.css")}}">
 @endpush
 
 @section('content')
-  {{dd($map->floors)}}
+  <img src="/{{$map->floors()->first()->src}}">
 @endsection
