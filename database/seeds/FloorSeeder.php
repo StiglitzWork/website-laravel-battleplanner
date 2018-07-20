@@ -15,113 +15,113 @@ class FloorSeeder extends Seeder
     {
       $floorArray = [
         /*------------------BANK--------------------------------*/
-        /*Bank Basement*/ ['map'=>"bank",'src'=> "", 'floorNum'=>0],
-        /*Bank First*/ ['map'=>"bank",'src'=> "", 'floorNum'=>1],
-        /*Bank Second*/ ['map'=>"bank",'src'=> "", 'floorNum'=>2],
-        /*Bank Roof*/ ['map'=>"bank",'src'=> "", 'floorNum'=>10],
+        /*Bank Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>1],
+        /*Bank First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>1],
+        /*Bank Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>1],
+        /*Bank Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>1],
 
         /*------------------BORDER--------------------------------*/
-        /*Border First*/ ['map'=>"border",'src'=> "", 'floorNum'=>1],
-        /*Border Second*/ ['map'=>"border",'src'=> "", 'floorNum'=>2],
-        /*Border Roof*/ ['map'=>"border",'src'=> "", 'floorNum'=>10],
+        /*Border First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>2],
+        /*Border Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>2],
+        /*Border Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>2],
 
         /*------------------COASTLINE--------------------------------*/
-        /*Coastline First*/ ['map'=>"coastline",'src'=> "", 'floorNum'=>1],
-        /*Coastline Second*/ ['map'=>"coastline",'src'=> "", 'floorNum'=>2],
-        /*Coastline Roof*/ ['map'=>"coastline",'src'=> "", 'floorNum'=>10],
+        /*Coastline First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>3],
+        /*Coastline Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>3],
+        /*Coastline Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>3],
 
         /*------------------CONSULATE--------------------------------*/
-        /*Consulate Basement*/ ['map'=>"consulate",'src'=> "", 'floorNum'=>0],
-        /*Consulate First*/ ['map'=>"consulate",'src'=> "", 'floorNum'=>1],
-        /*Consulate Second*/ ['map'=>"consulate",'src'=> "", 'floorNum'=>2],
-        /*Consulate Roof*/ ['map'=>"consulate",'src'=> "", 'floorNum'=>10],
+        /*Consulate Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>4],
+        /*Consulate First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>4],
+        /*Consulate Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>4],
+        /*Consulate Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>4],
 
         /*------------------CHALET--------------------------------*/
-        /*Chalet Basement*/ ['map'=>"chalet",'src'=> "", 'floorNum'=>0],
-        /*Chalet First*/ ['map'=>"chalet",'src'=> "", 'floorNum'=>1],
-        /*Chalet Second*/ ['map'=>"chalet",'src'=> "", 'floorNum'=>2],
+        /*Chalet Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>5],
+        /*Chalet First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>5],
+        /*Chalet Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>5],
 
         /*------------------CLUBHOUSE--------------------------------*/
-        /*Clubhouse Basement*/ ['map'=>"clubhouse",'src'=> "", 'floorNum'=>0],
-        /*Clubhouse First*/ ['map'=>"clubhouse",'src'=> "", 'floorNum'=>1],
-        /*Clubhouse Second*/ ['map'=>"clubhouse",'src'=> "", 'floorNum'=>2],
-        /*Clubhouse Roof*/ ['map'=>"clubhouse",'src'=> "", 'floorNum'=>10],
+        /*Clubhouse Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>6],
+        /*Clubhouse First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>6],
+        /*Clubhouse Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>6],
+        /*Clubhouse Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>6],
 
         /*------------------KAFE--------------------------------*/
-        /*Kafe First*/ ['map'=>"kafe",'src'=> "", 'floorNum'=>1],
-        /*Kafe Second*/ ['map'=>"kafe",'src'=> "", 'floorNum'=>2],
-        /*Kafe Third*/ ['map'=>"kafe", 'src'=>"", 'floorNum'=>3],
-        /*Kafe Roof*/ ['map'=>"kafe",'src'=> "", 'floorNum'=>10],
+        /*Kafe First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>7],
+        /*Kafe Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>7],
+        /*Kafe Third*/ [ 'src'=>"", 'floorNum'=>3, 'map_id'=>7],
+        /*Kafe Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>7],
 
         /*------------------OREGON--------------------------------*/
-        /*Oregon Basement*/ ['map'=>"oregon",'src'=> "", 'floorNum'=>0],
-        /*Oregon First*/ ['map'=>"oregon",'src'=> "", 'floorNum'=>1],
-        /*Oregon Second*/ ['map'=>"oregon",'src'=> "", 'floorNum'=>2],
-        /*Oregon Tower*/ ['map'=>"oregon", 'src'=>"", 'floorNum'=>3],
-        /*Oregon Roof*/ ['map'=>"consulate",'src'=> "", 'floorNum'=>10],
+        /*Oregon Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>8],
+        /*Oregon First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>8],
+        /*Oregon Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>8],
+        /*Oregon Tower*/ ['src'=>"", 'floorNum'=>3, 'map_id'=>8],
+        /*Oregon Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>8],
 
         /*------------------SKYSCRAPER--------------------------------*/
-        /*Skyscraper First*/ ['map'=>"skyscraper",'src'=> "", 'floorNum'=>1],
-        /*Skyscraper Second*/ ['map'=>"skyscraper",'src'=> "", 'floorNum'=>2],
+        /*Skyscraper First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>9],
+        /*Skyscraper Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>9],
 
         /*------------------VILLA--------------------------------*/
-        /*Villa Basement*/ ['map'=>"villa",'src'=> "", 'floorNum'=>0],
-        /*Villa First*/ ['map'=>"villa",'src'=> "", 'floorNum'=>1],
-        /*Villa Second*/ ['map'=>"villa",'src'=> "", 'floorNum'=>2],
-        /*Villa Roof*/ ['map'=>"villa",'src'=> "", 'floorNum'=>10],
+        /*Villa Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>10],
+        /*Villa First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>10],
+        /*Villa Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>10],
+        /*Villa Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>10],
 
         /*------------------THEME PARK--------------------------------*/
-        /*Theme Park First*/ ['map'=>"theme park",'src'=> "", 'floorNum'=>1],
-        /*Theme Park Second*/ ['map'=>"theme park",'src'=> "", 'floorNum'=>2],
-        /*Theme Park Roof*/ ['map'=>"theme park",'src'=> "", 'floorNum'=>10],
+        /*Theme Park First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>11],
+        /*Theme Park Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>11],
+        /*Theme Park Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>11],
 
         /*------------------HOUSE--------------------------------*/
-        /*House Basement*/ ['map'=>"house",'src'=> "", 'floorNum'=>0],
-        /*House First*/ ['map'=>"house",'src'=> "", 'floorNum'=>1],
-        /*House Second*/ ['map'=>"house",'src'=> "", 'floorNum'=>2],
-        /*House Roof*/ ['map'=>"house",'src'=> "", 'floorNum'=>10],
+        /*House Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>12],
+        /*House First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>12],
+        /*House Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>12],
+        /*House Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>12],
 
         /*------------------YACHT--------------------------------*/
-        /*Yacht Basement*/ ['map'=>"yacht",'src'=> "", 'floorNum'=>0],
-        /*Yacht First*/ ['map'=>"yacht",'src'=> "", 'floorNum'=>1],
-        /*Yacht Second*/ ['map'=>"yacht",'src'=> "", 'floorNum'=>2],
-        /*Yacht Third*/ ['map'=>"yacht", 'src'=>"", 'floorNum'=>3],
-        /*Yacht Roof*/ ['map'=>"yacht",'src'=> "", 'floorNum'=>10],
+        /*Yacht Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>13],
+        /*Yacht First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>13],
+        /*Yacht Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>13],
+        /*Yacht Third*/ [ 'src'=>"", 'floorNum'=>3, 'map_id'=>13],
+        /*Yacht Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>13],
 
         /*------------------FAVELA--------------------------------*/
-        /*Favela First*/ ['map'=>"favela",'src'=> "", 'floorNum'=>1],
-        /*Favela Second*/ ['map'=>"favela",'src'=> "", 'floorNum'=>2],
-        /*Favela Third*/ ['map'=>"favela",'src'=> "", 'floorNum'=>3],
-        /*Favela Roof*/ ['map'=>"favela",'src'=> "", 'floorNum'=>10],
+        /*Favela First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>14],
+        /*Favela Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>14],
+        /*Favela Third*/ ['src'=> "", 'floorNum'=>3, 'map_id'=>14],
+        /*Favela Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>14],
 
         /*------------------TOWER--------------------------------*/
-        /*Tower First*/ ['map'=>"tower",'src'=> "", 'floorNum'=>1],
-        /*Tower Second*/ ['map'=>"tower",'src'=> "", 'floorNum'=>2],
-        /*Tower Third*/ ['map'=>"tower",'src'=> "", 'floorNum'=>3],
-        /*Tower Roof*/ ['map'=>"tower",'src'=> "", 'floorNum'=>10],
+        /*Tower First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>15],
+        /*Tower Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>15],
+        /*Tower Third*/ ['src'=> "", 'floorNum'=>3, 'map_id'=>15],
+        /*Tower Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>15],
 
         /*------------------PLANE--------------------------------*/
-        /*Plane Cargo*/ ['map'=>"plane",'src'=> "", 'floorNum'=>0],
-        /*Plane First*/ ['map'=>"plane",'src'=> "", 'floorNum'=>1],
-        /*Plane Second*/ ['map'=>"plane",'src'=> "", 'floorNum'=>2],
+        /*Plane Cargo*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>16],
+        /*Plane First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>16],
+        /*Plane Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>16],
 
         /*------------------BARTLETT--------------------------------*/
-        /*Bartlett First*/ ['map'=>"bartlett",'src'=> "", 'floorNum'=>1],
-        /*Bartlett Second*/ ['map'=>"bartlett",'src'=> "", 'floorNum'=>2],
-        /*Bartlett Roof*/ ['map'=>"bartlett",'src'=> "", 'floorNum'=>10],
+        /*Bartlett First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>17],
+        /*Bartlett Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>17],
+        /*Bartlett Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>17],
 
         /*------------------HEREFORD--------------------------------*/
-        /*Hereford Basement*/ ['map'=>"hereford",'src'=> "", 'floorNum'=>0],
-        /*Hereford First*/ ['map'=>"hereford",'src'=> "", 'floorNum'=>1],
-        /*Hereford Second*/ ['map'=>"hereford",'src'=> "", 'floorNum'=>2],
-        /*Hereford Third*/ ['map'=>"hereford",'src'=> "", 'floorNum'=>3],
-        /*Hereford Roof*/ ['map'=>"hereford",'src'=> "", 'floorNum'=>10],
+        /*Hereford Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>18],
+        /*Hereford First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>18],
+        /*Hereford Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>18],
+        /*Hereford Third*/ ['src'=> "", 'floorNum'=>3, 'map_id'=>18],
+        /*Hereford Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>18],
 
         /*------------------KANAL--------------------------------*/
-        /*Kanal Basement*/ ['map'=>"kanal",'src'=> "", 'floorNum'=>0],
-        /*Kanal First*/ ['map'=>"kanal",'src'=> "", 'floorNum'=>1],
-        /*Kanal Second*/ ['map'=>"kanal",'src'=> "", 'floorNum'=>2],
-        /*Kanal Roof*/ ['map'=>"kanal",'src'=> "", 'floorNum'=>10],
+        /*Kanal Basement*/ ['src'=> "", 'floorNum'=>0, 'map_id'=>19],
+        /*Kanal First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>19],
+        /*Kanal Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>19],
+        /*Kanal Roof*/ ['src'=> "", 'floorNum'=>10, 'map_id'=>19],
       ];
 
       Floor::insert($floorArray);

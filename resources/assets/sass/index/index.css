@@ -36,10 +36,16 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 10px;
 }
 
-.top-left {
+.map-name {
     position: absolute;
-    bottom: 75px;
-    left: 77px;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.map-container {
+    position: relative;
+    text-align: center;
 }
 
 .bg-primary {

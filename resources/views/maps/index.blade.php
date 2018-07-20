@@ -18,14 +18,14 @@
     @foreach($maps as $map)
       @if($map->comp)
         <div class="col-md-3 col-xs-12 top-buffer">
-          <div class="container">
-            <a href="/maps/{{$map->name}}">
-              <img src="{{$map->thumbsrc}}">
-              <div class="top-left">
+          <a href="/maps/{{$map->name}}" class="text-center">
+            <div class="container text-center map-container">
+              <img src="/{{$map->thumbsrc}}">
+              <div class="map-name">
                 {{ucwords($map->name)}}
               </div>
-            </a>
-          </div>
+            </div>
+          </a>
         </div>
       @endif
     @endforeach
@@ -41,15 +41,15 @@
   <div class="row text-center">
     @foreach($maps as $map)
       @if(!$map->comp)
-        <div class="col-xs-12 col-md-3 top-buffer">
-          <div class="container">
-            <a href="">
-              <img src="{{$map->thumbsrc}}">
-              <div class="top-left">
+        <div class="col-md-3 col-xs-12 top-buffer">
+          <a href="/maps/{{$map->name}}" class="text-center">
+            <div class="container text-center map-container">
+              <img src="/{{$map->thumbsrc}}">
+              <div class="map-name">
                 {{ucwords($map->name)}}
               </div>
-            </a>
-          </div>
+            </div>
+          </a>
         </div>
       @endif
     @endforeach

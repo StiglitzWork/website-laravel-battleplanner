@@ -13,9 +13,9 @@ class MapController extends Controller
       return view('maps.index', compact('maps'));
     }
 
-    public function show($name) {
+    public function show(Request $request, $name) {
 
-      $map = Map::find($name);
+      $map = Map::where('name', $name)->first();
 
       return view('maps.show', compact('map'));
     }

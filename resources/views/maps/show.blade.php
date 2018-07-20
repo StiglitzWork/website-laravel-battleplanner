@@ -9,5 +9,5 @@
 @endpush
 
 @section('content')
-  {{dd($map->floors())}}
+  {{dd($map->floors)}}
 @endsection
