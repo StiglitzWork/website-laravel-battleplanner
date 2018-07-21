@@ -11,7 +11,7 @@
 @section('content')
   <div class="competitive">
     <h1>
-      <strong><center>Competitive</center></strong>
+      <strong><center>Ranked Maps</center></strong>
     </h1>
   </div>
   <div class="row text-center">
@@ -35,7 +35,7 @@
 
   <div class="casual">
     <h1>
-      <strong><center>Casual</center></strong>
+      <strong><center>Casual Maps</center></strong>
     </h1>
   </div>
   <div class="row text-center">
