@@ -13684,7 +13684,6 @@ module.exports = __webpack_require__(36);
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -13692,6 +13691,7 @@ module.exports = __webpack_require__(36);
  */
 
 __webpack_require__(12);
+// require('./canvasMoveZoom');
 
 /***/ }),
 /* 12 */

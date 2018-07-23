@@ -38,6 +38,7 @@
     <!--
               JS
     -->
+    @stack('js')
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
@@ -46,6 +47,5 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
     <script src="{{ r_asset('js/app.js') }}"></script>
     <script src="{{ r_asset('js/global/global.js') }}"></script>
-    @stack('js')
 </body>
 </html>
