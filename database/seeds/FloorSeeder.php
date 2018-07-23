@@ -70,8 +70,9 @@ class FloorSeeder extends Seeder
         /*Villa Second*/ ['src'=> "media/maps/Villa/Second.jpg", 'floorNum'=>2, 'map_id'=>10],
 
         /*------------------THEME PARK--------------------------------*/
-        /*Theme Park First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>11],
-        /*Theme Park Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>11],
+        /*Theme Park First*/ ['src'=> "media/maps/Theme Park/First.jpg", 'floorNum'=>1, 'map_id'=>11],
+        /*Theme Park Second*/ ['src'=> "media/maps/Theme Park/Second.jpg", 'floorNum'=>2, 'map_id'=>11],
+        /*Theme Park Roof*/ ['src'=> "media/maps/Theme Park/Roof.jpg", 'floorNum'=>10, 'map_id'=>11],
 
         /*------------------HOUSE--------------------------------*/
         /*House Basement*/ ['src'=> "media/maps/House/Basement.jpg", 'floorNum'=>0, 'map_id'=>12],
@@ -93,9 +94,10 @@ class FloorSeeder extends Seeder
         /*Favela Roof*/ ['src'=> "media/maps/Favela/Roof.jpg", 'floorNum'=>10, 'map_id'=>14],
 
         /*------------------TOWER--------------------------------*/
-        /*Tower First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>15],
-        /*Tower Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>15],
-        /*Tower Third*/ ['src'=> "", 'floorNum'=>3, 'map_id'=>15],
+        /*Tower First*/ ['src'=> "media/maps/Tower/First.jpg", 'floorNum'=>1, 'map_id'=>15],
+        /*Tower Second*/ ['src'=> "media/maps/Tower/Second.jpg", 'floorNum'=>2, 'map_id'=>15],
+        /*Tower Third*/ ['src'=> "media/maps/Tower/Third.jpg", 'floorNum'=>3, 'map_id'=>15],
+        /*Tower Roof*/ ['src'=> "media/maps/Tower/Roof.jpg", 'floorNum'=>3, 'map_id'=>15],
 
         /*------------------PLANE--------------------------------*/
         /*Plane Cargo*/ ['src'=> "media/maps/Plane/Basement.jpg", 'floorNum'=>0, 'map_id'=>16],
@@ -104,15 +106,16 @@ class FloorSeeder extends Seeder
         /*Plane Roof*/ ['src'=> "media/maps/Plane/Roof.jpg", 'floorNum'=>10, 'map_id'=>16],
 
         /*------------------BARTLETT--------------------------------*/
-        /*Bartlett First*/ ['src'=> "", 'floorNum'=>1, 'map_id'=>17],
-        /*Bartlett Second*/ ['src'=> "", 'floorNum'=>2, 'map_id'=>17],
+        /*Bartlett First*/ ['src'=> "media/maps/Bartlett/First.jpg", 'floorNum'=>1, 'map_id'=>17],
+        /*Bartlett Second*/ ['src'=> "media/maps/Bartlett/Second.jpg", 'floorNum'=>2, 'map_id'=>17],
+        /*Bartlett Roof*/ ['src'=> "media/maps/Bartlett/Roof.jpg", 'floorNum'=>2, 'map_id'=>17],
 
         /*------------------HEREFORD--------------------------------*/
         /*Hereford Basement*/ ['src'=> "media/maps/Hereford/Basement.jpg", 'floorNum'=>0, 'map_id'=>18],
         /*Hereford First*/ ['src'=> "media/maps/Hereford/First.jpg", 'floorNum'=>1, 'map_id'=>18],
         /*Hereford Second*/ ['src'=> "media/maps/Hereford/Second.jpg", 'floorNum'=>2, 'map_id'=>18],
         /*Hereford Third*/ ['src'=> "media/maps/Hereford/Third.jpg", 'floorNum'=>3, 'map_id'=>18],
-        /*Hereford Third*/ ['src'=> "media/maps/Hereford/Roof.jpg", 'floorNum'=>3, 'map_id'=>18],
+        /*Hereford Roof*/ ['src'=> "media/maps/Hereford/Roof.jpg", 'floorNum'=>3, 'map_id'=>18],
 
         /*------------------KANAL--------------------------------*/
         /*Kanal Basement*/ ['src'=> "media/maps/Kanal/Basement.jpg", 'floorNum'=>0, 'map_id'=>19],
