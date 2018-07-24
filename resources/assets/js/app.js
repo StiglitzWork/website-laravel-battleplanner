@@ -5,4 +5,4 @@
  */
 
 require('./bootstrap');
-// require('./canvasMoveZoom');
+require('./canvasDrawing');

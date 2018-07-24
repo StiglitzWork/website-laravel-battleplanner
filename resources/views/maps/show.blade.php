@@ -33,8 +33,8 @@
 
 @section('content')
 <div class="canvas-page">
-  <div class="row">
-    <div class="btn-group btn-group-lg col-centered">
+  <div class="row row-margin">
+    <div class="btn-group btn-group-lg col-centered no-padding">
       @foreach($floorsList as $floor)
         @if($floor->floorNum == 0)
           <input id="Basebtn" type="button" class = "btn btn-primary" value="Basement"
@@ -49,7 +49,7 @@
       @endforeach
     </div>
 
-    <div class="col-sm-12">
+    <div class="col-sm-12 canvas-padding">
       <canvas class="canvas" width="1800" height="800"></canvas>
     </div>
   </div>

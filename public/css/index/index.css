@@ -50,18 +50,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .canvas {
-    /* display: block; */
-    /* margin: 1em auto; */
     width: 100%;
-    height: 100%;
-    background: #fff;
+    height: calc(100vh - 61px);
+    background: #000;
     border: 1px solid #ccc;
-    z-index: 0;
 }
 
 .col-centered {
     float: none;
     margin: 0 auto;
+}
+
+.canvas-padding {
+    padding: 0px;
+    position: absolute;
+    top: 54px;
+    z-index: -1;
+}
+
+.row-margin {
+    margin: 0px;
+    margin-top: 20px;
 }
 
 .map-thumb {

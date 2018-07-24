@@ -1,6 +1,7 @@
 var canvas = document.getElementsByTagName('canvas')[0];
 canvas.width = document.getElementsByTagName('canvas')[0].getAttribute('width');
 canvas.height = document.getElementsByTagName('canvas')[0].getAttribute('height');
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 var gkhead = floorsArray;
 var visible = new Array();
@@ -35,27 +36,6 @@ function redraw() {
 
 window.onload = function() {
 
-    // var ctx = canvas.getContext('2d');
-    // trackTransforms(ctx);
-    //
-    // function redraw() {
-    //
-    //     // Clear the entire canvas
-    //     var p1 = ctx.transformedPoint(0, 0);
-    //     var p2 = ctx.transformedPoint(canvas.width, canvas.height);
-    //     ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-    //
-    //     ctx.save();
-    //     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     ctx.restore();
-    //
-    //     for (var i = 0; i < gkhead.length; i++) {
-    //         if (visible[i]) {
-    //             ctx.drawImage(gkhead[i], 0, 0);
-    //         }
-    //     }
-    // }
     redraw();
 
     var lastX = canvas.width / 2,
@@ -63,12 +43,16 @@ window.onload = function() {
 
     var dragStart, dragged;
 
+    // canvas.addEventListener('contextmenu', event => event.preventDefault());
+
     canvas.addEventListener('mousedown', function(evt) {
-        document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
-        lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
-        lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
-        dragStart = ctx.transformedPoint(lastX, lastY);
-        dragged = false;
+        if (evt.which == 3) {
+            document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
+            lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
+            lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
+            dragStart = ctx.transformedPoint(lastX, lastY);
+            dragged = false;
+        }
     }, false);
 
     canvas.addEventListener('mousemove', function(evt) {
@@ -107,26 +91,6 @@ window.onload = function() {
     canvas.addEventListener('DOMMouseScroll', handleScroll, false);
     canvas.addEventListener('mousewheel', handleScroll, false);
 
-    // /*/////////////////////////////////////////////////////////////////
-    //   CUSTOM FUNCTIONS
-    // */ /////////////////////////////////////////////////////////////////
-    // function selectFloor(id) {
-    //     if (id == 0) {
-    //         for (var j = 1; j < visible.length; j++) {
-    //             visible[j] = false;
-    //         }
-    //     } else if (id == 10) {
-    //         visible[visible.length - 1] = true;
-    //     } else {
-    //         for (var j = id; j < visible.length; j++) {
-    //             visible[j] = false;
-    //         }
-    //         visible[id - 1] = true;
-    //     }
-    //
-    //     redraw();
-    // };
-    // ///////////////////////////////////////////////////////////////////////
 };
 
 /*/////////////////////////////////////////////////////////////////
