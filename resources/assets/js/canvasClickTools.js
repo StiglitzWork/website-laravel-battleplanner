@@ -6,6 +6,12 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 var gkhead = floorsArray;
 var visible = new Array();
 
+var clickSVGPt = new Array();
+var clickPtX = new Array();
+var clickPtY = new Array();
+var clickDrag = new Array();
+var paint, ptFromX, ptFromY, ptToX, ptToY;
+
 gkhead.forEach(function() {
     visible.push(false);
 });
@@ -14,6 +20,9 @@ visible[0] = true;
 
 var ctx = canvas.getContext('2d');
 trackTransforms(ctx);
+
+var ptFrom = ctx.createNewPoint();
+var ptTo = ctx.createNewPoint();
 
 function redraw() {
 
@@ -27,10 +36,56 @@ function redraw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.restore();
 
+    ctx.strokeStyle = "#32df26";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 5;
+
     for (var i = 0; i < gkhead.length; i++) {
         if (visible[i]) {
             ctx.drawImage(gkhead[i], 0, 0);
         }
+    }
+    // for (var i = 0; i < clickSVGPt.length; i++) {
+    //
+    //     if (clickDrag[i] && i) {
+    //         ptFrom = clickSVGPt[i - 1];
+    //     } else {
+    //         ptFrom.x = clickSVGPt[i].x - 1;
+    //         ptFrom.y = clickSVGPt[i].y;
+    //     }
+    //     ptTo = clickSVGPt[i];
+    //
+    //     ctx.beginPath();
+    //
+    //     ctx.moveTo(ptFrom.x, ptFrom.y);
+    //
+    //     ctx.lineTo(ptTo.x, ptTo.y);
+    //
+    //     ctx.closePath();
+    //
+    //     ctx.stroke();
+    // }
+    for (var i = 0; i < clickPtX.length; i++) {
+
+        if (clickDrag[i] && i) {
+            ptFromX = clickPtX[i - 1];
+            ptFromY = clickPtY[i - 1];
+        } else {
+            ptFromX = clickPtX[i] - 1;
+            ptFromY = clickPtY[i];
+        }
+        ptToX = clickPtX[i];
+        ptToY = clickPtY[i];
+
+        ctx.beginPath();
+
+        ctx.moveTo(ptFromX, ptFromY);
+
+        ctx.lineTo(ptToX, ptToY);
+
+        ctx.closePath();
+
+        ctx.stroke();
     }
 }
 
@@ -43,33 +98,58 @@ window.onload = function() {
 
     var dragStart, dragged;
 
-    // canvas.addEventListener('contextmenu', event => event.preventDefault());
-
     canvas.addEventListener('mousedown', function(evt) {
+        document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
+        lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
+        lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
+        var pt = ctx.transformedPoint(lastX, lastY);
+
+        //alert("x:" + lastX + " y:" + lastY);
+        //alert("x:" + pt.x + " y:" + pt.y);
         if (evt.which == 3) {
-            document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
-            lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
-            lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
-            dragStart = ctx.transformedPoint(lastX, lastY);
+            dragStart = pt;
             dragged = false;
+        }
+        if (evt.which == 1) {
+
+            paint = true;
+
+            addClick(py.x, pt.y, false);
+
+            // addClickPt(pt, false);
+
+            redraw();
         }
     }, false);
 
     canvas.addEventListener('mousemove', function(evt) {
         lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
         lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
-        dragged = true;
+        var pt = ctx.transformedPoint(lastX, lastY);
+
         if (dragStart) {
-            var pt = ctx.transformedPoint(lastX, lastY);
+            dragged = true;
             ctx.translate(pt.x - dragStart.x, pt.y - dragStart.y);
             redraw();
         }
+        if (paint) {
+            addClick(pt.x, pt.y, true);
+            // addClickPt(pt, true);
+            redraw();
+        }
+
     }, false);
 
     canvas.addEventListener('mouseup', function(evt) {
         dragStart = null;
-        if (!dragged) zoom(evt.shiftKey ? -1 : 1);
+        paint = false;
+        redraw();
     }, false);
+
+    canvas.addEventListener('mouseleave', function(e) {
+        paint = false;
+        redraw();
+    });
 
     var scaleFactor = 1.1;
 
@@ -124,6 +204,19 @@ function selectFloor(id, noBasement) {
     redraw();
 };
 ///////////////////////////////////////////////////////////////////////
+
+function addClickPt(point, dragging) {
+
+    clickSVGPt.push(point);
+    clickDrag.push(dragging);
+};
+
+function addClick(x, y, dragging) {
+
+    clickPtX.push(x);
+    clickPtY.push(y);
+    clickDrag.push(dragging);
+}
 
 // Adds ctx.getTransform() - returns an SVGMatrix
 // Adds ctx.transformedPoint(x,y) - returns an SVGPoint
@@ -190,6 +283,10 @@ function trackTransforms(ctx) {
     };
 
     var pt = svg.createSVGPoint();
+    ctx.createNewPoint = function() {
+        return svg.createSVGPoint();
+    }
+
     ctx.transformedPoint = function(x, y) {
         pt.x = x;
         pt.y = y;

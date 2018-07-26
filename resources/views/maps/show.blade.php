@@ -20,11 +20,13 @@
     floorsArray.push(floor0, floor1, floor2, floor3, floor4, floor5);
     <?php foreach ($floorsList as $floor): ?>
       floorsArray[count].src = '{{$floor->src}}';
+      floorsArray[count].id = 'floor{{$floor->floorNum}}';
       count++;
     <?php endforeach; ?>
     count  = null;
   </script>
-  <script src="{{r_asset("js/canvasMoveZoom.js")}}"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="{{r_asset("js/canvasTools.js")}}"></script>
 @endpush
 
 @push('css')
@@ -50,7 +52,8 @@
     </div>
 
     <div class="col-sm-12 canvas-padding">
-      <canvas class="canvas" width="1800" height="800"></canvas>
+      <div id="map-area" class="map-area"></div>
+      <!-- class="canvas"  -->
     </div>
   </div>
 </div>

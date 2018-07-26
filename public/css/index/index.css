@@ -73,6 +73,13 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 20px;
 }
 
+.map-area {
+    width: 100%;
+    height: calc(100vh - 61px);
+    background: #000;
+    border: 1px solid #ccc;
+}
+
 .map-thumb {
     height: 100px;
     width: 200px;
