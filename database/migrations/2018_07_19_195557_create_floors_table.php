@@ -15,11 +15,17 @@ class CreateFloorsTable extends Migration
     {
         Schema::create('floors', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->unsignedInteger('map_id')
               ->nullable();
               $table->foreign('map_id')
                 ->references('id')
                 ->on('maps');
+            $table->unsignedInteger('battlefloor_id')
+              ->nullable();
+              $table->foreign('battlefloor_id')
+                ->references('id')
+                ->on('battlefloors');
             $table->text('src');
             $table->integer('floorNum');
             $table->timestamps();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMapsTable extends Migration
+class CreateBattlefloorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateMapsTable extends Migration
      */
     public function up()
     {
-        Schema::create('maps', function (Blueprint $table) {
+        Schema::create('battlefloors', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('name');
-            $table->text('thumbsrc');
-            $table->boolean('comp');
+            //DRAWING
             $table->unsignedInteger('battleplan_id')
               ->nullable();
               $table->foreign('battleplan_id')
@@ -34,6 +32,6 @@ class CreateMapsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('maps');
+        Schema::dropIfExists('battlefloors');
     }
 }
