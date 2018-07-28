@@ -1,13 +1,43 @@
 @extends('layouts.main')
 
 @push('js')
-  <!-- <script src="{{asset("js/index/index.js")}}"></script> -->
 @endpush
 
 @push('css')
-  <link rel="stylesheet" href="{{r_asset("css/index/index.css")}}">
+  <link rel="stylesheet" href="{{r_asset("css/maps/show.css")}}">
 @endpush
 
-@section('content')
-  <img src="/{{$map->floors()->first()->src}}">
+@push ('js')
+  <script>
+    const MAP_ID = "{{$map->id}}";
+
+    const FLOOR_SOURCES = [
+      @foreach ($map->floors as $index => $floor)
+        {"id": {{$floor->id}}, "src" : "{{ $floor->src }}"},
+      @endforeach
+    ]
+  </script>
+  <script src="{{asset("js/maps/show.bundle.js")}}"></script>
+@endpush
+
+@section ('content')
+    <div class="buttonGroup col-12 text-center fixed">
+        <button type="button" name="button" onclick="app.engine.map.changeFloor(-1)"><</button>
+        @foreach ($map->floors as $index => $floor)
+          <button type="button" name="button" >{{$floor->id}}</button>
+        @endforeach
+        <button type="button" name="button" onclick="app.engine.changeFloor(1)">></button>
+    </div>
+    <div class="row" id="EngineContainer">
+  		<div id="viewport">
+  			<canvas id="background" class="fixed"></canvas>
+  			<canvas id="overlay"
+          class="fixed"
+  				onmouseleave="app.engine.canvasLeave(event)" onmouseenter="app.engine.canvasEnter(event)"
+  				ondragover="app.engine.canvasAllowDrop(event)" ondrop="app.engine.canvasDrop(event)"
+  				onmousemove="app.engine.canvasMove(event)" onmousedown="app.engine.canvasDown(event)"
+  				onmouseup="app.engine.canvasUp(event)"></canvas>
+  		</div>
+    </div>
+
 @endsection

@@ -52,3 +52,7 @@ mix.copy('resources/assets/js/login/*', 'public/js/login')
     .copy('resources/assets/sass/login/*', 'public/css/login')
     .copy('resources/assets/js/register/*', 'public/js/register')
     .copy('resources/assets/sass/register/*', 'public/css/register');
+
+// Maps
+mix.js('resources/assets/js/maps/show.js', 'public/js/maps/show.bundle.js')
+    .copy('resources/assets/sass/maps/*', 'public/css/maps');
