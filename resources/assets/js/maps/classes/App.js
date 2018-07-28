@@ -82,6 +82,7 @@ class App {
         var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
         this._clickActivateEventListen(ev)
         if (this.lmb) {
+            this.map.floor.addPaint(coordinates, false);
 
             // Update UI
             this.ui.overlayUpdate = true;
@@ -98,6 +99,7 @@ class App {
         }
 
         if (this.lmb) {
+            this.map.floor.addPaint(coordinates, true);
             this.ui.overlayUpdate = true;
             this.ui.update();
 
@@ -129,6 +131,13 @@ class App {
         var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
         this._deactivateClickEventListen();
 
+        if (this.lmb) {
+            this.map.floor.addPaint(coordinates, true);
+
+            // Update UI
+            this.ui.overlayUpdate = true;
+            this.ui.update();
+        }
         // Update UI
         this.ui.overlayUpdate = true;
         this.ui.update();

@@ -187,6 +187,8 @@ var Helpers = function () {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Floor; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -205,7 +207,7 @@ var Floor = function (_Helpers) {
             Constructor
     **************************/
 
-    function Floor(id, src) {
+    function Floor(id, src, number) {
         _classCallCheck(this, Floor);
 
         // Identifiers
@@ -215,17 +217,30 @@ var Floor = function (_Helpers) {
 
         _this.type = "Floor"; // Json identifier
         _this.id = id;
+        _this.number = number;
         _this.src = src;
+        _this.paint = [];
         return _this;
     }
 
     /**************************
-             Getters
+             Public methods
     **************************/
 
-    /**************************
-        Helper functions
-    **************************/
+
+    _createClass(Floor, [{
+        key: "addPaint",
+        value: function addPaint(coordinates, isDrag) {
+            coordinates["color"] = "red";
+            coordinates["isDrag"] = isDrag;
+            this.paint.push(coordinates);
+        }
+
+        /**************************
+            Helper functions
+        **************************/
+
+    }]);
 
     return Floor;
 }(Helpers);
@@ -405,6 +420,7 @@ var App = function () {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
             this._clickActivateEventListen(ev);
             if (this.lmb) {
+                this.map.floor.addPaint(coordinates, false);
 
                 // Update UI
                 this.ui.overlayUpdate = true;
@@ -422,6 +438,7 @@ var App = function () {
             }
 
             if (this.lmb) {
+                this.map.floor.addPaint(coordinates, true);
                 this.ui.overlayUpdate = true;
                 this.ui.update();
             } else {
@@ -453,6 +470,13 @@ var App = function () {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
             this._deactivateClickEventListen();
 
+            if (this.lmb) {
+                this.map.floor.addPaint(coordinates, true);
+
+                // Update UI
+                this.ui.overlayUpdate = true;
+                this.ui.update();
+            }
             // Update UI
             this.ui.overlayUpdate = true;
             this.ui.update();
@@ -710,7 +734,7 @@ var Map = function (_Helpers) {
         key: 'loadFloors',
         value: function loadFloors(floorSources) {
             for (var i = 0; i < floorSources.length; i++) {
-                this.floors.push(new this.Floor(floorSources[i].id, floorSources[i].src));
+                this.floors.push(new this.Floor(floorSources[i].id, floorSources[i].src, floorSources[i].number));
             }
 
             // init the current floor
@@ -892,8 +916,31 @@ var Ui = function () {
     }, {
         key: "updateOverlay",
         value: function updateOverlay() {
+            // variable declaration
+            var myCanvas = document.getElementById(this.canvasOverlayId);
+            var ctx = myCanvas.getContext('2d');
+
+            // Clear all
             this.clearOverlay();
-            // TODO: Update overlay here
+
+            var lastDrag = null;
+            // Redraw
+            for (var i = 0; i < this.map.floor.paint.length; i++) {
+
+                ctx.beginPath();
+                if (!this.map.floor.paint[i].isDrag || !lastDrag) {
+                    ctx.moveTo(this.map.floor.paint[i].x * this.ratio - this.offsetX, this.map.floor.paint[i].y * this.ratio - this.offsetY);
+                    ctx.lineTo(this.map.floor.paint[i].x * this.ratio - this.offsetX + 1, this.map.floor.paint[i].y * this.ratio - this.offsetY + 1);
+                    lastDrag = this.map.floor.paint[i];
+                } else {
+                    ctx.moveTo(lastDrag.x * this.ratio - this.offsetX, lastDrag.y * this.ratio - this.offsetY);
+                    ctx.lineTo(this.map.floor.paint[i].x * this.ratio - this.offsetX, this.map.floor.paint[i].y * this.ratio - this.offsetY);
+                    lastDrag = this.map.floor.paint[i];
+                }
+                ctx.strokeStyle = this.map.floor.paint[i].color;
+                ctx.closePath();
+                ctx.stroke();
+            }
             this.overlayUpdate = false;
         }
     }, {

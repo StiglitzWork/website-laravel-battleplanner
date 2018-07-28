@@ -8,6 +8,6 @@
 .fixed{
   position: fixed;
 }
-.buttonGroup{
+/* .buttonGroup > button{
   z-index: 2;
-}
+} */

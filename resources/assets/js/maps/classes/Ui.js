@@ -120,8 +120,31 @@ class Ui {
     }
 
     updateOverlay(){
+        // variable declaration
+        var myCanvas = document.getElementById(this.canvasOverlayId);
+        var ctx = myCanvas.getContext('2d');
+
+        // Clear all
         this.clearOverlay()
-         // TODO: Update overlay here
+
+        var lastDrag = null;
+        // Redraw
+        for (var i = 0; i < this.map.floor.paint.length; i++) {
+
+          ctx.beginPath();
+          if (!this.map.floor.paint[i].isDrag || !lastDrag) {
+            ctx.moveTo(this.map.floor.paint[i].x * this.ratio - this.offsetX, this.map.floor.paint[i].y * this.ratio - this.offsetY);
+            ctx.lineTo(this.map.floor.paint[i].x * this.ratio - this.offsetX + 1, this.map.floor.paint[i].y * this.ratio - this.offsetY + 1);
+            lastDrag = this.map.floor.paint[i];
+          } else{
+            ctx.moveTo(lastDrag.x * this.ratio - this.offsetX, lastDrag.y * this.ratio - this.offsetY);
+            ctx.lineTo(this.map.floor.paint[i].x * this.ratio - this.offsetX, this.map.floor.paint[i].y * this.ratio - this.offsetY);
+            lastDrag = this.map.floor.paint[i];
+          }
+          ctx.strokeStyle = this.map.floor.paint[i].color;
+          ctx.closePath();
+          ctx.stroke();
+        }
         this.overlayUpdate = false;
     }
 

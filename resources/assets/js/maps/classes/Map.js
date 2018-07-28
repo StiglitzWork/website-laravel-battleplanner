@@ -123,7 +123,8 @@ class Map extends Helpers {
           this.floors.push(
             new this.Floor(
               floorSources[i].id,
-              floorSources[i].src
+              floorSources[i].src,
+              floorSources[i].number
             )
           );
         }

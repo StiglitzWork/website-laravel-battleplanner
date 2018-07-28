@@ -13,7 +13,7 @@
 
     const FLOOR_SOURCES = [
       @foreach ($map->floors as $index => $floor)
-        {"id": {{$floor->id}}, "src" : "{{ $floor->src }}"},
+        {"id": {{$floor->id}},"number": {{$floor->floorNum - 1}}, "src" : "{{ $floor->src }}"},
       @endforeach
     ]
   </script>
@@ -21,8 +21,9 @@
 @endpush
 
 @section ('content')
-    <div class="buttonGroup col-12 text-center fixed">
-        <button type="button" name="button" onclick="app.engine.map.changeFloor(-1)"><</button>
+    {{dd($map->floors->first())}}
+    <div class="buttonGroup col-12 text-center">
+        <button type="button" name="button" onclick="app.engine.changeFloor(-1)"><</button>
         @foreach ($map->floors as $index => $floor)
           <button type="button" name="button" >{{$floor->id}}</button>
         @endforeach
