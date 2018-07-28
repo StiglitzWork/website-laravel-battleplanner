@@ -26,4 +26,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function battleplans() {
+      return $this->hasMany('App\Models\Battleplan', 'user_id');
+    }
+
+    public function room() {
+      return $this->hasOne('App\Models\Room', 'owner');
+    }
 }

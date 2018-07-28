@@ -34,7 +34,6 @@ class Ui {
         this.floorChange = true;
         this.overlayUpdate = false;
         this.backgroundUpdate = false;
-        this.listUpdate = true;
 
         this._initViewports();
         this.update();
@@ -52,7 +51,7 @@ class Ui {
         var img = new Image;
 
         // acquire image
-        img.src = "/" + this.map.floor.src;
+        img.src = this.map.floor.src;
 
         // Load the image in memory
         img.onload = function() {
@@ -64,6 +63,10 @@ class Ui {
             this.update();
             $("#loading").hide();
         }.bind(this);
+
+        // Update floor Button
+        $(".floorSelector").removeClass("active");
+        $("#floorSelector-" + this.map.floor.id).addClass("active");
     }
 
     // Set the size of the viewports

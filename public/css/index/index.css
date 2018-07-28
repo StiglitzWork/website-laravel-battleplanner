@@ -49,6 +49,37 @@ h1, h2, h3, h4, h5, h6 {
     text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
 }
 
+.canvas {
+    width: 100%;
+    height: calc(100vh - 61px);
+    background: #000;
+    border: 1px solid #ccc;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+
+.canvas-padding {
+    padding: 0px;
+    position: absolute;
+    top: 54px;
+    z-index: -1;
+}
+
+.row-margin {
+    margin: 0px;
+    margin-top: 20px;
+}
+
+.map-area {
+    width: 100%;
+    height: calc(100vh - 61px);
+    background: #000;
+    border: 1px solid #ccc;
+}
+
 .map-thumb {
     height: 100px;
     width: 200px;

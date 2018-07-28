@@ -20,6 +20,7 @@ class App {
         this.type = "App"; // Json identifier
 
         // Varable declarations
+        this.color = "#e66465"; //draw color
         this.map = new this.Map(Map_dbId, floorSources);
         this.ui = new this.Ui(viewportId, canvasBackgroundId, canvasOverlayId, this.map);
 
@@ -51,6 +52,9 @@ class App {
         this.ui.update();
     }
 
+    changeColor(newColor){
+      this.color = newColor
+    }
     /**************************
           Floor Methods
     **************************/
@@ -60,6 +64,13 @@ class App {
         this.ui.floorChange = true;
         this.ui.update();
     }
+
+    changeFloorById(floorId){
+        this.map.changeFloorById(floorId);
+        this.ui.floorChange = true;
+        this.ui.update();
+    }
+
 
     /**************************
         Canvas Methods
@@ -82,7 +93,7 @@ class App {
         var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
         this._clickActivateEventListen(ev)
         if (this.lmb) {
-            this.map.floor.addPaint(coordinates, false);
+            this.map.floor.addPaint(coordinates, false , this.color);
 
             // Update UI
             this.ui.overlayUpdate = true;
@@ -99,7 +110,7 @@ class App {
         }
 
         if (this.lmb) {
-            this.map.floor.addPaint(coordinates, true);
+            this.map.floor.addPaint(coordinates, true, this.color);
             this.ui.overlayUpdate = true;
             this.ui.update();
 
@@ -132,7 +143,7 @@ class App {
         this._deactivateClickEventListen();
 
         if (this.lmb) {
-            this.map.floor.addPaint(coordinates, true);
+            this.map.floor.addPaint(coordinates, true, this.color);
 
             // Update UI
             this.ui.overlayUpdate = true;

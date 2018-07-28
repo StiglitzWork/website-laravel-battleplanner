@@ -1,6 +1,6 @@
 #EngineContainer{
   margin: 0px;
-  height: calc(100vh - 61px);
+  height: calc(100vh - 92px);
 }
 #viewport{
   width:100%
@@ -8,6 +8,6 @@
 .fixed{
   position: fixed;
 }
-/* .buttonGroup > button{
-  z-index: 2;
-} */
+canvas{
+  width:100%;
+}

@@ -1,6 +1,10 @@
 /**************************
         Inports
 **************************/
+import $ from 'jquery';
+window.jQuery = $;
+window.$ = $;
+
 var bootstrap  = window.bootstrap;
 
 /**************************
@@ -27,6 +31,17 @@ app = new App(MAP_ID,FLOOR_SOURCES, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OV
 **************************/
 $("#" + CANVAS_BACKGROUND_ID + ', #' + CANVAS_OVERLAY_ID).on("contextmenu", function(e) {
     return false;
+});
+
+// Resize needs to reasjust the canvas sizes
+$( window ).resize(function() {
+
+  app.ui.floorChange = true;
+  app.ui.overlayUpdate = true;
+  app.ui.backgroundUpdate = true;
+
+  app.ui._initViewports();
+  app.ui.update();
 });
 
 // Zoom eventlistener

@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateBattlefloorsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('battlefloors', function (Blueprint $table) {
+            $table->increments('id');
+            //DRAWING
+            $table->unsignedInteger('battleplan_id')
+              ->nullable();
+              $table->foreign('battleplan_id')
+                ->references('id')
+                ->on('battleplans');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('battlefloors');
+    }
+}

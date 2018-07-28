@@ -71,6 +71,10 @@ class Map extends Helpers {
       }
     }
 
+    changeFloorById(floorId){
+       this.floor = this.getFloor(floorId);
+    }
+
     nextFloor(){
       if (this.hasNextFloor()) {
         this.floor = this.floors[this.floor.number + 1];

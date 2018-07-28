@@ -24,8 +24,8 @@ class Floor extends Helpers {
     /**************************
              Public methods
     **************************/
-    addPaint(coordinates, isDrag){
-      coordinates["color"] = "red";
+    addPaint(coordinates, isDrag, color){
+      coordinates["color"] = color;
       coordinates["isDrag"] = isDrag;
       this.paint.push(coordinates);
     }

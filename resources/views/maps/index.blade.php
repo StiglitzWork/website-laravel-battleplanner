@@ -18,9 +18,9 @@
     @foreach($maps as $map)
       @if($map->comp)
         <div class="col-md-3 col-xs-12 top-buffer">
-          <a href="/maps/{{$map->name}}" class="text-center">
+          <a href="maps/{{$map->name}}" class="text-center">
             <div class="container text-center map-container">
-              <img src="/{{$map->thumbsrc}}" class="map-thumb">
+              <img src="{{$map->thumbsrc}}" class="map-thumb">
               <div class="map-name stroke-text">
                 {{ucwords($map->name)}}
               </div>
@@ -42,9 +42,9 @@
     @foreach($maps as $map)
       @if(!$map->comp)
         <div class="col-md-3 col-xs-12 top-buffer">
-          <a href="/maps/{{$map->name}}" class="text-center">
+          <a href="maps/{{$map->name}}" class="text-center">
             <div class="container text-center map-container">
-              <img src="/{{$map->thumbsrc}}" class="map-thumb">
+              <img src="{{$map->thumbsrc}}" class="map-thumb">
               <div class="map-name stroke-text">
                 {{ucwords($map->name)}}
               </div>

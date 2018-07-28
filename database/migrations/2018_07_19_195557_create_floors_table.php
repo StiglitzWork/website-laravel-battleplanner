@@ -15,6 +15,7 @@ class CreateFloorsTable extends Migration
     {
         Schema::create('floors', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->unsignedInteger('map_id')
               ->nullable();
               $table->foreign('map_id')
