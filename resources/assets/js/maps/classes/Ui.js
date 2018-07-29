@@ -53,6 +53,10 @@ class Ui {
         // acquire image
         img.src = this.map.floor.src;
 
+        // Fille background color
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0,0,myBackground.width, myBackground.height);
+
         // Load the image in memory
         img.onload = function() {
             // Draw the image
@@ -155,6 +159,11 @@ class Ui {
         this.clearBackground();
         var myCanvas = document.getElementById(this.canvasBackgroundId);
         var ctx = myCanvas.getContext('2d');
+
+        // Fille background color
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0,0,myCanvas.width, myCanvas.height);
+
         ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY ,this.backgroundImage.width * this.ratio ,this.backgroundImage.height * this.ratio);
         this.overlayUpdate = true;
     }

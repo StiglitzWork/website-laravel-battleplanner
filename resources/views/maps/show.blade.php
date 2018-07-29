@@ -24,7 +24,7 @@
       @endforeach
     ]
   </script>
-  <script src="{{asset("js/maps/show.bundle.js")}}"></script>
+  <script src="{{r_asset("js/maps/show.bundle.js")}}"></script>
 @endpush
 
 @section ('content')

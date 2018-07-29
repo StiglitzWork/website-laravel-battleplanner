@@ -3,28 +3,28 @@
 **************************/
 const Helpers = require('./Helpers.js').default;
 
-class Map extends Helpers {
+class Battleplan extends Helpers {
 
     /**************************
             Constructor
     **************************/
 
-    constructor(dbId, floorSources) {
+    constructor(battleplan, battlefloors) {
         // Super Class constructor call
         super();
 
         // Instantiatable class types
-        this.Floor = require('./Floor.js').default;
+        this.Battlefloor = require('./Battlefloor.js').default;
 
         // Identifiers
-        this.dbId = dbId;
-        this.type = "Map"; // Json identifier
+        this.id = battleplan.id;
+        this.type = "Battleplan"; // Json identifier
 
         // Variables
-        this.floor = null;
-        this.floors = [];
+        this.battlefloor = null;
+        this.battlefloors = [];
 
-        this.initialization(floorSources)
+        this.initialization(battlefloors)
     }
 
     /**************************
@@ -32,11 +32,11 @@ class Map extends Helpers {
     **************************/
 
     getFloor(id){
-        return this.floors.filter(floor => this._objectIdEquals(floor,id))[0];
+        return this.battlefloors.filter(floor => this._objectIdEquals(floor,id))[0];
     }
 
     getFloorDbId(dbId){
-        return this.floors.filter(floor => this._objectDbIdEquals(floor,dbId))[0];
+        return this.battlefloors.filter(floor => this._objectDbIdEquals(floor,dbId))[0];
     }
 
     //Positive or negative values accepted
@@ -66,36 +66,49 @@ class Map extends Helpers {
         }
       }
       // Error checking
-      if (!this.floor){
+      if (!this.battlefloor){
         throw new Error("Something when wrong when changing floors");
       }
     }
 
     changeFloorById(floorId){
-       this.floor = this.getFloor(floorId);
+        // if (this.battlefloor) {
+        //   this.battlefloor.active=false;
+        // }
+       this.battlefloor = this.getFloor(floorId);
+       // this.battlefloor.active=true;
     }
 
     nextFloor(){
       if (this.hasNextFloor()) {
-        this.floor = this.floors[this.floor.number + 1];
+        // if (this.battlefloor) {
+        //   this.battlefloor.active=false;
+        // }
+        this.battlefloor = this.battlefloors[this.battlefloor.number + 1];
+        // this.battlefloor.active=true;
       }
     }
 
     previousFloor(){
       if (this.hasPreviousFloor()) {
-        this.floor = this.floors[this.floor.number - 1];
+
+        // if (this.battlefloor) {
+        //   this.battlefloor.active=false;
+        // }
+        this.battlefloor = this.battlefloors[this.battlefloor.number - 1];
+        // this.battlefloor.active=true;
       }
     }
 
     hasNextFloor(){
-      if(this.floor.number < this.floors.length -1 ){
+      if(this.battlefloor.number < this.battlefloors.length -1 ){
         return true;
       }
       return false;
     }
 
     hasPreviousFloor(){
-        if(this.floor.number - 1 >= 0){
+        if(this.battlefloor.number - 1 >= 0){
           return true;
         }
         return false;
@@ -104,7 +117,12 @@ class Map extends Helpers {
     setFloor(id){
       var floor = this.getFloor(id)
       if (floor) {
-        this.floor = floor;
+
+        // if (this.battlefloor) {
+        //   this.battlefloor.active=false;
+        // }
+        this.battlefloor = floor;
+        // this.battlefloor.active=true;
       }
     }
 
@@ -124,17 +142,12 @@ class Map extends Helpers {
 
     loadFloors(floorSources){
         for (var i = 0; i < floorSources.length; i++) {
-          this.floors.push(
-            new this.Floor(
-              floorSources[i].id,
-              floorSources[i].src,
-              floorSources[i].number
-            )
-          );
+          this.battlefloors.push(new this.Battlefloor(floorSources[i]));
         }
 
         // init the current floor
-        this.floor = this.floors[0];
+        this.battlefloor = this.battlefloors[0];
+        // this.battlefloor.active = true;
     }
 
 
@@ -144,7 +157,7 @@ class Map extends Helpers {
      * @return {undefined}
      */
     _update() {
-      this.floor.update();
+      this.battlefloor.update();
     }
 
     /**************************
@@ -153,6 +166,6 @@ class Map extends Helpers {
 
 }
 export {
-    Map as
+    Battleplan as
     default
 }

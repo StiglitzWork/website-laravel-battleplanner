@@ -15,7 +15,12 @@ class CreateBattlefloorsTable extends Migration
     {
         Schema::create('battlefloors', function (Blueprint $table) {
             $table->increments('id');
-            //DRAWING
+            $table->unsignedInteger('floor_id')
+              ->nullable();
+              $table->foreign('floor_id')
+                ->references('id')
+                ->on('floors');
+
             $table->unsignedInteger('battleplan_id')
               ->nullable();
               $table->foreign('battleplan_id')

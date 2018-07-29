@@ -3,7 +3,7 @@
 **************************/
 const Helpers = require('./Helpers.js').default;
 
-class Floor extends Helpers {
+class Battlefloor extends Helpers {
 
     /**************************
             Constructor
@@ -14,7 +14,7 @@ class Floor extends Helpers {
         super();
 
         // Identifiers
-        this.type = "Floor"; // Json identifier
+        this.type = "Battlefloor"; // Json identifier
         this.id = id;
         this.number = number;
         this.src = src;
@@ -36,6 +36,6 @@ class Floor extends Helpers {
 
 }
 export {
-    Floor as
+    Battlefloor as
     default
 }
