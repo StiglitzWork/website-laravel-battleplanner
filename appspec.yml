@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html/FinAviva-Dev-group
+hooks:
+  AfterInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 1000
+      runas: root
