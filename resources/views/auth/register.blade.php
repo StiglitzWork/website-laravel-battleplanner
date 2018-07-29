@@ -11,7 +11,7 @@
     {{-- Login --}}
     <form class="login-form" method="post" action="{{ route('register') }}" >
     @csrf
-      <input placeholder="username" id="username" type="username" value="kriegersmith" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" name="username" value="{{ old('username') }}" required>
+      <input placeholder="username" id="username" type="username" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" name="username" value="{{ old('username') }}" required>
 
       @if ($errors->has('username'))
         <span class="invalid-feedback" role="alert">
@@ -19,7 +19,7 @@
         </span>
       @endif
 
-      <input placeholder="email" id="email" type="email" value="test@mail.ca" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
+      <input placeholder="email" id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
 
       @if ($errors->has('email'))
           <span class="invalid-feedback" role="alert">
@@ -27,7 +27,7 @@
           </span>
       @endif
 
-      <input placeholder="password" id="password"  value="thisisapassword123"  type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+      <input placeholder="password" id="password"  type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
       @if ($errors->has('password'))
           <span class="invalid-feedback" role="alert">
@@ -35,7 +35,7 @@
           </span>
       @endif
 
-      <input placeholder="password confirm" id="password-confirm" value="thisisapassword123"  type="password" class="form-control" name="password_confirmation" required>
+      <input placeholder="password confirm" id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
 
       <button>Register</button>
       <p class="message">Already registered? <a href="/login">Sign In</a></p>
