@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/html/FinAviva-Dev-group
+    destination: /var/www/html/r6-maps-group
 hooks:
   AfterInstall:
     - location: scripts/install_dependencies.sh
