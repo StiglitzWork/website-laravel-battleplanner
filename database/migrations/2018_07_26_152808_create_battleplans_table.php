@@ -16,23 +16,26 @@ class CreateBattleplansTable extends Migration
         Schema::create('battleplans', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description');
-            $table->string('mode');
+            $table->text('description')->nullable();
+
             $table->unsignedInteger('owner')
               ->nullable();
               $table->foreign('owner')
                 ->references('id')
                 ->on('users');
-            $table->unsignedInteger('room_id')
-              ->nullable();
-              $table->foreign('room_id')
-                ->references('id')
-                ->on('rooms');
+
             $table->unsignedInteger('gametype_id')
               ->nullable();
               $table->foreign('gametype_id')
                 ->references('id')
                 ->on('gametypes');
+
+            $table->unsignedInteger('map_id')
+              ->nullable();
+              $table->foreign('map_id')
+                ->references('id')
+                ->on('maps');
+
             $table->timestamps();
         });
     }

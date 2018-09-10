@@ -1,10 +1,6 @@
 /**************************
         Inports
 **************************/
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
-
 var bootstrap  = window.bootstrap;
 
 /**************************
@@ -24,7 +20,6 @@ const VIEWPORT_ID = "viewport";
 **************************/
 var app;
 app = new App(MAP_ID,FLOOR_SOURCES, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID)
-// app.load();
 
 /**************************
  Remove Default Html Events

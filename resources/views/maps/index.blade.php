@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @push('js')
-  <!-- <script src="{{asset("js/index/index.js")}}"></script> -->
+  <!-- <script src="{{r_asset("js/index/index.js")}}"></script> -->
 @endpush
 
 @push('css')

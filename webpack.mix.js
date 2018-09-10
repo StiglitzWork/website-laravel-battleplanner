@@ -1,22 +1,24 @@
 let mix = require('laravel-mix');
+const webpack = require('webpack');
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
+// Includes dependancies in all files
+// Else plugins cannot inject themselves into jQuery
+mix.webpackConfig({
+  plugins: [
+    new webpack.ProvidePlugin({
+      '$': 'jquery',
+      'jQuery': 'jquery',
+      'window.jQuery': 'jquery',
+      'bootstrap': 'bootstrap'
+    })
+  ]
+});
+
 
 
 // Main
-mix.js('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css')
+mix.sass('resources/assets/sass/app.scss', 'public/css')
     .copy('resources/assets/js/global/*', 'public/js/global')
-    .copy('resources/assets/js/canvasTools.js', 'public/js')
 
     // Assets and CSS
     .copy('resources/assets/media/*', 'public/media')
@@ -46,7 +48,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .copy('resources/assets/sass/global/*', 'public/css/global');
 
 // Index
-mix.copy('resources/assets/js/index/*', 'public/js/index')
+mix.js('resources/assets/js/index/index.js', 'public/js/index')
     .copy('resources/assets/sass/index/*', 'public/css/index');
 
 // Auth
@@ -56,5 +58,11 @@ mix.copy('resources/assets/js/login/*', 'public/js/login')
     .copy('resources/assets/sass/register/*', 'public/css/register');
 
 // Maps
-mix.js('resources/assets/js/maps/show.js', 'public/js/maps/show.bundle.js')
-    .copy('resources/assets/sass/maps/*', 'public/css/maps');
+// mix.js('resources/assets/js/maps/show.js', 'public/js/maps/show.bundle.js')
+//     .copy('resources/assets/sass/maps/*', 'public/css/maps');
+
+// Maps
+mix.js('resources/assets/js/room/join.js', 'public/js/room/join.js')
+    .js('resources/assets/js/room/index.js', 'public/js/room/index.js')
+    .js('resources/assets/js/room/show.js', 'public/js/room/show.bundle.js')
+    .copy('resources/assets/sass/room/*', 'public/css/room');

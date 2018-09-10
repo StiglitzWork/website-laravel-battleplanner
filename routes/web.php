@@ -12,11 +12,30 @@
 */
 
 Auth::routes();
+
 Route::get('/', 'IndexController@index')->name("index");
-Route::get('/home', 'HomeController@index')->name('home');
 
 # Map selector routes
-Route::prefix('/maps')->group(function (){
-  Route::get('/', 'MapController@index')->name("maps.index");
-  Route::get('/{map}', 'MapController@show');
+// Route::prefix('/maps')->group(function (){
+//   Route::get('/', 'MapController@index')->name("maps.index");
+//   Route::get('/{map}', 'MapController@show');
+// });
+
+# Map selector routes
+Route::prefix('/room')->group(function (){
+  Route::get('/', 'RoomController@index')->name("Room.index");
+  Route::get('/new', 'RoomController@new')->name("Room.new");
+  Route::get('/join', 'RoomController@join')->name("Room.join");
+  Route::get('/{conn_string}', 'RoomController@show')->name("Room.show");
+  Route::post('battleplan/set', 'RoomController@setBattleplan')->name("Room.setBattleplan");
+  Route::post('battleplan/get', 'RoomController@getBattleplan')->name("Room.getBattleplan");
+});
+
+Route::prefix('/battleplan')->group(function (){
+  Route::post('/new', 'BattleplanController@new')->name("Battleplan.new");
+});
+
+Route::prefix('/battlefloor')->group(function (){
+  Route::post('/update', 'BattlefloorController@update')->name("Battlefloor.update");
+  Route::post('/getDraws', 'BattlefloorController@getDraws')->name("Battlefloor.getDraws");
 });

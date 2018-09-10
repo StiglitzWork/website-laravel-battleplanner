@@ -12,8 +12,8 @@ class App {
 
     constructor(Map_dbId, floorSources, viewportId, canvasBackgroundId , canvasOverlayId) {
         // Instantiatable class types
-        this.Map = require('./Map.js').default;
-        this.Floor = require('./Floor.js').default;
+        this.Battleplan = require('./Battleplan.js').default;
+        this.Battlefloor = require('./Battlefloor.js').default;
         this.Ui = require('./Ui.js').default;
 
         // Identifiers

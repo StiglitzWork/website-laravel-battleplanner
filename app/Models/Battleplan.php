@@ -1,26 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Battleplan extends Model
 {
   protected $fillable = [
-    'name', 'description', 'owner', 'room_id', 'gametype_id',
+    'name', 'description', 'owner', 'gametype_id', 'map_id'
   ];
-
 
   public function owner() {
     return $this->belongsTo('App\Models\User', 'owner', 'id');
   }
 
   public function map() {
-    return $this->hasOne('App\Models\Map', 'battleplan_id');
-  }
-
-  public function room() {
-    return $this->belongsTo('App\Models\Room', 'room_id', 'id');
+    return $this->hasOne('App\Models\Map', "id", 'map_id');
   }
 
   public function battlefloors() {
