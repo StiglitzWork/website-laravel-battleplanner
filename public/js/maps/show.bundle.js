@@ -60,12 +60,11 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 39);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 1:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10436,8 +10435,7 @@ return jQuery;
 
 
 /***/ }),
-
-/***/ 10:
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10552,8 +10550,7 @@ var Helpers = function () {
 
 
 /***/ }),
-
-/***/ 11:
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10570,7 +10567,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**************************
 	Extention class type
 **************************/
-var Helpers = __webpack_require__(10).default;
+var Helpers = __webpack_require__(1).default;
 
 var Floor = function (_Helpers) {
     _inherits(Floor, _Helpers);
@@ -10620,35 +10617,28 @@ var Floor = function (_Helpers) {
 
 
 /***/ }),
-
-/***/ 39:
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(40);
+module.exports = __webpack_require__(7);
 
 
 /***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 40:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/**************************
+/* WEBPACK VAR INJECTION */(function($) {/**************************
         Inports
 **************************/
-
-window.jQuery = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a;
-window.$ = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a;
-
 var bootstrap = window.bootstrap;
 
 /**************************
     Class type definition
 **************************/
-var App = __webpack_require__(41).default;
+var App = __webpack_require__(8).default;
 
 /**************************
     Constant declarations
@@ -10662,17 +10652,16 @@ var VIEWPORT_ID = "viewport";
 **************************/
 var app;
 app = new App(MAP_ID, FLOOR_SOURCES, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID);
-// app.load();
 
 /**************************
  Remove Default Html Events
 **************************/
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()("#" + CANVAS_BACKGROUND_ID + ', #' + CANVAS_OVERLAY_ID).on("contextmenu", function (e) {
+$("#" + CANVAS_BACKGROUND_ID + ', #' + CANVAS_OVERLAY_ID).on("contextmenu", function (e) {
     return false;
 });
 
 // Resize needs to reasjust the canvas sizes
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(window).resize(function () {
+$(window).resize(function () {
 
     app.ui.floorChange = true;
     app.ui.overlayUpdate = true;
@@ -10683,7 +10672,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(window).resize(function () {
 });
 
 // Zoom eventlistener
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()("#" + VIEWPORT_ID).on('wheel', function (ev) {
+$("#" + VIEWPORT_ID).on('wheel', function (ev) {
     ev.preventDefault();
 
     var step;
@@ -10708,10 +10697,10 @@ if (typeof window.app === "undefined") {
 }
 
 window.app.engine = app;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-
-/***/ 41:
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10737,9 +10726,9 @@ var App = function () {
         _classCallCheck(this, App);
 
         // Instantiatable class types
-        this.Map = __webpack_require__(42).default;
-        this.Floor = __webpack_require__(11).default;
-        this.Ui = __webpack_require__(43).default;
+        this.Map = __webpack_require__(9).default;
+        this.Floor = __webpack_require__(2).default;
+        this.Ui = __webpack_require__(10).default;
 
         // Identifiers
         this.type = "App"; // Json identifier
@@ -10972,8 +10961,7 @@ var App = function () {
 
 
 /***/ }),
-
-/***/ 42:
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10990,7 +10978,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**************************
 	Extention class type
 **************************/
-var Helpers = __webpack_require__(10).default;
+var Helpers = __webpack_require__(1).default;
 
 var Map = function (_Helpers) {
     _inherits(Map, _Helpers);
@@ -11007,7 +10995,7 @@ var Map = function (_Helpers) {
         // Super Class constructor call
 
 
-        _this.Floor = __webpack_require__(11).default;
+        _this.Floor = __webpack_require__(2).default;
 
         // Identifiers
         _this.dbId = dbId;
@@ -11173,13 +11161,12 @@ var Map = function (_Helpers) {
 
 
 /***/ }),
-
-/***/ 43:
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Ui; });
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Ui; });
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11244,6 +11231,10 @@ var Ui = function () {
 
             // acquire image
             img.src = this.map.floor.src;
+
+            // Fille background color
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, myBackground.width, myBackground.height);
 
             // Load the image in memory
             img.onload = function () {
@@ -11360,6 +11351,11 @@ var Ui = function () {
             this.clearBackground();
             var myCanvas = document.getElementById(this.canvasBackgroundId);
             var ctx = myCanvas.getContext('2d');
+
+            // Fille background color
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
             ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY, this.backgroundImage.width * this.ratio, this.backgroundImage.height * this.ratio);
             this.overlayUpdate = true;
         }
@@ -11432,7 +11428,7 @@ var Ui = function () {
 }();
 
 
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ })
-
-/******/ });
+/******/ ]);

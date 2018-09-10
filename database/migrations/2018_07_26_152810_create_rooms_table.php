@@ -15,11 +15,19 @@ class CreateRoomsTable extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->unsignedInteger('battleplan_id')
+              ->nullable();
+              $table->foreign('battleplan_id')
+                ->references('id')
+                ->on('battleplans');
+
             $table->unsignedInteger('owner')
               ->nullable();
               $table->foreign('owner')
                 ->references('id')
                 ->on('users');
+
             $table->string('connection_string');
             $table->timestamps();
         });

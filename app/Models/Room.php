@@ -1,20 +1,20 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
   protected $fillable = [
-    'owner', 'connection_string',
+    'owner', 'connection_string', 'battleplan_id'
   ];
 
-  public function owner() {
-    return $this->belongsTo('App\Models\User', 'owner', 'id');
+  public function Owner() {
+    return $this->hasOne('App\Models\User', 'id', 'owner');
   }
 
-  public function battleplan() {
-    return $this->hasOne('App\Models\Battleplan', 'room_id');
+  public function Battleplan() {
+    return $this->belongsTo('App\Models\Battleplan');
   }
 }
