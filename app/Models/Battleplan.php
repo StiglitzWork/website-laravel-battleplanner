@@ -26,6 +26,7 @@ class Battleplan extends Model
     return $this->belongsTo('App\Models\Gametype', 'gametype_id', 'id');
   }
 
+
   public function saveDraws() {
     $battlefloors = $this->battlefloors();
     foreach ($battlefloors as $key => $battlefloor) {
@@ -38,6 +39,10 @@ class Battleplan extends Model
     foreach ($battlefloors as $key => $battlefloor) {
         $battlefloor->removeUnsavedDraws();
     }
+  }
+
+  public function operators() {
+    return $this->belongsToMany('App\Models\Operator');
   }
 
 }

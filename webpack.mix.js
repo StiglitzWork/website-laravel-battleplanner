@@ -4,14 +4,14 @@ const webpack = require('webpack');
 // Includes dependancies in all files
 // Else plugins cannot inject themselves into jQuery
 mix.webpackConfig({
-  plugins: [
-    new webpack.ProvidePlugin({
-      '$': 'jquery',
-      'jQuery': 'jquery',
-      'window.jQuery': 'jquery',
-      'bootstrap': 'bootstrap'
-    })
-  ]
+    plugins: [
+        new webpack.ProvidePlugin({
+            '$': 'jquery',
+            'jQuery': 'jquery',
+            'window.jQuery': 'jquery',
+            'bootstrap': 'bootstrap'
+        })
+    ]
 });
 
 
@@ -23,28 +23,29 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
     // Assets and CSS
     .copy('resources/assets/media/*', 'public/media')
     .copy('resources/assets/media/thumbs/*', 'public/media/thumbs')
-    .copy('resources/assets/media/maps/Bank/*', 'public/media/maps/Bank')
-    .copy('resources/assets/media/maps/Border/*', 'public/media/maps/Border')
-    .copy('resources/assets/media/maps/Coastline/*', 'public/media/maps/Coastline')
-    .copy('resources/assets/media/maps/Consulate/*', 'public/media/maps/Consulate')
-    .copy('resources/assets/media/maps/Chalet/*', 'public/media/maps/Chalet')
-    .copy('resources/assets/media/maps/Clubhouse/*', 'public/media/maps/Clubhouse')
-    .copy('resources/assets/media/maps/Kafe/*', 'public/media/maps/Kafe')
-    .copy('resources/assets/media/maps/Oregon/*', 'public/media/maps/Oregon')
-    .copy('resources/assets/media/maps/Skyscraper/*', 'public/media/maps/Skyscraper')
-    .copy('resources/assets/media/maps/Villa/*', 'public/media/maps/Villa')
-    .copy('resources/assets/media/maps/Theme Park/*', 'public/media/maps/Theme Park')
-    .copy('resources/assets/media/maps/House/*', 'public/media/maps/House')
-    .copy('resources/assets/media/maps/Yacht/*', 'public/media/maps/Yacht')
-    .copy('resources/assets/media/maps/Favela/*', 'public/media/maps/Favela')
-    .copy('resources/assets/media/maps/Tower/*', 'public/media/maps/Tower')
-    .copy('resources/assets/media/maps/Plane/*', 'public/media/maps/Plane')
-    .copy('resources/assets/media/maps/Bartlett/*', 'public/media/maps/Bartlett')
-    .copy('resources/assets/media/maps/Hereford/*', 'public/media/maps/Hereford')
-    .copy('resources/assets/media/maps/Kanal/*', 'public/media/maps/Kanal')
+    .copy('resources/assets/media/maps/Clean/Bank/*', 'public/media/maps/Clean/Bank')
+    .copy('resources/assets/media/maps/Clean/Border/*', 'public/media/maps/Clean/Border')
+    .copy('resources/assets/media/maps/Clean/Coastline/*', 'public/media/maps/Clean/Coastline')
+    .copy('resources/assets/media/maps/Clean/Consulate/*', 'public/media/maps/Clean/Consulate')
+    .copy('resources/assets/media/maps/Clean/Chalet/*', 'public/media/maps/Clean/Chalet')
+    .copy('resources/assets/media/maps/Clean/Clubhouse/*', 'public/media/maps/Clean/Clubhouse')
+    .copy('resources/assets/media/maps/Clean/Kafe/*', 'public/media/maps/Clean/Kafe')
+    .copy('resources/assets/media/maps/Clean/Oregon/*', 'public/media/maps/Clean/Oregon')
+    .copy('resources/assets/media/maps/Clean/Skyscraper/*', 'public/media/maps/Clean/Skyscraper')
+    .copy('resources/assets/media/maps/Clean/Villa/*', 'public/media/maps/Clean/Villa')
+    .copy('resources/assets/media/maps/Clean/Theme Park/*', 'public/media/maps/Clean/Theme Park')
+    .copy('resources/assets/media/maps/Clean/House/*', 'public/media/maps/Clean/House')
+    .copy('resources/assets/media/maps/Clean/Yacht/*', 'public/media/maps/Clean/Yacht')
+    .copy('resources/assets/media/maps/Clean/Favela/*', 'public/media/maps/Clean/Favela')
+    .copy('resources/assets/media/maps/Clean/Tower/*', 'public/media/maps/Clean/Tower')
+    .copy('resources/assets/media/maps/Clean/Plane/*', 'public/media/maps/Clean/Plane')
+    .copy('resources/assets/media/maps/Clean/Bartlett/*', 'public/media/maps/Clean/Bartlett')
+    .copy('resources/assets/media/maps/Clean/Hereford/*', 'public/media/maps/Clean/Hereford')
+    .copy('resources/assets/media/maps/Clean/Kanal/*', 'public/media/maps/Clean/Kanal')
     .copy('resources/assets/media/ops/*', 'public/media/ops')
-    .copy('resources/assets/media/tools/atk/*', 'public/media/tools/atk')
-    .copy('resources/assets/media/tools/def/*', 'public/media/tools/def')
+    .copy('resources/assets/media/tools/general/*', 'public/media/tools/general')
+    .copy('resources/assets/media/tools/secondary/*', 'public/media/tools/secondary')
+    .copy('resources/assets/media/tools/unique/*', 'public/media/tools/unique')
     .copy('resources/assets/sass/global/*', 'public/css/global');
 
 // Index
