@@ -33,10 +33,23 @@ class RoomController extends Controller
     return redirect()->route("Room.show", ["conn_string" => $room->connection_string]);
   }
 
+  public function saveBattleplan(Request $request) {
+    $battleplan = Room::where("connection_string", $request->conn_string)->first()->battleplan;
+    if ($battleplan) {
+        $battleplan->saveDraws();
+        $battleplan->name = $request->name;
+        $battleplan->saved = true;
+        $battleplan->save();
+        return $battleplan;
+    }
+  }
+
   public function setBattleplan(Request $request){
     // define variables
     $room = Room::where("connection_string", $request->conn_string)->first();
     $battlePlanId = $request->battleplan;
+    $battlePlan = Battleplan::find($battlePlanId);
+    $battlePlan->removeUnsavedDraws();
     $room->battleplan_id = $battlePlanId;
     $room->save();
     return response()->json($room);
@@ -67,17 +80,18 @@ class RoomController extends Controller
   }
 
   public function show(Request $request,$conn_string){
-    // dd($conn_string);
     $room = Room::where("connection_string", $conn_string)->first();
 
     $maps = Map::orderBy('name', 'asc')->get();
+    $battleplans = Battleplan::where('owner', Auth::User()->id)
+        ->where('saved', true)
+        ->get();
 
     // Error handle room DNE
     if($room == null){
       return redirect()->route('Room.join')->with("error", ["error" => "Room not found!"]);
     } else{
-      return view("room.show", compact("maps", "room"));
-
+      return view("room.show", compact("maps", "room", 'battleplans'));
     }
 
   }

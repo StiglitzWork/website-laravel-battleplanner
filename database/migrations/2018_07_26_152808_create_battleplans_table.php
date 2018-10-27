@@ -17,6 +17,7 @@ class CreateBattleplansTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->boolean("saved")->default(false);
 
             $table->unsignedInteger('owner')
               ->nullable();

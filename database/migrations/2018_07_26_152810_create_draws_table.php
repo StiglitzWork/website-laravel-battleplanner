@@ -20,6 +20,7 @@ class CreateDrawsTable extends Migration
             $table->float("destinationX",10,5);
             $table->float("destinationY",10,5);
             $table->string("color");
+            $table->boolean("saved")->default(false);
 
             $table->unsignedInteger('user_id')
               ->nullable();

@@ -28,7 +28,11 @@
 
           <div class="col-4 battleplan">
             <label for="battleplan">Battleplan Name:</label>
-            <input class="col-4 form-control inline" id="battleplan_name" value="" type="text" disabled>
+            @if ($room->Owner == Auth::User())
+                <input class="col-4 form-control inline" id="battleplan_name" value="" type="text">
+            @else
+                <input class="col-4 form-control inline" id="battleplan_name" value="" type="text" disabled>
+            @endif
           </div>
 
         </div>
@@ -39,7 +43,7 @@
             <button type="button" name="button" class="btn btn-primary" onclick="app.engine.changeFloor(1)">></button>
             @if ($room->Owner == Auth::User())
               <button type="button" name="button" class="btn btn-info" data-toggle="modal" data-target="#mapModal">load</button>
-              {{-- <button type="button" name="button" class="btn btn-success" onclick="app.engine.changeFloor(-1)">Save</button> --}}
+              <button type="button" name="button" class="btn btn-success" onclick="app.engine.save()">Save</button>
             @endif
           </div>
         </div>
@@ -77,9 +81,9 @@
             <li class="nav-item">
               <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true">New</a>
             </li>
-            {{-- <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" id="load-tab" data-toggle="tab" href="#load" role="tab" aria-controls="load" aria-selected="false">load</a>
-            </li> --}}
+            </li>
           </ul>
 
           {{-- Pill content --}}
@@ -87,9 +91,9 @@
             <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="home-tab">
               @include('room.new')
             </div>
-            {{-- <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="profile-tab">
-
-            </div> --}}
+            <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="profile-tab">
+              @include('room.load')
+            </div>
           </div>
 
         </div>

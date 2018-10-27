@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Map;
 
-class MapController extends Controller
+class MapController1 extends Controller
 {
 
     // Tells laravel you must be logged in to see any of these routes
@@ -15,8 +15,8 @@ class MapController extends Controller
     }
 
     public function index(Request $request) {
-      $maps = Map::orderBy('name', 'asc')->get();
-      return view('maps.index', compact('maps'));
+        $maps = Map::orderBy('name', 'asc')->get();
+        return view('maps.index', compact('maps','savedMaps'));
     }
 
     public function show(Request $request, $name) {
@@ -25,4 +25,6 @@ class MapController extends Controller
 
       return view('maps.show', compact('map'));
     }
+
+
 }

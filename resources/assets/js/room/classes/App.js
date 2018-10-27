@@ -96,6 +96,21 @@ class App {
       });
     }
 
+    save(){
+      var self = this;
+      $.ajax({
+        method: "POST",
+        url: "/room/battleplan/save",
+        data: { conn_string : this.conn_string, name : $("#battleplan_name").val()},
+        success: function(result){
+          alert("Saved!");
+        },
+        error: function(result,code){
+          console.log(result);
+        }
+      });
+    }
+
     load(battleplan,battlefloors){
       if (battleplan && battlefloors) {
         $("#battleplan_name").val(battleplan.name);

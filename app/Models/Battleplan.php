@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Battleplan extends Model
 {
   protected $fillable = [
-    'name', 'description', 'owner', 'gametype_id', 'map_id'
+    'name', 'description', 'owner', 'gametype_id', 'map_id', 'saved'
   ];
 
   public function owner() {
@@ -25,4 +25,19 @@ class Battleplan extends Model
   public function gametype() {
     return $this->belongsTo('App\Models\Gametype', 'gametype_id', 'id');
   }
+
+  public function saveDraws() {
+    $battlefloors = $this->battlefloors();
+    foreach ($battlefloors as $key => $battlefloor) {
+        $battlefloor->saveDraws();
+    }
+  }
+
+  public function removeUnsavedDraws() {
+    $battlefloors = $this->battlefloors();
+    foreach ($battlefloors as $key => $battlefloor) {
+        $battlefloor->removeUnsavedDraws();
+    }
+  }
+
 }

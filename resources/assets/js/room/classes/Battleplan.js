@@ -147,7 +147,6 @@ class Battleplan extends Helpers {
 
         // init the current floor
         this.battlefloor = this.battlefloors[0];
-        // this.battlefloor.active = true;
     }
 
 

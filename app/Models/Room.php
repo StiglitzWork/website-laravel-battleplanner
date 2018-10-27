@@ -17,4 +17,5 @@ class Room extends Model
   public function Battleplan() {
     return $this->belongsTo('App\Models\Battleplan');
   }
+
 }

@@ -10930,6 +10930,22 @@ var App = function () {
             });
         }
     }, {
+        key: 'save',
+        value: function save() {
+            var self = this;
+            $.ajax({
+                method: "POST",
+                url: "/room/battleplan/save",
+                data: { conn_string: this.conn_string, name: $("#battleplan_name").val() },
+                success: function success(result) {
+                    alert("Saved!");
+                },
+                error: function error(result, code) {
+                    console.log(result);
+                }
+            });
+        }
+    }, {
         key: 'load',
         value: function load(battleplan, battlefloors) {
             if (battleplan && battlefloors) {
@@ -11356,7 +11372,6 @@ var Battleplan = function (_Helpers) {
 
             // init the current floor
             this.battlefloor = this.battlefloors[0];
-            // this.battlefloor.active = true;
         }
 
         /**

@@ -16,12 +16,6 @@ Auth::routes();
 Route::get('/', 'IndexController@index')->name("index");
 
 # Map selector routes
-// Route::prefix('/maps')->group(function (){
-//   Route::get('/', 'MapController@index')->name("maps.index");
-//   Route::get('/{map}', 'MapController@show');
-// });
-
-# Map selector routes
 Route::prefix('/room')->group(function (){
   Route::get('/', 'RoomController@index')->name("Room.index");
   Route::get('/new', 'RoomController@new')->name("Room.new");
@@ -29,10 +23,12 @@ Route::prefix('/room')->group(function (){
   Route::get('/{conn_string}', 'RoomController@show')->name("Room.show");
   Route::post('battleplan/set', 'RoomController@setBattleplan')->name("Room.setBattleplan");
   Route::post('battleplan/get', 'RoomController@getBattleplan')->name("Room.getBattleplan");
+  Route::post('battleplan/save', 'RoomController@saveBattleplan')->name("Room.saveBattleplan");
 });
 
 Route::prefix('/battleplan')->group(function (){
   Route::post('/new', 'BattleplanController@new')->name("Battleplan.new");
+  Route::post('/load', 'BattleplanController@load')->name("Battleplan.load");
 });
 
 Route::prefix('/battlefloor')->group(function (){

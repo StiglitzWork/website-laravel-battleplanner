@@ -27,4 +27,21 @@ class Battlefloor extends Model
       ->whereNotIn("id",$alreadyHaveIds)
       ->get();
   }
+
+  public function saveDraws(){
+    $draws = $this->draws;
+    foreach ($draws as $key => $draw) {
+        $draw->saved = true;
+        $draw->save();
+    }
+  }
+  public function removeUnsavedDraws(){
+    $draws = $this->draws;
+    foreach ($draws as $key => $draw) {
+        if(!$draw->saved){
+            $draw->delete();
+        }
+    }
+  }
+
 }
