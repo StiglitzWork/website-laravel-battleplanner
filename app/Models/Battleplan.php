@@ -25,4 +25,8 @@ class Battleplan extends Model
   public function gametype() {
     return $this->belongsTo('App\Models\Gametype', 'gametype_id', 'id');
   }
+
+  public function operators() {
+    return $this->belongsToMany('App\Models\Operator');
+  }
 }
