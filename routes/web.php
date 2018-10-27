@@ -24,6 +24,7 @@ Route::prefix('/room')->group(function (){
   Route::post('battleplan/set', 'RoomController@setBattleplan')->name("Room.setBattleplan");
   Route::post('battleplan/get', 'RoomController@getBattleplan')->name("Room.getBattleplan");
   Route::post('battleplan/save', 'RoomController@saveBattleplan')->name("Room.saveBattleplan");
+  Route::post('battleplan/delete', 'RoomController@deleteBattleplan')->name("Room.deleteBattleplan");
 });
 
 Route::prefix('/battleplan')->group(function (){

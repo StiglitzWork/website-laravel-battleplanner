@@ -20,6 +20,7 @@ class CreateRoomsTable extends Migration
               ->nullable();
               $table->foreign('battleplan_id')
                 ->references('id')
+                ->onDelete('set null')
                 ->on('battleplans');
 
             $table->unsignedInteger('owner')

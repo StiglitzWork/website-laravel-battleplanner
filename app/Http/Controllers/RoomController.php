@@ -35,6 +35,11 @@ class RoomController extends Controller
 
   public function saveBattleplan(Request $request) {
     $battleplan = Room::where("connection_string", $request->conn_string)->first()->battleplan;
+
+    // make sure the deleter is also the owner of the map
+    if ($battleplan->Owner != Auth::User()) {
+        return false;
+    }
     if ($battleplan) {
         $battleplan->saveDraws();
         $battleplan->name = $request->name;
@@ -47,12 +52,25 @@ class RoomController extends Controller
   public function setBattleplan(Request $request){
     // define variables
     $room = Room::where("connection_string", $request->conn_string)->first();
-    $battlePlanId = $request->battleplan;
-    $battlePlan = Battleplan::find($battlePlanId);
-    $battlePlan->removeUnsavedDraws();
-    $room->battleplan_id = $battlePlanId;
+    $battleplanId = $request->battleplan;
+    $battleplan = Battleplan::find($battleplanId);
+    $battleplan->removeUnsavedDraws();
+    $room->battleplan_id = $battleplanId;
     $room->save();
     return response()->json($room);
+  }
+
+  public function deleteBattleplan(Request $request){
+    $battleplanId = $request->battleplanId;
+    $battleplan = Battleplan::find($battleplanId);
+
+    // make sure the deleter is also the owner of the map
+    if ($battleplan->Owner != Auth::User()) {
+        return false;
+    }
+
+    $battleplan->delete();
+    return true;
   }
 
   public function getBattleplan(Request $request){

@@ -19,12 +19,14 @@ class CreateBattlefloorsTable extends Migration
               ->nullable();
               $table->foreign('floor_id')
                 ->references('id')
+                ->onDelete('set null')
                 ->on('floors');
 
             $table->unsignedInteger('battleplan_id')
               ->nullable();
               $table->foreign('battleplan_id')
                 ->references('id')
+                ->onDelete('cascade')
                 ->on('battleplans');
             $table->timestamps();
         });
