@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Gadget extends Model
 {
   protected $fillable = [
-    'name', 'icon', 'prime'
+    'name', 'icon', 'prime', 'general'
   ];
 
   public function operators() {
