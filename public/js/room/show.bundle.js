@@ -10922,11 +10922,41 @@ var App = function () {
                 data: { map: mapId, room: this.conn_string },
                 success: function success(result) {
                     self.load(result.battleplan, result.battlefloors);
-                    self.setRoomsBattleplan(result.battleplan);
+                    self.setRoomsBattleplan(result.battleplan.id);
                 },
                 error: function error(result, code) {
                     console.log(result);
                 }
+            });
+        }
+    }, {
+        key: 'deleteBattlePlan',
+        value: function deleteBattlePlan(battleplanId) {
+            var self = this;
+            $.ajax({
+                method: "POST",
+                url: "/room/battleplan/delete",
+                data: { "battleplanId": battleplanId },
+                success: function success(result) {
+                    console.log("Successfully deleted!");
+                },
+                error: function error(result, code) {
+                    console.log(result);
+                }
+            });
+        }
+    }, {
+        key: 'loadBattlePlan',
+        value: function loadBattlePlan(battleplanId) {
+            // set the battleplan
+            var self = this;
+            this.setRoomsBattleplan(battleplanId, function () {
+                // Reset
+                self.getRoomsBattleplan(function (result) {
+                    if (result != null) {
+                        self.load(result.battleplan, result.battlefloors);
+                    }
+                });
             });
         }
     }, {
@@ -10956,14 +10986,19 @@ var App = function () {
         }
     }, {
         key: 'setRoomsBattleplan',
-        value: function setRoomsBattleplan(battleplan) {
+        value: function setRoomsBattleplan(battleplanId) {
+            var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
             var self = this;
             $.ajax({
                 method: "POST",
                 url: "/room/battleplan/set",
-                data: { battleplan: battleplan.id, conn_string: this.conn_string },
+                data: { battleplan: battleplanId, conn_string: this.conn_string },
                 success: function success(result) {
                     console.log(result);
+                    if (callback) {
+                        callback(result);
+                    }
                 },
                 error: function error(result, code) {
                     console.log(result);

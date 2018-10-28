@@ -29,12 +29,14 @@ class CreateBattleplansTable extends Migration
               ->nullable();
               $table->foreign('gametype_id')
                 ->references('id')
+                ->onDelete('set null')
                 ->on('gametypes');
 
             $table->unsignedInteger('map_id')
               ->nullable();
               $table->foreign('map_id')
                 ->references('id')
+                ->onDelete('set null')
                 ->on('maps');
 
             $table->timestamps();

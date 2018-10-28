@@ -88,12 +88,40 @@ class App {
         data: { map: mapId, room : this.conn_string},
         success: function(result){
           self.load(result.battleplan,result.battlefloors);
-          self.setRoomsBattleplan(result.battleplan);
+          self.setRoomsBattleplan(result.battleplan.id);
         },
         error: function(result,code){
           console.log(result);
         }
       });
+    }
+
+    deleteBattlePlan(battleplanId){
+      var self = this;
+      $.ajax({
+        method: "POST",
+        url: "/room/battleplan/delete",
+        data: { "battleplanId": battleplanId},
+        success: function(result){
+            console.log("Successfully deleted!");
+        },
+        error: function(result,code){
+            console.log(result);
+        }
+      });
+    }
+
+    loadBattlePlan(battleplanId){
+        // set the battleplan
+        var self = this;
+        this.setRoomsBattleplan(battleplanId, function(){
+            // Reset
+            self.getRoomsBattleplan(function(result){
+              if(result != null){
+                  self.load(result.battleplan,result.battlefloors);
+              }
+          })
+        });
     }
 
     save(){
@@ -119,14 +147,17 @@ class App {
       }
     }
 
-    setRoomsBattleplan(battleplan){
+    setRoomsBattleplan(battleplanId, callback = null){
       var self = this;
       $.ajax({
         method: "POST",
         url: "/room/battleplan/set",
-        data: { battleplan: battleplan.id, conn_string : this.conn_string},
+        data: { battleplan: battleplanId, conn_string : this.conn_string},
         success: function(result){
           console.log(result);
+          if (callback) {
+              callback(result)
+          }
         },
         error: function(result,code){
           console.log(result);

@@ -26,16 +26,15 @@ class Battleplan extends Model
     return $this->belongsTo('App\Models\Gametype', 'gametype_id', 'id');
   }
 
-
   public function saveDraws() {
-    $battlefloors = $this->battlefloors();
+    $battlefloors = $this->battlefloors;
     foreach ($battlefloors as $key => $battlefloor) {
         $battlefloor->saveDraws();
     }
   }
 
   public function removeUnsavedDraws() {
-    $battlefloors = $this->battlefloors();
+    $battlefloors = $this->battlefloors;
     foreach ($battlefloors as $key => $battlefloor) {
         $battlefloor->removeUnsavedDraws();
     }

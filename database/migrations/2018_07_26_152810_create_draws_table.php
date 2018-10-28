@@ -32,6 +32,7 @@ class CreateDrawsTable extends Migration
               ->nullable();
             $table->foreign('battlefloor_id')
               ->references('id')
+              ->onDelete('cascade')
               ->on('battlefloors');
 
             $table->timestamps();
