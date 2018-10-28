@@ -17,4 +17,8 @@ class Operator extends Model
   public function gadgets() {
     return $this->belongsToMany('App\Models\Gadget');
   }
+
+  public function slots() {
+    return $this->belongsToMany('App\Models\OperatorSlot');
+  }
 }

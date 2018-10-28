@@ -44,4 +44,8 @@ class Battleplan extends Model
     return $this->belongsToMany('App\Models\Operator');
   }
 
+  public function slots() {
+    return $this->hasMany('App\Models\OperatorSlot', 'battleplan_id');
+  }
+
 }

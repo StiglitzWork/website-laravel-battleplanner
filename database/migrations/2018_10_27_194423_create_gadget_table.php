@@ -18,6 +18,7 @@ class CreateGadgetTable extends Migration
             $table->text('name');
             $table->text('icon');
             $table->boolean('prime');
+            $table->boolean('general');
             $table->timestamps();
         });
     }
