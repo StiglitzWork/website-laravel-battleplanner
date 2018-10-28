@@ -1,28 +1,52 @@
-#EngineContainer{
-  margin: 0px;
-  height: calc(100vh - 92px);
+#EngineContainer {
+    margin: 0px;
+    height: calc(100vh - 92px);
 }
-#viewport{
-  width:100%
+
+#viewport {
+    width: 100%
 }
-.fixed{
-  position: fixed;
+
+.fixed {
+    position: fixed;
 }
-canvas{
-  width:100%;
+
+canvas {
+    width: 100%;
 }
-.buttonGroup{
-  background-color: black;
+
+.buttonGroup {
+    background-color: black;
 }
-.inline{
-  display: inline;
+
+.inline {
+    display: inline;
 }
-label{
-  color:white;
+
+label {
+    color: white;
 }
-#colorPicker{
-  height: 40px;
+
+#colorPicker {
+    height: 40px;
 }
-.content{
-  background-color: black;
+
+.content {
+    background-color: black;
+}
+
+.padding-0 {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.operator-rectangle {
+    max-height: 40px;
+    height: 100%;
+    width: 100%;
+}
+
+.op-icon {
+    height: 100%;
+    width: 40px;
 }

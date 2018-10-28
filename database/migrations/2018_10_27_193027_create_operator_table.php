@@ -18,6 +18,7 @@ class CreateOperatorTable extends Migration
             $table->text('name');
             $table->text('icon');
             $table->text('colour');
+            $table->boolean('atk');
             $table->timestamps();
         });
     }

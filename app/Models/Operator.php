@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Operator extends Model
 {
   protected $fillable = [
-    'name', 'icon', 'colour'
+    'name', 'icon', 'colour', 'atk'
   ];
 
   public function battleplan() {
