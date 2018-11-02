@@ -5,6 +5,8 @@ use App\Models\Room;
 use App\Models\Map;
 use App\Models\Battleplan;
 use App\Models\Battlefloor;
+use App\Models\Operator;
+use App\Models\OperatorSlot;
 use Illuminate\Http\Request;
 use Auth;
 class RoomController extends Controller
@@ -98,9 +100,13 @@ class RoomController extends Controller
   }
 
   public function show(Request $request,$conn_string){
+    // Find correct room
     $room = Room::where("connection_string", $conn_string)->first();
 
+    // Gather relevant data
     $maps = Map::orderBy('name', 'asc')->get();
+    $atk_operators = Operator::attackers();
+    $def_operators = Operator::defenders();
     $battleplans = Battleplan::where('owner', Auth::User()->id)
         ->where('saved', true)
         ->get();
@@ -109,7 +115,7 @@ class RoomController extends Controller
     if($room == null){
       return redirect()->route('Room.join')->with("error", ["error" => "Room not found!"]);
     } else{
-      return view("room.show", compact("maps", "room", 'battleplans'));
+      return view("room.show", compact("maps", "room", 'battleplans', 'atk_operators', 'def_operators'));
     }
 
   }

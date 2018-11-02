@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,10 +11,10 @@ class OperatorSlot extends Model
    ];
 
    public function battleplan() {
-     return $this->belongsTo('App\Models\Battleplan')
+     return $this->belongsTo('App\Models\Battleplan');
    }
 
    public function operator() {
-     return $this->hasOne('App\Models\Operator');
+     return $this->belongsTo('App\Models\Operator');
    }
 }

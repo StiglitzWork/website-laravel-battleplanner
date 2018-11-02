@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\OperatorSlot;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,12 +41,24 @@ class Battleplan extends Model
     }
   }
 
-  public function operators() {
-    return $this->belongsToMany('App\Models\Operator');
-  }
-
   public function slots() {
     return $this->hasMany('App\Models\OperatorSlot', 'battleplan_id');
   }
+
+  // Create override
+  public static function create(array $attributes = [])
+    {
+        $numberOfOperatorSlots = 5;
+        // Parent Create method
+        $model = static::query()->create($attributes);
+
+        for ($i=0; $i < $numberOfOperatorSlots; $i++) {
+            OperatorSlot::create([
+                "battleplan_id" => $model->id
+            ]);
+        }
+        // Create slots
+        return $model;
+    }
 
 }

@@ -13,7 +13,7 @@ class CreateGadgetTable extends Migration
      */
     public function up()
     {
-        Schema::create('gadget', function (Blueprint $table) {
+        Schema::create('gadgets', function (Blueprint $table) {
             $table->increments('id');
             $table->text('name');
             $table->text('icon');
@@ -30,6 +30,6 @@ class CreateGadgetTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gadget');
+        Schema::dropIfExists('gadgets');
     }
 }

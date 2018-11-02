@@ -103,7 +103,7 @@ class App {
         url: "/room/battleplan/delete",
         data: { "battleplanId": battleplanId},
         success: function(result){
-            console.log("Successfully deleted!");
+            alert("Successfully deleted!");
         },
         error: function(result,code){
             console.log(result);

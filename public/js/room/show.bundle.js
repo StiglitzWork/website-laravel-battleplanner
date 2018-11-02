@@ -10938,7 +10938,7 @@ var App = function () {
                 url: "/room/battleplan/delete",
                 data: { "battleplanId": battleplanId },
                 success: function success(result) {
-                    console.log("Successfully deleted!");
+                    alert("Successfully deleted!");
                 },
                 error: function error(result, code) {
                     console.log(result);

@@ -12,74 +12,7 @@
 @endpush
 
 @section ('content')
-    <div class="buttonGroup col-12 text-center">
-      <div class="float-none text-center">
-
-        <div class="row mb-2">
-          <div class="col-3 text-left">
-            <label class="inline connection" for="connection">Room #:</label>
-            <input class="col-4 form-control inline" id="connection" value="{{$room->connection_string}}"type="text" disabled>
-          </div>
-          <div class="col-6 text-center">
-            @if ($room->Owner == Auth::User())
-              <button type="button" name="button" class="btn btn-info" data-toggle="modal" data-target="#mapModal">Load Map or Battleplan</button>
-              <button type="button" name="button" class="btn btn-success" onclick="app.engine.save()">Save</button>
-            @endif
-            <button type="button" name="button" class="btn btn-info">Help</button>
-            <button type="button" name="button" class="btn btn-primary" onclick="app.engine.changeFloor(-1)">Floor &darr;</button>
-            <button type="button" name="button" class="btn btn-primary" onclick="app.engine.changeFloor(1)">Floor &uarr;</button>
-          </div>
-          <div class="col-3 owner text-right">
-            <label for="owner">Room Owner:</label>
-            <input class="col-4 form-control inline" id="owner" value="{{$room->Owner->username}}"type="text" disabled>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-1 padding-0">
-            <div class="operator-rectangle text-centered" style="background-color:#dfdfdf;">
-              <input type="image" src="/media/ops/empty.png" class="op-icon" data-toggle="modal" data-target="#opModal" />
-            </div>
-          </div>
-          <div class="col-1 padding-0">
-            <div class="operator-rectangle text-centered" style="background-color:#dfdfdf;">
-              <input type="image" src="/media/ops/empty.png" class="op-icon" data-toggle="modal" data-target="#opModal" />
-            </div>
-          </div>
-          <div class="col-1 padding-0">
-            <div class="operator-rectangle text-centered" style="background-color:#dfdfdf;">
-              <input type="image" src="/media/ops/empty.png" class="op-icon" data-toggle="modal" data-target="#opModal" />
-            </div>
-          </div>
-          <div class="col-1 padding-0">
-            <div class="operator-rectangle text-centered" style="background-color:#dfdfdf;">
-              <input type="image" src="/media/ops/empty.png" class="op-icon" data-toggle="modal" data-target="#opModal" />
-            </div>
-          </div>
-          <div class="col-1 padding-0">
-            <div class="operator-rectangle text-centered" style="background-color:#dfdfdf;">
-              <input type="image" src="/media/ops/empty.png" class="op-icon" data-toggle="modal" data-target="#opModal" />
-            </div>
-          </div>
-
-
-          <div class="col-2  text-center">
-            <label for="head">Pencil:</label>
-            <input type="color" id="head" name="color" value="#e66465" onChange="app.engine.changeColor(this.value)" />
-          </div>
-
-          <div class="col-5 battleplan text-right">
-            <label for="battleplan">Battleplan Name:</label>
-            @if ($room->Owner == Auth::User())
-                <input class="col-4 form-control inline" id="battleplan_name" value="" type="text">
-            @else
-                <input class="col-4 form-control inline" id="battleplan_name" value="" type="text" disabled>
-            @endif
-          </div>
-        </div>
-
-      </div>
-    </div>
+    @include('room.collapse-topbar')
     <div class="row" id="EngineContainer">
   		<div id="viewport">
   			<canvas id="background" class="fixed"></canvas>
@@ -129,7 +62,6 @@
 
         </div>
         <div class="modal-footer">
-          {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>

@@ -1,8 +1,19 @@
-#EngineContainer {
-    margin: 0px;
-    height: calc(100vh - 92px);
+.cursor-click{
+    cursor: pointer;
 }
-
+.cursor-click:hover{
+    border-style: solid;
+}
+ #EngineContainer {
+    margin: 0px;
+    top:0px;
+    right:0px;
+    left:0px;
+    bottom:0px;
+    position: fixed;
+    z-index: -1;
+    /* height: calc(100vh - 92px); */
+}
 #viewport {
     width: 100%
 }
@@ -28,25 +39,22 @@ label {
 }
 
 #colorPicker {
-    height: 40px;
-}
-
-.content {
-    background-color: black;
-}
-
-.padding-0 {
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.operator-rectangle {
-    max-height: 40px;
     height: 100%;
     width: 100%;
 }
+.content {
+    background-color: black;
+    overflow: hidden;
+}
 
-.op-icon {
-    height: 100%;
-    width: 40px;
+.operator-border{
+    border-style: solid;
+    border-width: 10px;
+    height: 90px;
+    width: 90px;
+}
+.battleplan_notes{
+    height:100%;
+    width:100%;
+    margin: 20px;
 }

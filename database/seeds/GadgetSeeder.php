@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Gadget;
 
 class GadgetSeeder extends Seeder
 {
@@ -75,5 +76,7 @@ class GadgetSeeder extends Seeder
         /*General: Rappel*/['name'=> "Rappel", 'icon'=> "/media/tools/secondary/Rappel.png", 'prime'=> false, 'general'=> true],
         /*General: Reinforcement*/['name'=> "Reinforcement", 'icon'=> "/media/tools/secondary/Reinforcement.png", 'prime'=> false, 'general'=> true],
       ];
+
+      Gadget::insert($gadgetArray);
     }
 }

@@ -21,4 +21,12 @@ class Operator extends Model
   public function slots() {
     return $this->belongsToMany('App\Models\OperatorSlot');
   }
+
+  public static function attackers() {
+    return Operator::where("atk", true)->get();
+  }
+
+  public static function defenders() {
+    return Operator::where("atk", false)->get();
+  }
 }

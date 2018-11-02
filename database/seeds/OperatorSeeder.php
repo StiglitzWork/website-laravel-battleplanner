@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Operator;
 
 class OperatorSeeder extends Seeder
 {
@@ -58,5 +59,6 @@ class OperatorSeeder extends Seeder
           /*Fuze*/['name'=> "Fuze", 'icon'=> "/media/ops/Fuze.png", 'colour'=> "ab1513", 'atk'=> true],
           /*Glaz*/['name'=> "Glaz", 'icon'=> "/media/ops/Glaz.png", 'colour'=> "ab1513", 'atk'=> true],
         ];
+        Operator::insert($operatorArray);
     }
 }
