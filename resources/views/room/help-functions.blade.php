@@ -1,23 +1,30 @@
-<h1 class="text-center">It's intuitive! kinda...</h1>
+<h1 class="text-center">It's intuitive! Kinda...</h1>
 <h3>
   Moving the map around
 </h3>
 <p>
- To move the map around, right click anywhere on it and move the cursor, duh!
+ To move the map around, right click anywhere on it and move the cursor.
+</p>
+
+<h3>
+  Zoom
+</h3>
+<p>
+ Spin your mouse wheel to zoom in/out of the map.
 </p>
 
 <h3>
   Drawing
 </h3>
 <p>
- Anyone can draw in any color they want! just left click and move your mouse. Changing the drawing color can be found under the "controls" tab.
+ Anyone can draw in any color they want! Just left click and move your mouse. Changing the drawing color can be found under the <strong>Controls</strong> tab.
 </p>
 
 <h3>
   How do I change floors?
 </h3>
 <p>
- "controls" tab... need I say more? (looking into making this a key bind for simplicity)
+ Again, check out the <strong>Controls</strong> tab. (We're looking into making a key bind for simplicity)
 </p>
 
 <h3>
@@ -28,15 +35,15 @@
 </p>
 
 <h3>
-  Naming the map, where is it!
+  Naming the map, where is it!?
 </h3>
 <p>
-  If you are the room owner, then you can change the name of the map under "info" tab, don't forget to click save!
+  If you are the room owner, then you can change the name of the map under the <strong>Info</strong> tab, don't forget to click save!
 </p>
 
 <h3>
   I can't edit the notes!
 </h3>
 <p>
-  You probable arent the room owner now are you?
+  You probably aren't the room owner, now are you?
 </p>

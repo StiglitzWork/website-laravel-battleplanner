@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>R6 Map Planner</title>
+    <title>Battle Planner</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -18,6 +18,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 
     <!-- Styles -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{r_asset('media/favicon.png')}}"/>
     <link href="{{ r_asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ r_asset('css/global/global.css') }}" rel="stylesheet">
     @stack('css')
