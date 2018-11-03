@@ -20,16 +20,17 @@
               easy switching between all of your saved battleplans.</h5>
         </div>
       </div>
-      <div class="row mt-4">
 
-        <div class="col-6">
-          <a href="/room/create" type="button" class="col-6 btn btn-primary">Create a new Room</a>
-        </div>
+    </div>
+    <div class="row mt-4 text-center">
 
-        <div class="col-6">
-          <a  href="/room/join" type="button" class="col-6 btn btn-success">Join by Room ID</a>
-        </div>
-
+      <div class="col-md-6 col-sm-12">
+        <a href="/room/create" type="button" class="col-12 btn btn-primary">Create a new Room</a>
       </div>
+
+      <div class="col-md-6 col-sm-12">
+        <a  href="/room/join" type="button" class="col-12 btn btn-success">Join by Room ID</a>
+      </div>
+
     </div>
 @endsection

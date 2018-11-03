@@ -46,7 +46,7 @@ class OperatorSlot extends Helpers {
             }
         } else{
             if (this.operatorId == null) {
-                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" style="border-color: #${this.color}" />`
+                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border no-pointer" style="border-color: #${this.color}" />`
             } else{
                 dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="${this.image_src}" class="op-icon operator-slot operator-border" style="border-color: #${this.color}"/>`
             }

@@ -34,7 +34,8 @@
             <h2 class="section-heading text-white">We've got what you need!</h2>
             <hr class="light my-4">
             <p class="text-faded mb-4">Don't get caught in the action without your game plan.</p>
-            <p class="text-faded mb-4">All Rights to Rainbow 6: Siege are property of Ubisoft. This is a non-profit, fan made website.</p>
+            <p class="text-faded mb-4">All Rights to Rainbow 6: Siege are property of Ubisoft. This is a <strong>non-profit</strong>, fan made website.</p>
+            <p class="text-faded mb-4">Please don't sue me! I'm trying to finish my last year of my degree and will try and work for you.</p>
           </div>
         </div>
       </div>

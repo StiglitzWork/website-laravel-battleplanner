@@ -10585,7 +10585,7 @@ var Battlefloor = function (_Helpers) {
 
 
         _this.Draw = __webpack_require__(14).default;
-        // this.active = false;
+
         // Identifiers
         _this.type = "Battlefloor"; // Json identifier
         _this.id = _Battlefloor.id;
@@ -10608,114 +10608,12 @@ var Battlefloor = function (_Helpers) {
         key: 'draw',
         value: function draw(originCoordinates, currentCoordinates, color) {
             this.draws_unpushed.push(new this.Draw(originCoordinates, currentCoordinates, color, this.id));
-            // if(!this.acquiringDelayedDraws){
-            //     this.acquiringDelayedDraws = true;
-            //     setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
-            // }
         }
     }, {
         key: 'serverDraw',
         value: function serverDraw(originCoordinates, currentCoordinates, color) {
             this.draws.push(new this.Draw(originCoordinates, currentCoordinates, color, this.id));
         }
-
-        // pushServer(){
-        //     this.acquiringDelayedDraws = false;
-        //     this.draws_transit = this.draws_unpushed;
-        //     this.draws_unpushed = [];
-        //     var self = this;
-        //
-        //       $.ajax({
-        //         method: "POST",
-        //         url: "/battlefloor/draw",
-        //         data: {battlefloorId: self.id, "draws" : self.draws_transit},
-        //         success: function(result){
-        //           self.draws = self.draws.concat(self.draws_transit);
-        //           self.draws_transit = [];
-        //         },
-        //         error: function(result,code){
-        //           console.log(result);
-        //         }
-        //       });
-        // }
-
-        // updateServer(){
-        //   var self = this;
-        //   // if (this.active) {
-        //     this.paints_transit = this.draws;
-        //     this.draws = [];
-        //
-        //     if(self.paints_transit.length > 0){
-        //       $.ajax({
-        //         method: "POST",
-        //         url: "/battlefloor/update",
-        //         data: {battlefloorId: self.id, "draws":self.paints_transit},
-        //         success: function(result){
-        //           self.paints_transit = [];
-        //           self.saveServerDraw(result);
-        //           setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-        //         },
-        //         error: function(result,code){
-        //           console.log(result);
-        //           setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-        //         }
-        //       });
-        //     } else{
-        //     setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-        //   }
-        // }
-
-        // addServerDrawToLocal(serverDraw){
-        //   var origin={
-        //       "x": serverDraw.originX,
-        //       "y": serverDraw.originY
-        //   }
-        //   var destination = {
-        //       "x": serverDraw.destinationX,
-        //       "y": serverDraw.destinationY
-        //   }
-        //   var aDraw = new this.Draw(origin, destination, serverDraw.color);
-        //   aDraw.id = serverDraw.id;
-        //   this.drawIds.push(serverDraw.id);
-        // }
-        //
-        // saveServerDraw(result){
-        //   for (var i = 0; i < result.length; i++) {
-        //     this.addServerDrawToLocal(result[i]);
-        //   }
-        // }
-
-        // loadServerDraw(result){
-        //   var self = this;
-        //   // if (this.active) {
-        //
-        //     $.ajax({
-        //       method: "POST",
-        //       url: "/battlefloor/getDraws",
-        //       data: {battlefloorId: self.id, alreadyHaveIds: self.drawIds},
-        //       success: function(result){
-        //         self.paints_transit = [];
-        //         self.updateDrawList(result);
-        //         setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-        //       },
-        //       error: function(result,code){
-        //         console.log(result);
-        //         setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-        //       }
-        //     });
-        //   // } else{
-        //   //   setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-        //   // }
-        //
-        // }
-
-        // updateDrawList(serverDrawList){
-        //   for (var i = 0; i < serverDrawList.length; i++) {
-        //     if (!this.paints_saved.filter(localDraw => this._objectIdEquals(localDraw,serverDrawList[i].id))[0]) {
-        //       this.addServerDrawToLocal(serverDrawList[i]);
-        //     }
-        //   }
-        // }
 
         /**************************
             Helper functions
@@ -10953,20 +10851,23 @@ var App = function () {
     }, {
         key: 'deleteBattlePlan',
         value: function deleteBattlePlan(battleplanId) {
-            var self = this;
-            $.ajax({
-                method: "POST",
-                url: "/battleplan/delete",
-                data: {
-                    "battleplanId": battleplanId
-                },
-                success: function success(result) {
-                    alert("Successfully deleted! Refresh page to update 'load' list");
-                },
-                error: function error(result, code) {
-                    console.log(result);
-                }
-            });
+            var r = confirm("Are you sure you want to delete? There is no goint back!");
+            if (r == true) {
+                var self = this;
+                $.ajax({
+                    method: "POST",
+                    url: "/battleplan/delete",
+                    data: {
+                        "battleplanId": battleplanId
+                    },
+                    success: function success(result) {
+                        alert("Successfully deleted! Refresh page to update 'load' list");
+                    },
+                    error: function error(result, code) {
+                        console.log(result);
+                    }
+                });
+            }
         }
     }, {
         key: 'loadBattlePlan',
@@ -11081,7 +10982,7 @@ var App = function () {
                     "draws": draws_transit
                 },
                 success: function success(result) {
-                    console.log(result);
+                    // debugging only
                 },
                 error: function error(result, code) {
                     console.log(result);
@@ -11121,7 +11022,6 @@ var App = function () {
                 },
                 success: function (result) {
                     this.changeOperatorSlotDom(result.operatorSlot.id, result.operator);
-                    console.log(result);
                 }.bind(this),
                 error: function error(result, code) {
                     console.log(result);
@@ -11388,6 +11288,7 @@ var Battleplan = function (_Helpers) {
         _this.battlefloors = [];
         _this.operatorSlots = [];
         _this.isOwner = isOwner;
+        _this.notes = battleplan.notes;
 
         _this.initialization(battleplan.battlefloors);
         return _this;
@@ -11536,6 +11437,7 @@ var Battleplan = function (_Helpers) {
         value: function initialization(floorSources) {
             // Innitialize the floors
             this.loadFloors(floorSources);
+            $("#battleplan_notes").val(this.notes);
         }
     }, {
         key: 'loadSlots',
@@ -11727,7 +11629,7 @@ var OperatorSlot = function (_Helpers) {
                 }
             } else {
                 if (this.operatorId == null) {
-                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"/media/ops/empty.png\" class=\"op-icon operator-slot operator-border\" style=\"border-color: #" + this.color + "\" />";
+                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"/media/ops/empty.png\" class=\"op-icon operator-slot operator-border no-pointer\" style=\"border-color: #" + this.color + "\" />";
                 } else {
                     dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"" + this.image_src + "\" class=\"op-icon operator-slot operator-border\" style=\"border-color: #" + this.color + "\"/>";
                 }

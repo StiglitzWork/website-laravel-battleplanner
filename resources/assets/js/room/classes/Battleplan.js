@@ -26,6 +26,7 @@ class Battleplan extends Helpers {
         this.battlefloors = [];
         this.operatorSlots = [];
         this.isOwner = isOwner;
+        this.notes = battleplan.notes;
 
         this.initialization(battleplan.battlefloors)
     }
@@ -145,6 +146,7 @@ class Battleplan extends Helpers {
     initialization(floorSources) {
         // Innitialize the floors
         this.loadFloors(floorSources);
+        $("#battleplan_notes").val(this.notes);
     }
 
     loadSlots(slots){

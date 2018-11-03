@@ -30,7 +30,7 @@
             </div>
           @endif
 
-          <button type="button" onclick="join( $('#room').val() )" class="mt-3 btn btn-success">Success</button>
+          <button type="button" onclick="join( $('#room').val() )" class="mt-3 btn btn-success">Join</button>
         </div>
     </div>
 @endsection

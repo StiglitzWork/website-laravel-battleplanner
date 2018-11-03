@@ -3,27 +3,39 @@
     <strong><center>Saved Maps</center></strong>
   </h1>
 </div>
+<hr>
 <div class="row">
     <div class="col-12">
-        <ul class="list-group savedBattleplan-list">
-          @foreach($battleplans as $battleplan)
-            <li class="list-group-item" href="#" onclick="app.engine.loadBattlePlan({{$battleplan->id}})">
-                <div class="col-12">
-                    (<strong>{{ucwords($battleplan->map->name)}}</strong>) {{$battleplan->name}}
+
+        <table id="battleplan_load_table" style="width:100%">
+            <thead>
+              <tr>
+                <th>Map</th>
+                <th>Name</th>
+                <th>Functions</th>
+              </tr>
+          </thead>
+          <tbody>
+        @foreach($battleplans as $battleplan)
+          <tr>
+            <td>{{ucwords($battleplan->map->name)}}</td>
+            <td>{{$battleplan->name}}</td>
+            <td>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-danger col-12" onclick="app.engine.deleteBattlePlan({{$battleplan->id}})">Delete</button>
+                    </div>
                 </div>
-                <div class="col-12 text-right">
-                    <button type="button" class="btn btn-danger" onclick="app.engine.deleteBattlePlan({{$battleplan->id}})">Delete</button>
+                <div class="row">
+                    <div class="col-12">
+                    <button type="button" class="btn btn-success col-12" onclick="app.engine.loadBattlePlan({{$battleplan->id}})">load</button>
+                    </div>
                 </div>
-            </li>
-          @endforeach
-        </ul>
+            </td>
+          </tr>
+       @endforeach
+   </tbody>
+        </table>
+
     </div>
 </div>
-
-@push('css')
-    <style>
-         .savedBattleplan-list > .list-group-item{
-             cursor: pointer;
-         }
-     </style>
-@endpush

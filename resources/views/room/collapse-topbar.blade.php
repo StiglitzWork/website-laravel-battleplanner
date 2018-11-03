@@ -18,7 +18,7 @@
     </div>
 
     <div class="col-3">
-        <button class="btn btn-primary col-10" type="button" data-toggle="collapse" data-target="#room_help">
+        <button class="btn btn-primary col-10" type="button" data-toggle="modal" data-target="#helpModal" >
             Help
         </button>
     </div>
@@ -133,18 +133,6 @@
                 @endif
               @endif
           {{-- </div> --}}
-      </div>
-  </div>
-</div>
-
-{{-- Help --}}
-<div class="collapse " id="room_help">
-  <div class="card card-body bg-dark m-0 p-0">
-
-      <div class="row text-center">
-          <div class="col-12" style="color:white">
-              <h1>Ooops! Looks like I have not made it this far yet!</h1>
-          </div>
       </div>
   </div>
 </div>

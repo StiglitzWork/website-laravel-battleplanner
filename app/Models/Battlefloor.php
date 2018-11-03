@@ -43,7 +43,7 @@ class Battlefloor extends Model
         $draw->saved = true;
         $draw->save();
     }
-
+    $this->save();
   }
 
   public function undo(){

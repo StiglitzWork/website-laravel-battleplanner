@@ -9,11 +9,11 @@ redis.subscribe('BattlefloorDraw', function(err, count) {});
 redis.subscribe('ChangeOperatorSlot', function(err, count) {});
 
 redis.on('message', function(channel, message) {
-    console.log('Message Received: ' + message);
+    // console.log('Message Received: ' + message);
     message = JSON.parse(message);
     io.emit(channel + '.' + message.data.identifier + ':' + message.event, message.data);
 });
 
 http.listen(3000, function(){
-    console.log('Listening on Port 3000');
+    console.log('Node server is live!');
 });

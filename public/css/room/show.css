@@ -1,6 +1,11 @@
 .cursor-click{
     cursor: pointer;
 }
+
+.no-pointer{
+    cursor:default !important;
+}
+
 .cursor-click:hover{
     border-style: solid;
 }

@@ -69,7 +69,7 @@ class Battleplan extends Model
 
     // save every battlefloor
     foreach ($this->battlefloors as $key => $battlefloor) {
-        $battlefloor->save();
+        $battlefloor->saveValues();
     }
     $this->save(); // Calls Default Save
   }

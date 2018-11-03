@@ -95,20 +95,24 @@ class App {
     }
 
     deleteBattlePlan(battleplanId) {
-        var self = this;
-        $.ajax({
-            method: "POST",
-            url: "/battleplan/delete",
-            data: {
-                "battleplanId": battleplanId
-            },
-            success: function(result) {
-                alert("Successfully deleted! Refresh page to update 'load' list");
-            },
-            error: function(result, code) {
-                console.log(result);
-            }
-        });
+        var r = confirm("Are you sure you want to delete? There is no goint back!");
+        if (r == true) {
+            var self = this;
+            $.ajax({
+                method: "POST",
+                url: "/battleplan/delete",
+                data: {
+                    "battleplanId": battleplanId
+                },
+                success: function(result) {
+                    alert("Successfully deleted! Refresh page to update 'load' list");
+                },
+                error: function(result, code) {
+                    console.log(result);
+                }
+            });
+        }
+
     }
 
     loadBattlePlan(battleplanId) {
@@ -215,7 +219,7 @@ class App {
                 "draws": draws_transit
             },
             success: function(result) {
-                console.log(result);
+                // debugging only
             },
             error: function(result, code) {
                 console.log(result);
@@ -254,7 +258,6 @@ class App {
             },
             success: function(result) {
                 this.changeOperatorSlotDom(result.operatorSlot.id, result.operator)
-                console.log(result);
             }.bind(this),
             error: function(result, code) {
                 console.log(result);
