@@ -28,7 +28,7 @@ $.ajaxSetup({
     Variable Declaration
 **************************/
 var app;
-app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID, LISTEN_SOCKET, USER_ID)
+app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID, LISTEN_SOCKET, USER_ID, IS_OWNER)
 
 /**************************
  Remove Default Html Events

@@ -10,7 +10,7 @@ class App {
             Constructor
     **************************/
 
-    constructor(conn_string, viewportId, canvasBackgroundId , canvasOverlayId, listenSocket, user_id) {
+    constructor(conn_string, viewportId, canvasBackgroundId , canvasOverlayId, listenSocket, user_id, isOwner) {
         // Instantiatable class types
         this.Battleplan = require('./Battleplan.js').default;
         this.Battlefloor = require('./Battlefloor.js').default;
@@ -27,6 +27,7 @@ class App {
         this.canvasOverlayId = canvasOverlayId
         this.socket = listenSocket;
         this.user_id = user_id;
+        this.isOwner = isOwner;
 
         // When we draw once, we start a timer to send to server so that we do not send a request per draw
         this.acquiringDelayedDraws = false;
@@ -136,21 +137,11 @@ class App {
     load(battleplan){
         if (battleplan) {
             $("#battleplan_name").val(battleplan.name);
-            this.battleplan = new this.Battleplan(battleplan);
+            this.battleplan = new this.Battleplan(battleplan, this.isOwner);
             this.ui = new this.Ui(this.viewportId, this.canvasBackgroundId, this.canvasOverlayId, this.battleplan);
 
-            // change ids of operator slots
-            var slots = $(".operator-slot");
-            for (var i = 0; i < slots.length; i++) {
-                // $(slots[i]).data("id", battleplan.slots[i].id);
-                slots[i].dataset["id"] = battleplan.slots[i].id;
-                $(slots[i]).attr("id", "operatorSlot-" + battleplan.slots[i].id);
-            }
-
             // Update operator doms
-            for (var i = 0; i < battleplan.slots.length; i++) {
-                this.changeOperatorSlotDom(battleplan.slots[i].id, battleplan.slots[i].operator);
-            }
+            this.battleplan.loadSlots(battleplan.slots);
         }
     }
 
@@ -251,13 +242,9 @@ class App {
     }
 
     changeOperatorSlotDom(operatorSlotId,operator){
-        if (operator != null) {
-            $("#operatorSlot-" + operatorSlotId).attr("src",operator.icon);
-            $("#operatorSlot-" + operatorSlotId).css("border-color","#"+operator.colour);
-        } else{
-            $("#operatorSlot-" + operatorSlotId).attr("src","/media/ops/empty.png");
-            $("#operatorSlot-" + operatorSlotId).css("border-color","black");
-        }
+        var slot = this.battleplan.getOperatorSlot(operatorSlotId);
+        slot.setOperator(operator);
+        this.battleplan.updateSlotsDom();
     }
 
     /**************************

@@ -10776,7 +10776,7 @@ $.ajaxSetup({
     Variable Declaration
 **************************/
 var app;
-app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID, LISTEN_SOCKET, USER_ID);
+app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID, LISTEN_SOCKET, USER_ID, IS_OWNER);
 
 /**************************
  Remove Default Html Events
@@ -10862,13 +10862,13 @@ var App = function () {
             Constructor
     **************************/
 
-    function App(conn_string, viewportId, canvasBackgroundId, canvasOverlayId, listenSocket, user_id) {
+    function App(conn_string, viewportId, canvasBackgroundId, canvasOverlayId, listenSocket, user_id, isOwner) {
         _classCallCheck(this, App);
 
         // Instantiatable class types
         this.Battleplan = __webpack_require__(13).default;
         this.Battlefloor = __webpack_require__(2).default;
-        this.Ui = __webpack_require__(15).default;
+        this.Ui = __webpack_require__(16).default;
 
         // Identifiers
         this.type = "App"; // Json identifier
@@ -10881,6 +10881,7 @@ var App = function () {
         this.canvasOverlayId = canvasOverlayId;
         this.socket = listenSocket;
         this.user_id = user_id;
+        this.isOwner = isOwner;
 
         // When we draw once, we start a timer to send to server so that we do not send a request per draw
         this.acquiringDelayedDraws = false;
@@ -10997,21 +10998,11 @@ var App = function () {
         value: function load(battleplan) {
             if (battleplan) {
                 $("#battleplan_name").val(battleplan.name);
-                this.battleplan = new this.Battleplan(battleplan);
+                this.battleplan = new this.Battleplan(battleplan, this.isOwner);
                 this.ui = new this.Ui(this.viewportId, this.canvasBackgroundId, this.canvasOverlayId, this.battleplan);
 
-                // change ids of operator slots
-                var slots = $(".operator-slot");
-                for (var i = 0; i < slots.length; i++) {
-                    // $(slots[i]).data("id", battleplan.slots[i].id);
-                    slots[i].dataset["id"] = battleplan.slots[i].id;
-                    $(slots[i]).attr("id", "operatorSlot-" + battleplan.slots[i].id);
-                }
-
                 // Update operator doms
-                for (var i = 0; i < battleplan.slots.length; i++) {
-                    this.changeOperatorSlotDom(battleplan.slots[i].id, battleplan.slots[i].operator);
-                }
+                this.battleplan.loadSlots(battleplan.slots);
             }
         }
     }, {
@@ -11118,13 +11109,9 @@ var App = function () {
     }, {
         key: 'changeOperatorSlotDom',
         value: function changeOperatorSlotDom(operatorSlotId, operator) {
-            if (operator != null) {
-                $("#operatorSlot-" + operatorSlotId).attr("src", operator.icon);
-                $("#operatorSlot-" + operatorSlotId).css("border-color", "#" + operator.colour);
-            } else {
-                $("#operatorSlot-" + operatorSlotId).attr("src", "/media/ops/empty.png");
-                $("#operatorSlot-" + operatorSlotId).css("border-color", "black");
-            }
+            var slot = this.battleplan.getOperatorSlot(operatorSlotId);
+            slot.setOperator(operator);
+            this.battleplan.updateSlotsDom();
         }
 
         /**************************
@@ -11338,7 +11325,7 @@ var App = function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Battleplan; });
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Battleplan; });
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11359,7 +11346,7 @@ var Battleplan = function (_Helpers) {
             Constructor
     **************************/
 
-    function Battleplan(battleplan) {
+    function Battleplan(battleplan, isOwner) {
         _classCallCheck(this, Battleplan);
 
         // Instantiatable class types
@@ -11368,6 +11355,7 @@ var Battleplan = function (_Helpers) {
 
 
         _this.Battlefloor = __webpack_require__(2).default;
+        _this.OperatorSlot = __webpack_require__(15).default;
 
         // Identifiers
         _this.id = battleplan.id;
@@ -11376,6 +11364,8 @@ var Battleplan = function (_Helpers) {
         // Variables
         _this.battlefloor = null;
         _this.battlefloors = [];
+        _this.operatorSlots = [];
+        _this.isOwner = isOwner;
 
         _this.initialization(battleplan.battlefloors);
         return _this;
@@ -11386,21 +11376,30 @@ var Battleplan = function (_Helpers) {
     **************************/
 
     _createClass(Battleplan, [{
-        key: 'getFloor',
-        value: function getFloor(id) {
+        key: 'getOperatorSlot',
+        value: function getOperatorSlot(id) {
             var _this2 = this;
 
+            return this.operatorSlots.filter(function (slot) {
+                return _this2._objectIdEquals(slot, id);
+            })[0];
+        }
+    }, {
+        key: 'getFloor',
+        value: function getFloor(id) {
+            var _this3 = this;
+
             return this.battlefloors.filter(function (floor) {
-                return _this2._objectIdEquals(floor, id);
+                return _this3._objectIdEquals(floor, id);
             })[0];
         }
     }, {
         key: 'getFloorDbId',
         value: function getFloorDbId(dbId) {
-            var _this3 = this;
+            var _this4 = this;
 
             return this.battlefloors.filter(function (floor) {
-                return _this3._objectDbIdEquals(floor, dbId);
+                return _this4._objectDbIdEquals(floor, dbId);
             })[0];
         }
 
@@ -11517,6 +11516,28 @@ var Battleplan = function (_Helpers) {
             this.loadFloors(floorSources);
         }
     }, {
+        key: 'loadSlots',
+        value: function loadSlots(slots) {
+            this.operatorSlots = [];
+            for (var i = 0; i < slots.length; i++) {
+                var operatorSlot = new this.OperatorSlot(slots[i].id, this.isOwner);
+                if (slots[i].operator != null) {
+                    operatorSlot.setOperator(slots[i].operator);
+                }
+                this.operatorSlots.push(operatorSlot);
+            }
+            this.updateSlotsDom();
+        }
+    }, {
+        key: 'updateSlotsDom',
+        value: function updateSlotsDom() {
+            var newDom = "";
+            for (var i = 0; i < this.operatorSlots.length; i++) {
+                newDom += this.operatorSlots[i].generateDom();
+            }
+            $("#operatorSlotList").html(newDom);
+        }
+    }, {
         key: 'loadFloors',
         value: function loadFloors(floorSources) {
             for (var i = 0; i < floorSources.length; i++) {
@@ -11561,6 +11582,7 @@ var Battleplan = function (_Helpers) {
 }(Helpers);
 
 
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 14 */
@@ -11614,6 +11636,96 @@ var Draw = function (_Helpers) {
 
 /***/ }),
 /* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return OperatorSlot; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**************************
+	Extention class type
+**************************/
+var Helpers = __webpack_require__(1).default;
+
+var OperatorSlot = function (_Helpers) {
+    _inherits(OperatorSlot, _Helpers);
+
+    /**************************
+            Constructor
+    **************************/
+
+    function OperatorSlot(id, isOwner) {
+        _classCallCheck(this, OperatorSlot);
+
+        var _this = _possibleConstructorReturn(this, (OperatorSlot.__proto__ || Object.getPrototypeOf(OperatorSlot)).call(this));
+        // Super Class constructor call
+
+
+        _this.type = "OperatorSlot"; // Json identifier
+        _this.id = id;
+        _this.operatorId = null;
+        _this.color = "000000";
+        _this.operatorName = null;
+        _this.image_src = null;
+        _this.isOwner = isOwner;
+        return _this;
+    }
+
+    _createClass(OperatorSlot, [{
+        key: "setOperator",
+        value: function setOperator(operator) {
+            if (operator != null) {
+                this.operatorId = operator.id;
+                this.color = operator.colour;
+                this.operatorName = operator.name;
+                this.image_src = operator.icon;
+            } else {
+                this.operatorId = null;
+                this.color = "000000";
+                this.operatorName = null;
+                this.image_src = null;
+            }
+        }
+    }, {
+        key: "generateDom",
+        value: function generateDom() {
+            var dom = "";
+            if (this.isOwner) {
+                if (this.operatorId == null) {
+                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"/media/ops/empty.png\" class=\"op-icon operator-slot operator-border\" data-toggle=\"modal\" data-target=\"#opModal\" onclick=\"setEditingOperatorSlot($(this).data('id'))\" style=\"border-color: #" + this.color + "\" />";
+                } else {
+                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"" + this.image_src + "\" class=\"op-icon operator-slot operator-border\" data-toggle=\"modal\" data-target=\"#opModal\" onclick=\"setEditingOperatorSlot($(this).data('id'))\" style=\"border-color: #" + this.color + "\"/>";
+                }
+            } else {
+                if (this.operatorId == null) {
+                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"/media/ops/empty.png\" class=\"op-icon operator-slot operator-border\" style=\"border-color: #" + this.color + "\" />";
+                } else {
+                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"" + this.image_src + "\" class=\"op-icon operator-slot operator-border\" style=\"border-color: #" + this.color + "\"/>";
+                }
+            }
+            return dom;
+        }
+
+        /**************************
+            Public functions
+        **************************/
+
+    }]);
+
+    return OperatorSlot;
+}(Helpers);
+
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

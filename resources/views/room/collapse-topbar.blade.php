@@ -55,7 +55,7 @@
   <div class="card card-body bg-dark m-0 p-0">
 
       <div class="row text-center mt-1">
-          <div class="col-md-8 col-sm-12">
+          <div class="col-md-8 col-sm-12" id="operatorSlotList">
 
               @if ($room->battleplan != null)
                   @foreach ($room->battleplan->slots as $key => $slot)

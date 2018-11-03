@@ -10,6 +10,7 @@
         const ROOM_CONN_STRING = "{{$room->connection_string}}";
         const LISTEN_SOCKET = io('{{$listenSocket}}');
         const USER_ID = {{Auth::User()->id}};
+        const IS_OWNER = {{(Auth::User()->id == $room->Owner->id) ? "true" : "false"}};
     </script>
     <script src="{{r_asset("js/room/show.bundle.js")}}"></script>
 @endpush

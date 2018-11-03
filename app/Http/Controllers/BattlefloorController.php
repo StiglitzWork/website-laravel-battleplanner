@@ -32,7 +32,6 @@ class BattlefloorController extends Controller
               ]);
           }
 
-
         // Fire event on listeners for socket.io
         event(new CreateDraws($draws, $request->conn_string, $request->userId));
 

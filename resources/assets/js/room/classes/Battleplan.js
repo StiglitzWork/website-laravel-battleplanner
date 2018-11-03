@@ -9,12 +9,13 @@ class Battleplan extends Helpers {
             Constructor
     **************************/
 
-    constructor(battleplan) {
+    constructor(battleplan, isOwner) {
         // Super Class constructor call
         super();
 
         // Instantiatable class types
         this.Battlefloor = require('./Battlefloor.js').default;
+        this.OperatorSlot = require('./OperatorSlot.js').default;
 
         // Identifiers
         this.id = battleplan.id;
@@ -23,6 +24,8 @@ class Battleplan extends Helpers {
         // Variables
         this.battlefloor = null;
         this.battlefloors = [];
+        this.operatorSlots = [];
+        this.isOwner = isOwner;
 
         this.initialization(battleplan.battlefloors)
     }
@@ -30,6 +33,10 @@ class Battleplan extends Helpers {
     /**************************
         Floor Methods
     **************************/
+
+    getOperatorSlot(id){
+        return this.operatorSlots.filter(slot => this._objectIdEquals(slot,id))[0];
+    }
 
     getFloor(id){
         return this.battlefloors.filter(floor => this._objectIdEquals(floor,id))[0];
@@ -138,6 +145,26 @@ class Battleplan extends Helpers {
     initialization(floorSources) {
         // Innitialize the floors
         this.loadFloors(floorSources);
+    }
+
+    loadSlots(slots){
+       this.operatorSlots = [];
+       for (var i = 0; i < slots.length; i++) {
+           var operatorSlot = new this.OperatorSlot(slots[i].id, this.isOwner);
+           if (slots[i].operator != null) {
+               operatorSlot.setOperator(slots[i].operator);
+           }
+           this.operatorSlots.push(operatorSlot);
+       }
+       this.updateSlotsDom();
+    }
+
+    updateSlotsDom(){
+        var newDom = "";
+        for (var i = 0; i < this.operatorSlots.length; i++) {
+            newDom += this.operatorSlots[i].generateDom();
+        }
+        $("#operatorSlotList").html(newDom);
     }
 
     loadFloors(floorSources){
