@@ -39,6 +39,7 @@ class CreateBattleplansTable extends Migration
                 ->onDelete('set null')
                 ->on('maps');
 
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

@@ -10,7 +10,7 @@ class App {
             Constructor
     **************************/
 
-    constructor(conn_string, viewportId, canvasBackgroundId , canvasOverlayId, listenSocket, user_id) {
+    constructor(conn_string, viewportId, canvasBackgroundId, canvasOverlayId, listenSocket, user_id) {
         // Instantiatable class types
         this.Battleplan = require('./Battleplan.js').default;
         this.Battlefloor = require('./Battlefloor.js').default;
@@ -33,9 +33,9 @@ class App {
         this.delayUpdateTimer = 200;
 
         // hide them until a map is chosen
-        $("#"+this.viewportId).hide();
-        $("#"+this.canvasBackgroundId).hide();
-        $("#"+this.canvasOverlayId).hide();
+        $("#" + this.viewportId).hide();
+        $("#" + this.canvasBackgroundId).hide();
+        $("#" + this.canvasOverlayId).hide();
 
         // Event variables
         this.lastCoordinates = {
@@ -63,77 +63,87 @@ class App {
             App Methods
     **************************/
 
-    zoom(amount,x,y){
-        var coordinates = this._calculateOffset(x,y);
+    zoom(amount, x, y) {
+        var coordinates = this._calculateOffset(x, y);
         this.ui.zoomCanvases(amount, x, y);
         this.ui.backgroundUpdate = true;
         this.ui.overlayUpdate = true;
         this.ui.update();
     }
 
-    changeColor(newColor){
-      this.color = newColor
+    changeColor(newColor) {
+        this.color = newColor
     }
 
-    createBattleplan(mapId){
-      var self = this;
-      $.ajax({
-        method: "POST",
-        url: "/battleplan/create",
-        data: { map: mapId, room : this.conn_string},
-        success: function(battleplan){
-          self.setRoomsBattleplan(battleplan.id);
-        },
-        error: function(result,code){
-          console.log(result);
-        }
-      });
-    }
-
-    deleteBattlePlan(battleplanId){
-      var self = this;
-      $.ajax({
-        method: "POST",
-        url: "/battleplan/delete",
-        data: { "battleplanId": battleplanId},
-        success: function(result){
-            alert("Successfully deleted! Refresh page to update 'load' list");
-        },
-        error: function(result,code){
-            console.log(result);
-        }
-      });
-    }
-
-    loadBattlePlan(battleplanId){
-        // set the battleplan
+    createBattleplan(mapId) {
         var self = this;
-        this.setRoomsBattleplan(battleplanId, function(){
-            // Reset
-            self.getRoomsBattleplan(function(result){
-              if(result != null){
-                  self.load(result.battleplan,result.battlefloors);
-              }
-          })
+        $.ajax({
+            method: "POST",
+            url: "/battleplan/create",
+            data: {
+                map: mapId,
+                room: this.conn_string
+            },
+            success: function(battleplan) {
+                self.setRoomsBattleplan(battleplan.id);
+            },
+            error: function(result, code) {
+                console.log(result);
+            }
         });
     }
 
-    save(){
-      var self = this;
-      $.ajax({
-        method: "POST",
-        url: "/battleplan/save",
-        data: { conn_string : this.conn_string, name : $("#battleplan_name").val()},
-        success: function(result){
-          alert("Saved!");
-        },
-        error: function(result,code){
-          console.log(result);
-        }
-      });
+    deleteBattlePlan(battleplanId) {
+        var self = this;
+        $.ajax({
+            method: "POST",
+            url: "/battleplan/delete",
+            data: {
+                "battleplanId": battleplanId
+            },
+            success: function(result) {
+                alert("Successfully deleted! Refresh page to update 'load' list");
+            },
+            error: function(result, code) {
+                console.log(result);
+            }
+        });
     }
 
-    load(battleplan){
+    loadBattlePlan(battleplanId) {
+        // set the battleplan
+        var self = this;
+        this.setRoomsBattleplan(battleplanId, function() {
+            // Reset
+            self.getRoomsBattleplan(function(result) {
+                if (result != null) {
+                    self.load(result.battleplan, result.battlefloors);
+                }
+            })
+        });
+    }
+
+    save() {
+        var tmp = $("#battleplan_notes").val();
+        var self = this;
+        $.ajax({
+            method: "POST",
+            url: "/battleplan/save",
+            data: {
+                conn_string: this.conn_string,
+                name: $("#battleplan_name").val(),
+                notes: $("#battleplan_notes").val()
+            },
+            success: function(result) {
+                alert("Saved!");
+            },
+            error: function(result, code) {
+                console.log(result);
+            }
+        });
+    }
+
+    load(battleplan) {
         if (battleplan) {
             $("#battleplan_name").val(battleplan.name);
             this.battleplan = new this.Battleplan(battleplan);
@@ -154,41 +164,44 @@ class App {
         }
     }
 
-    setRoomsBattleplan(battleplanId, callback = null){
-      var self = this;
-      $.ajax({
-        method: "POST",
-        url: "/room/setBattleplan",
-        data: { battleplanId: battleplanId, conn_string : this.conn_string},
-        success: function(result){
-          if (callback) {
-              callback(result)
-          }
-        },
-        error: function(result,code){
-          console.log(result);
-        }
-      });
+    setRoomsBattleplan(battleplanId, callback = null) {
+        var self = this;
+        $.ajax({
+            method: "POST",
+            url: "/room/setBattleplan",
+            data: {
+                battleplanId: battleplanId,
+                conn_string: this.conn_string
+            },
+            success: function(result) {
+                if (callback) {
+                    callback(result)
+                }
+            },
+            error: function(result, code) {
+                console.log(result);
+            }
+        });
     }
 
-    getRoomsBattleplan(callback){
-      var self = this;
-      $.ajax({
-        method: "GET",
-        url: `${this.conn_string}/getBattleplan`,
-        // data: { conn_string : this.conn_string},
-        success: function(result){
-          if (callback) {
-            callback(result);
-          }
-        },
-        error: function(result,code){
-          console.log(result);
-        }
-      });
+    getRoomsBattleplan(callback) {
+        var self = this;
+        $.ajax({
+            method: "GET",
+            url: `${this.conn_string}/getBattleplan`,
+            // data: { conn_string : this.conn_string},
+            success: function(result) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error: function(result, code) {
+                console.log(result);
+            }
+        });
     }
 
-    pushDrawServer(){
+    pushDrawServer() {
         this.acquiringDelayedDraws = false;
         var draws_transit = [];
 
@@ -202,61 +215,69 @@ class App {
         this.draws_unpushed = [];
         var self = this;
 
-          $.ajax({
+        $.ajax({
             method: "POST",
             url: "/battlefloor/draw",
-            data: {conn_string:this.conn_string, userId: this.user_id, "draws" : draws_transit},
-            success: function(result){
+            data: {
+                conn_string: this.conn_string,
+                userId: this.user_id,
+                "draws": draws_transit
+            },
+            success: function(result) {
                 console.log(result);
             },
-            error: function(result,code){
-              console.log(result);
+            error: function(result, code) {
+                console.log(result);
             }
-          });
+        });
     }
 
-    serverDraw(result){
+    serverDraw(result) {
         for (var i = 0; i < result.draws.length; i++) {
 
             var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
 
             battlefloor.serverDraw({
-                "x":result.draws[i]["originX"],
-                "y":result.draws[i]["originY"],
-            },
-            {
-                "x":result.draws[i]["destinationX"],
-                "y":result.draws[i]["destinationY"],
-            },
-            result.draws[i].color);
+                    "x": result.draws[i]["originX"],
+                    "y": result.draws[i]["originY"],
+                }, {
+                    "x": result.draws[i]["destinationX"],
+                    "y": result.draws[i]["destinationY"],
+                },
+                result.draws[i].color);
         }
         this.ui.overlayUpdate = true;
         this.ui.update();
     }
 
-    changeOperatorSlot(slotId,operatorId){
+    changeOperatorSlot(slotId, operatorId) {
 
         $.ajax({
-          method: "POST",
-          url: "/operatorSlot/update",
-          data: {conn_string:this.conn_string, userId: this.user_id, operatorSlotId : slotId, operatorId: operatorId},
-          success: function(result){
-              this.changeOperatorSlotDom(result.operatorSlot.id,result.operator)
-              console.log(result);
-          }.bind(this),
-          error: function(result,code){
-            console.log(result);
-          }
+            method: "POST",
+            url: "/operatorSlot/update",
+            data: {
+                conn_string: this.conn_string,
+                userId: this.user_id,
+                operatorSlotId: slotId,
+                operatorId: operatorId
+            },
+            success: function(result) {
+                this.changeOperatorSlotDom(result.operatorSlot.id, result.operator)
+                console.log(result);
+            }.bind(this),
+            error: function(result, code) {
+                console.log(result);
+            }
         });
     }
 
-    changeOperatorSlotDom(operatorSlotId,operator){
+    changeOperatorSlotDom(operatorSlotId, operator) {
         if (operator != null) {
-            $("#operatorSlot-" + operatorSlotId).attr("src",operator.icon);
-            $("#operatorSlot-" + operatorSlotId).css("border-color","#"+operator.colour);
-        } else{
-            $("#operatorSlot-" + operatorSlotId).attr("src","/media/ops/empty.png");
-            $("#operatorSlot-" + operatorSlotId).css("border-color","black");
+            $("#operatorSlot-" + operatorSlotId).attr("src", operator.icon);
+            $("#operatorSlot-" + operatorSlotId).css("border-color", "#" + operator.colour);
+        } else {
+            $("#operatorSlot-" + operatorSlotId).attr("src", "/media/ops/empty.png");
+            $("#operatorSlot-" + operatorSlotId).css("border-color", "black");
         }
     }
 
@@ -264,13 +285,13 @@ class App {
           Floor Methods
     **************************/
 
-    changeFloor(amount){
+    changeFloor(amount) {
         this.battleplan.changeFloor(amount);
         this.ui.floorChange = true;
         this.ui.update();
     }
 
-    changeFloorById(floorId){
+    changeFloorById(floorId) {
         this.battleplan.changeFloorById(floorId);
         this.ui.floorChange = true;
         this.ui.update();
@@ -282,10 +303,10 @@ class App {
     **************************/
 
     canvasUp(ev) {
-        var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._clickDeactivateEventListen(ev);
 
-        if(!this.lmb){
+        if (!this.lmb) {
             this.ui.overlayUpdate = true;
             this.ui.update();
         }
@@ -295,13 +316,13 @@ class App {
     canvasDown(ev) {
         // var eventX = (ev.offsetX)/ this.ui.ratio;
         // var eventY = (ev.offsetY) / this.ui.ratio;
-        var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._clickActivateEventListen(ev)
         if (this.lmb) {
-            this.battleplan.battlefloor.draw(coordinates, coordinates , this.color);
+            this.battleplan.battlefloor.draw(coordinates, coordinates, this.color);
 
             // Push new drawings to server
-            if(!this.acquiringDelayedDraws){
+            if (!this.acquiringDelayedDraws) {
                 this.acquiringDelayedDraws = true;
                 setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
             }
@@ -314,10 +335,10 @@ class App {
     }
 
     canvasMove(ev) {
-        var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
 
         if (this.rmb) {
-            this.ui.move(this.originPoints["x"] - (ev.offsetX / this.ui.ratio), this.originPoints["y"] - (ev.offsetY/ this.ui.ratio));
+            this.ui.move(this.originPoints["x"] - (ev.offsetX / this.ui.ratio), this.originPoints["y"] - (ev.offsetY / this.ui.ratio));
             this.ui.backgroundUpdate = true;
         }
 
@@ -325,7 +346,7 @@ class App {
             this.battleplan.battlefloor.draw(this.lastCoordinates, coordinates, this.color);
 
             // Push new drawings to server
-            if(!this.acquiringDelayedDraws){
+            if (!this.acquiringDelayedDraws) {
                 this.acquiringDelayedDraws = true;
                 setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
             }
@@ -339,10 +360,9 @@ class App {
             this.resizeRangeX = false;
         }
 
-        if(this.rmb || this.lmb){
+        if (this.rmb || this.lmb) {
             this.lastCoordinates = coordinates;
-            this.originPoints =
-            {
+            this.originPoints = {
                 "x": (ev.offsetX / this.ui.ratio),
                 "y": (ev.offsetY / this.ui.ratio)
             } //2 dimentional
@@ -351,7 +371,7 @@ class App {
     }
 
     canvasEnter(ev) {
-        var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._deactivateClickEventListen();
 
         // Update UI
@@ -360,7 +380,7 @@ class App {
     }
 
     canvasLeave(ev) {
-        var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._deactivateClickEventListen();
 
         if (this.lmb) {
@@ -385,7 +405,7 @@ class App {
      * @return {undefined}
      */
     _clickActivateEventListen(ev) {
-        var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
 
         this.originPoints = {
             "x": ev.offsetX / this.ui.ratio,
@@ -435,7 +455,7 @@ class App {
         });
     };
 
-    _calculateOffset(evx,evy){
+    _calculateOffset(evx, evy) {
         var jsonResponse = {}
         jsonResponse.x = (evx / this.ui.ratio) + (this.ui.offsetX / this.ui.ratio);
         jsonResponse.y = (evy / this.ui.ratio) + (this.ui.offsetY / this.ui.ratio);

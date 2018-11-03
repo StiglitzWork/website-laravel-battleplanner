@@ -42,8 +42,8 @@ class BattleplanController extends Controller
                 "message" => "You do not own this battleplan."
             ]);
         }
-
-        $battleplan->saveValues($request->name);
+        
+        $battleplan->saveValues($request->name, $request->notes);
 
         // Respond
         return response()->json([

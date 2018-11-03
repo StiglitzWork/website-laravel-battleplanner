@@ -10937,7 +10937,10 @@ var App = function () {
             $.ajax({
                 method: "POST",
                 url: "/battleplan/create",
-                data: { map: mapId, room: this.conn_string },
+                data: {
+                    map: mapId,
+                    room: this.conn_string
+                },
                 success: function success(battleplan) {
                     self.setRoomsBattleplan(battleplan.id);
                 },
@@ -10953,7 +10956,9 @@ var App = function () {
             $.ajax({
                 method: "POST",
                 url: "/battleplan/delete",
-                data: { "battleplanId": battleplanId },
+                data: {
+                    "battleplanId": battleplanId
+                },
                 success: function success(result) {
                     alert("Successfully deleted! Refresh page to update 'load' list");
                 },
@@ -10979,11 +10984,16 @@ var App = function () {
     }, {
         key: 'save',
         value: function save() {
+            var tmp = $("#battleplan_notes").val();
             var self = this;
             $.ajax({
                 method: "POST",
                 url: "/battleplan/save",
-                data: { conn_string: this.conn_string, name: $("#battleplan_name").val() },
+                data: {
+                    conn_string: this.conn_string,
+                    name: $("#battleplan_name").val(),
+                    notes: $("#battleplan_notes").val()
+                },
                 success: function success(result) {
                     alert("Saved!");
                 },
@@ -11023,7 +11033,10 @@ var App = function () {
             $.ajax({
                 method: "POST",
                 url: "/room/setBattleplan",
-                data: { battleplanId: battleplanId, conn_string: this.conn_string },
+                data: {
+                    battleplanId: battleplanId,
+                    conn_string: this.conn_string
+                },
                 success: function success(result) {
                     if (callback) {
                         callback(result);
@@ -11071,7 +11084,11 @@ var App = function () {
             $.ajax({
                 method: "POST",
                 url: "/battlefloor/draw",
-                data: { conn_string: this.conn_string, userId: this.user_id, "draws": draws_transit },
+                data: {
+                    conn_string: this.conn_string,
+                    userId: this.user_id,
+                    "draws": draws_transit
+                },
                 success: function success(result) {
                     console.log(result);
                 },
@@ -11105,7 +11122,12 @@ var App = function () {
             $.ajax({
                 method: "POST",
                 url: "/operatorSlot/update",
-                data: { conn_string: this.conn_string, userId: this.user_id, operatorSlotId: slotId, operatorId: operatorId },
+                data: {
+                    conn_string: this.conn_string,
+                    userId: this.user_id,
+                    operatorSlotId: slotId,
+                    operatorId: operatorId
+                },
                 success: function (result) {
                     this.changeOperatorSlotDom(result.operatorSlot.id, result.operator);
                     console.log(result);
