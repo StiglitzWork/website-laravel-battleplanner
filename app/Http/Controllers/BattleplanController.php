@@ -6,59 +6,76 @@ use Illuminate\Http\Request;
 
 use App\Models\Battleplan;
 use App\Models\Battlefloor;
+use App\Models\Room;
 use App\Models\Map;
 use Auth;
 class BattleplanController extends Controller
 {
-    public function new(Request $request){
+    public function create(Request $request){
+      // Declarations
       $floorCollection = [];
+
+      // Find we are map instantiating
       $map = Map::findOrFail($request->map);
+
+      // Create battleplan
       $battleplan = Battleplan::create([
-        'name' => "Untitled",
-        'description' => "",
         'map_id' => $map->id,
         'owner' => Auth::User()->id
       ]);
 
-      foreach ($map->floors as $key => $floor) {
-        $battlefloor =Battlefloor::create([
-          "floor_id" => $floor->id,
-          "battleplan_id" => $battleplan->id,
-          "drawing" => ""
-        ]);
-        //add to collection
-        $floorCollection[] = Battlefloor::with('floor')->where('id', $battlefloor->id)->first();
+      // dd();
+      return Battleplan::json($battleplan->id);
+      return response()->json(Battleplan::json($battleplan->id));
+    }
+
+    public function update(Request $request){
+
+      // Variable declaration
+
+      $battleplan = Room::Connection($request->conn_string)->battleplan;
+
+        // make sure the deleter is also the owner of the map
+        if (!$this->isOwner($battleplan)) {
+            return response()->json([
+                "success" => false,
+                "message" => "You do not own this battleplan."
+            ]);
+        }
+
+        $battleplan->saveValues($request->name);
+
+        // Respond
+        return response()->json([
+            'data' => $battleplan,
+            "success" => true,
+            "message" => "Successfully deleted!"
+        ]);;
+    }
+
+    public function delete(Request $request){
+      // Variable declaration
+      $battleplan = Battleplan::findOrFail($request->battleplanId);
+
+      // Check that deleter is the owner
+      if (!$this->isOwner($battleplan)) {
+          return response()->json([
+              "success" => false,
+              "message" => "You do not own this battleplan."
+          ]);
       }
 
+      // Do the delete
+      $battleplan->delete();
+
       return response()->json([
-        "battleplan" => Battleplan::with('map')->where('id', $battleplan->id)->first(),
-        "battlefloors" => $floorCollection,
+          "success" => true,
+          "message" => "Successfully deleted!"
       ]);
     }
 
-    public function save(Request $request){
-      $floorCollection = [];
-      $map = Map::findOrFail($request->map);
-      $battleplan = Battleplan::create([
-        'name' => "Untitled",
-        'description' => "",
-        'map_id' => $map->id,
-        'owner' => Auth::User()->id
-      ]);
-
-      foreach ($map->floors as $key => $floor) {
-        $battlefloor =Battlefloor::create([
-          "floor_id" => $floor->id,
-          "battleplan_id" => $battleplan->id,
-          "drawing" => ""
-        ]);
-        //add to collection
-        $floorCollection[] = Battlefloor::with('floor')->where('id', $battlefloor->id)->first();
-      }
-
-      return response()->json([
-        "battleplan" => Battleplan::with('map')->where('id', $battleplan->id)->first(),
-        "battlefloors" => $floorCollection,
-      ]);
+    private function isOwner($battleplan){
+        return $battleplan->Owner == Auth::User();
     }
+
 }

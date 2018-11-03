@@ -8,6 +8,7 @@ use App\Models\Battlefloor;
 use App\Models\Operator;
 use App\Models\OperatorSlot;
 use Illuminate\Http\Request;
+use App\Events\Room\BattleplanChange;
 use Auth;
 class RoomController extends Controller
 {
@@ -25,85 +26,62 @@ class RoomController extends Controller
     return view("room.join");
   }
 
-  public function new(Request $request){
-    $room = Room::create(
-      [
+  public function create(Request $request){
+
+    // Create the room
+    $room = Room::create([
         'owner' => Auth::User()->id,
         'connection_string' => uniqid()
-      ]
-    );
+    ]);
+
+    // Respond with redirect
     return redirect()->route("Room.show", ["conn_string" => $room->connection_string]);
-  }
-
-  public function saveBattleplan(Request $request) {
-    $battleplan = Room::where("connection_string", $request->conn_string)->first()->battleplan;
-
-    // make sure the deleter is also the owner of the map
-    if ($battleplan->Owner != Auth::User()) {
-        return false;
-    }
-    if ($battleplan) {
-        $battleplan->saveDraws();
-        $battleplan->name = $request->name;
-        $battleplan->saved = true;
-        $battleplan->save();
-        return $battleplan;
-    }
   }
 
   public function setBattleplan(Request $request){
     // define variables
-    $room = Room::where("connection_string", $request->conn_string)->first();
-    $battleplanId = $request->battleplan;
-    $battleplan = Battleplan::find($battleplanId);
-    $battleplan->removeUnsavedDraws();
-    $room->battleplan_id = $battleplanId;
+    $room = Room::Connection($request->conn_string);
+    // return $request->all();
+    $battleplan = Battleplan::findOrFail($request->battleplanId);
+
+    // make sure the deleter is also the owner of the map
+    if (!$this->isOwner($room)) {
+        return $room;
+        return response()->json([
+            "success" => false,
+            "message" => "You do not own the room."
+        ]);
+    }
+
+    // Undo any unsaved work
+    $battleplan->undo();
+
+    // set the battleplan
+    $room->battleplan_id = $battleplan->id;
     $room->save();
+
+    // Fire event to listeners
+    event(new BattleplanChange($room->connection_string));
+
+    // Respond
     return response()->json($room);
   }
 
-  public function deleteBattleplan(Request $request){
-    $battleplanId = $request->battleplanId;
-    $battleplan = Battleplan::find($battleplanId);
-
-    // make sure the deleter is also the owner of the map
-    if ($battleplan->Owner != Auth::User()) {
-        return false;
+  public function getBattleplan($conn_string){
+    // variable declaration
+    $battleplan = Room::Connection($conn_string)->Battleplan;
+    if($battleplan == null){
+        return null;
     }
-
-    $battleplan->delete();
-    return true;
+    return response()->json(Battleplan::json($battleplan->id));
   }
 
-  public function getBattleplan(Request $request){
-    $room = Room::where("connection_string", $request->conn_string)->first();
-    $floorCollection = [];
-
-
-    // error handle
-    if($room->battleplan_id == null){
-      return null;
-    }
-
-    // build return objects
-    $battleplan = $room->battleplan;
-
-    foreach ($battleplan->battlefloors as $key => $battlefloor) {
-      //add to collection
-      $floorCollection[] = Battlefloor::with('floor')->where('id', $battlefloor->id)->first();
-    }
-
-    return response()->json([
-      "battleplan" => Battleplan::with('map')->where('id', $battleplan->id)->first(),
-      "battlefloors" => $floorCollection,
-    ]);
-  }
-
-  public function show(Request $request,$conn_string){
+  public function show(Request $request, $conn_string){
     // Find correct room
-    $room = Room::where("connection_string", $conn_string)->first();
+    $room = Room::Connection($conn_string);
 
     // Gather relevant data
+    $listenSocket = env("LISTEN_SOCKET");
     $maps = Map::orderBy('name', 'asc')->get();
     $atk_operators = Operator::attackers();
     $def_operators = Operator::defenders();
@@ -115,9 +93,13 @@ class RoomController extends Controller
     if($room == null){
       return redirect()->route('Room.join')->with("error", ["error" => "Room not found!"]);
     } else{
-      return view("room.show", compact("maps", "room", 'battleplans', 'atk_operators', 'def_operators'));
+      return view("room.show", compact("maps", "room", 'battleplans', 'atk_operators', 'def_operators','listenSocket'));
     }
 
+  }
+
+  private function isOwner($room){
+      return $room->Owner == Auth::User();
   }
 
 }

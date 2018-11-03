@@ -2,63 +2,109 @@
 
 namespace App\Models;
 use App\Models\OperatorSlot;
+use App\Models\Map;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Battleplan extends Model
 {
-  protected $fillable = [
-    'name', 'description', 'owner', 'gametype_id', 'map_id', 'saved'
-  ];
+    protected $fillable = [
+        'name', 'description', 'owner', 'gametype_id', 'map_id', 'saved'
+    ];
 
-  public function owner() {
-    return $this->belongsTo('App\Models\User', 'owner', 'id');
-  }
+    /*****
+    Relationships
+    *****/
 
-  public function map() {
-    return $this->hasOne('App\Models\Map', "id", 'map_id');
-  }
+    public function owner() {
+        return $this->belongsTo('App\Models\User', 'owner', 'id');
+    }
 
-  public function battlefloors() {
-    return $this->hasMany('App\Models\Battlefloor', 'battleplan_id');
-  }
+    public function map() {
+        return $this->hasOne('App\Models\Map', "id", 'map_id');
+    }
 
-  public function gametype() {
-    return $this->belongsTo('App\Models\Gametype', 'gametype_id', 'id');
-  }
+    public function battlefloors() {
+        return $this->hasMany('App\Models\Battlefloor', 'battleplan_id');
+    }
 
-  public function saveDraws() {
-    $battlefloors = $this->battlefloors;
-    foreach ($battlefloors as $key => $battlefloor) {
-        $battlefloor->saveDraws();
+    public function gametype() {
+        return $this->belongsTo('App\Models\Gametype', 'gametype_id', 'id');
+    }
+
+    public function slots() {
+        return $this->hasMany('App\Models\OperatorSlot', 'battleplan_id');
+    }
+
+
+  /*****
+    Static methods
+  *****/
+    public static function json($id){
+        return Battleplan::where('id', $id)
+        ->with("battlefloors")
+        ->with("battlefloors.floor")
+        ->with("battlefloors.draws")
+        ->with("slots")
+        ->with("slots.operator")
+        ->first();
+    }
+
+  /*****
+    Public methods
+  *****/
+  public function undo() {
+    // Undo every battlefloor
+    foreach ($this->battlefloors as $key => $battlefloor) {
+        $battlefloor->undo();
     }
   }
 
-  public function removeUnsavedDraws() {
-    $battlefloors = $this->battlefloors;
-    foreach ($battlefloors as $key => $battlefloor) {
-        $battlefloor->removeUnsavedDraws();
+  public function saveValues($name = "") {
+
+    $this->name = $name;
+    $this->saved = true;
+
+    // save every battlefloor
+    foreach ($this->battlefloors as $key => $battlefloor) {
+        $battlefloor->save();
     }
+    $this->save(); // Calls Default Save
   }
-
-  public function slots() {
-    return $this->hasMany('App\Models\OperatorSlot', 'battleplan_id');
-  }
-
-  // Create override
+  /*****
+    Overrides
+  *****/
   public static function create(array $attributes = [])
     {
-        $numberOfOperatorSlots = 5;
-        // Parent Create method
-        $model = static::query()->create($attributes);
+        // variable declarations
+        $map = Map::findOrFail($attributes["map_id"]);
 
-        for ($i=0; $i < $numberOfOperatorSlots; $i++) {
+        // Defaults
+        $operatorSlots = (isset($attributes["operatorSlots"])) ? $attributes["operatorSlots"] : 5;
+        $attributes["name"] = (isset($attributes["name"])) ? $attributes["name"] : "Untitled";
+        $attributes["description"] = (isset($attributes["description"])) ? $attributes["description"] : "";
+
+        // Parent Create method
+        $battleplan = static::query()->create($attributes);
+
+        // Generate the number of operator slots
+        for ($i=0; $i < $operatorSlots; $i++) {
             OperatorSlot::create([
-                "battleplan_id" => $model->id
+                "battleplan_id" => $battleplan->id
             ]);
         }
+
+        // Generate the number of battlefloors from map
+        foreach ($map->floors as $key => $floor) {
+          Battlefloor::create([
+            "floor_id" => $floor->id,
+            "battleplan_id" => $battleplan->id,
+          ]);
+        }
+
         // Create slots
-        return $model;
+        return $battleplan;
     }
+
 
 }

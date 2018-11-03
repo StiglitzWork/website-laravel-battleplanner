@@ -21,107 +21,126 @@ class Battlefloor extends Helpers {
         this.id = Battlefloor.id;
         this.number = Battlefloor.floor.floorNum;
         this.src = Battlefloor.floor.src;
-        this.paints_saved = []
-        this.paints_unsaved = []
-        this.paints_transit = []
-        this.delayUpdateTimer = 500;
-        // we use this var to keep tract or the list of Draw ids we we can send them to the server to ignore on return
-        this.drawIds = [];
-        this.updateServer();
-        this.loadServerDraw();
+
+        this.draws = []
+        this.draws_unpushed = [];
+        this.draws_transit = [];
+
+
     }
 
     /**************************
              Public methods
     **************************/
-    addPaint(originCoordinates,currentCoordinates, color){
-      this.paints_unsaved.push(new this.Draw(originCoordinates,currentCoordinates, color));
-    }
-
-    checkPaint(db_dump){
-      for (var i = 0; i < db_dump.length; i++) {
-        db_dump[i];
-      }
-    }
-
-    updateServer(){
-      var self = this;
-      // if (this.active) {
-        this.paints_transit = this.paints_unsaved;
-        this.paints_unsaved = [];
-
-        if(self.paints_transit.length > 0){
-          $.ajax({
-            method: "POST",
-            url: "/battlefloor/update",
-            data: {battlefloorId: self.id, "draws":self.paints_transit},
-            success: function(result){
-              self.paints_transit = [];
-              self.saveServerDraw(result);
-              setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-            },
-            error: function(result,code){
-              console.log(result);
-              setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-            }
-          });
-        } else{
-        setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-      }
-    }
-
-    addServerDrawToLocal(serverDraw){
-      var origin={
-          "x": serverDraw.originX,
-          "y": serverDraw.originY
-      }
-      var destination = {
-          "x": serverDraw.destinationX,
-          "y": serverDraw.destinationY
-      }
-      var aDraw = new this.Draw(origin, destination, serverDraw.color);
-      aDraw.id = serverDraw.id;
-      this.drawIds.push(serverDraw.id);
-      this.paints_saved.push(aDraw);
-    }
-
-    saveServerDraw(result){
-      for (var i = 0; i < result.length; i++) {
-        this.addServerDrawToLocal(result[i]);
-      }
-    }
-
-    loadServerDraw(result){
-      var self = this;
-      // if (this.active) {
-
-        $.ajax({
-          method: "POST",
-          url: "/battlefloor/getDraws",
-          data: {battlefloorId: self.id, alreadyHaveIds: self.drawIds},
-          success: function(result){
-            self.paints_transit = [];
-            self.updateDrawList(result);
-            setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-          },
-          error: function(result,code){
-            console.log(result);
-            setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-          }
-        });
-      // } else{
-      //   setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
+    draw(originCoordinates,currentCoordinates, color){
+      this.draws_unpushed.push(new this.Draw(originCoordinates,currentCoordinates, color, this.id));
+      // if(!this.acquiringDelayedDraws){
+      //     this.acquiringDelayedDraws = true;
+      //     setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
       // }
-
     }
 
-    updateDrawList(serverDrawList){
-      for (var i = 0; i < serverDrawList.length; i++) {
-        if (!this.paints_saved.filter(localDraw => this._objectIdEquals(localDraw,serverDrawList[i].id))[0]) {
-          this.addServerDrawToLocal(serverDrawList[i]);
-        }
-      }
+    serverDraw(originCoordinates,currentCoordinates, color){
+      this.draws.push(new this.Draw(originCoordinates,currentCoordinates, color, this.id));
     }
+
+    // pushServer(){
+    //     this.acquiringDelayedDraws = false;
+    //     this.draws_transit = this.draws_unpushed;
+    //     this.draws_unpushed = [];
+    //     var self = this;
+    //
+    //       $.ajax({
+    //         method: "POST",
+    //         url: "/battlefloor/draw",
+    //         data: {battlefloorId: self.id, "draws" : self.draws_transit},
+    //         success: function(result){
+    //           self.draws = self.draws.concat(self.draws_transit);
+    //           self.draws_transit = [];
+    //         },
+    //         error: function(result,code){
+    //           console.log(result);
+    //         }
+    //       });
+    // }
+
+    // updateServer(){
+    //   var self = this;
+    //   // if (this.active) {
+    //     this.paints_transit = this.draws;
+    //     this.draws = [];
+    //
+    //     if(self.paints_transit.length > 0){
+    //       $.ajax({
+    //         method: "POST",
+    //         url: "/battlefloor/update",
+    //         data: {battlefloorId: self.id, "draws":self.paints_transit},
+    //         success: function(result){
+    //           self.paints_transit = [];
+    //           self.saveServerDraw(result);
+    //           setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
+    //         },
+    //         error: function(result,code){
+    //           console.log(result);
+    //           setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
+    //         }
+    //       });
+    //     } else{
+    //     setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
+    //   }
+    // }
+
+    // addServerDrawToLocal(serverDraw){
+    //   var origin={
+    //       "x": serverDraw.originX,
+    //       "y": serverDraw.originY
+    //   }
+    //   var destination = {
+    //       "x": serverDraw.destinationX,
+    //       "y": serverDraw.destinationY
+    //   }
+    //   var aDraw = new this.Draw(origin, destination, serverDraw.color);
+    //   aDraw.id = serverDraw.id;
+    //   this.drawIds.push(serverDraw.id);
+    // }
+    //
+    // saveServerDraw(result){
+    //   for (var i = 0; i < result.length; i++) {
+    //     this.addServerDrawToLocal(result[i]);
+    //   }
+    // }
+
+    // loadServerDraw(result){
+    //   var self = this;
+    //   // if (this.active) {
+    //
+    //     $.ajax({
+    //       method: "POST",
+    //       url: "/battlefloor/getDraws",
+    //       data: {battlefloorId: self.id, alreadyHaveIds: self.drawIds},
+    //       success: function(result){
+    //         self.paints_transit = [];
+    //         self.updateDrawList(result);
+    //         setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
+    //       },
+    //       error: function(result,code){
+    //         console.log(result);
+    //         setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
+    //       }
+    //     });
+    //   // } else{
+    //   //   setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
+    //   // }
+    //
+    // }
+
+    // updateDrawList(serverDrawList){
+    //   for (var i = 0; i < serverDrawList.length; i++) {
+    //     if (!this.paints_saved.filter(localDraw => this._objectIdEquals(localDraw,serverDrawList[i].id))[0]) {
+    //       this.addServerDrawToLocal(serverDrawList[i]);
+    //     }
+    //   }
+    // }
 
     /**************************
         Helper functions

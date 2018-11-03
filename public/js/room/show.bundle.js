@@ -10555,7 +10555,7 @@ var Helpers = function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Battlefloor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Battlefloor; });
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10570,154 +10570,163 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Helpers = __webpack_require__(1).default;
 
 var Battlefloor = function (_Helpers) {
-  _inherits(Battlefloor, _Helpers);
+    _inherits(Battlefloor, _Helpers);
 
-  /**************************
-          Constructor
-  **************************/
+    /**************************
+            Constructor
+    **************************/
 
-  function Battlefloor(_Battlefloor) {
-    _classCallCheck(this, Battlefloor);
+    function Battlefloor(_Battlefloor) {
+        _classCallCheck(this, Battlefloor);
 
-    // Instantiatable class types
-    var _this = _possibleConstructorReturn(this, (Battlefloor.__proto__ || Object.getPrototypeOf(Battlefloor)).call(this));
-    // Super Class constructor call
-
-
-    _this.Draw = __webpack_require__(14).default;
-    // this.active = false;
-    // Identifiers
-    _this.type = "Battlefloor"; // Json identifier
-    _this.id = _Battlefloor.id;
-    _this.number = _Battlefloor.floor.floorNum;
-    _this.src = _Battlefloor.floor.src;
-    _this.paints_saved = [];
-    _this.paints_unsaved = [];
-    _this.paints_transit = [];
-    _this.delayUpdateTimer = 500;
-    // we use this var to keep tract or the list of Draw ids we we can send them to the server to ignore on return
-    _this.drawIds = [];
-    _this.updateServer();
-    _this.loadServerDraw();
-    return _this;
-  }
-
-  /**************************
-           Public methods
-  **************************/
+        // Instantiatable class types
+        var _this = _possibleConstructorReturn(this, (Battlefloor.__proto__ || Object.getPrototypeOf(Battlefloor)).call(this));
+        // Super Class constructor call
 
 
-  _createClass(Battlefloor, [{
-    key: 'addPaint',
-    value: function addPaint(originCoordinates, currentCoordinates, color) {
-      this.paints_unsaved.push(new this.Draw(originCoordinates, currentCoordinates, color));
-    }
-  }, {
-    key: 'checkPaint',
-    value: function checkPaint(db_dump) {
-      for (var i = 0; i < db_dump.length; i++) {
-        db_dump[i];
-      }
-    }
-  }, {
-    key: 'updateServer',
-    value: function updateServer() {
-      var self = this;
-      // if (this.active) {
-      this.paints_transit = this.paints_unsaved;
-      this.paints_unsaved = [];
+        _this.Draw = __webpack_require__(14).default;
+        // this.active = false;
+        // Identifiers
+        _this.type = "Battlefloor"; // Json identifier
+        _this.id = _Battlefloor.id;
+        _this.number = _Battlefloor.floor.floorNum;
+        _this.src = _Battlefloor.floor.src;
 
-      if (self.paints_transit.length > 0) {
-        $.ajax({
-          method: "POST",
-          url: "/battlefloor/update",
-          data: { battlefloorId: self.id, "draws": self.paints_transit },
-          success: function success(result) {
-            self.paints_transit = [];
-            self.saveServerDraw(result);
-            setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-          },
-          error: function error(result, code) {
-            console.log(result);
-            setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-          }
-        });
-      } else {
-        setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
-      }
-    }
-  }, {
-    key: 'addServerDrawToLocal',
-    value: function addServerDrawToLocal(serverDraw) {
-      var origin = {
-        "x": serverDraw.originX,
-        "y": serverDraw.originY
-      };
-      var destination = {
-        "x": serverDraw.destinationX,
-        "y": serverDraw.destinationY
-      };
-      var aDraw = new this.Draw(origin, destination, serverDraw.color);
-      aDraw.id = serverDraw.id;
-      this.drawIds.push(serverDraw.id);
-      this.paints_saved.push(aDraw);
-    }
-  }, {
-    key: 'saveServerDraw',
-    value: function saveServerDraw(result) {
-      for (var i = 0; i < result.length; i++) {
-        this.addServerDrawToLocal(result[i]);
-      }
-    }
-  }, {
-    key: 'loadServerDraw',
-    value: function loadServerDraw(result) {
-      var self = this;
-      // if (this.active) {
+        _this.draws = [];
+        _this.draws_unpushed = [];
+        _this.draws_transit = [];
 
-      $.ajax({
-        method: "POST",
-        url: "/battlefloor/getDraws",
-        data: { battlefloorId: self.id, alreadyHaveIds: self.drawIds },
-        success: function success(result) {
-          self.paints_transit = [];
-          self.updateDrawList(result);
-          setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-        },
-        error: function error(result, code) {
-          console.log(result);
-          setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-        }
-      });
-      // } else{
-      //   setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
-      // }
-    }
-  }, {
-    key: 'updateDrawList',
-    value: function updateDrawList(serverDrawList) {
-      var _this2 = this;
-
-      for (var i = 0; i < serverDrawList.length; i++) {
-        if (!this.paints_saved.filter(function (localDraw) {
-          return _this2._objectIdEquals(localDraw, serverDrawList[i].id);
-        })[0]) {
-          this.addServerDrawToLocal(serverDrawList[i]);
-        }
-      }
+        return _this;
     }
 
     /**************************
-        Helper functions
+             Public methods
     **************************/
 
-  }]);
 
-  return Battlefloor;
+    _createClass(Battlefloor, [{
+        key: 'draw',
+        value: function draw(originCoordinates, currentCoordinates, color) {
+            this.draws_unpushed.push(new this.Draw(originCoordinates, currentCoordinates, color, this.id));
+            // if(!this.acquiringDelayedDraws){
+            //     this.acquiringDelayedDraws = true;
+            //     setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
+            // }
+        }
+    }, {
+        key: 'serverDraw',
+        value: function serverDraw(originCoordinates, currentCoordinates, color) {
+            this.draws.push(new this.Draw(originCoordinates, currentCoordinates, color, this.id));
+        }
+
+        // pushServer(){
+        //     this.acquiringDelayedDraws = false;
+        //     this.draws_transit = this.draws_unpushed;
+        //     this.draws_unpushed = [];
+        //     var self = this;
+        //
+        //       $.ajax({
+        //         method: "POST",
+        //         url: "/battlefloor/draw",
+        //         data: {battlefloorId: self.id, "draws" : self.draws_transit},
+        //         success: function(result){
+        //           self.draws = self.draws.concat(self.draws_transit);
+        //           self.draws_transit = [];
+        //         },
+        //         error: function(result,code){
+        //           console.log(result);
+        //         }
+        //       });
+        // }
+
+        // updateServer(){
+        //   var self = this;
+        //   // if (this.active) {
+        //     this.paints_transit = this.draws;
+        //     this.draws = [];
+        //
+        //     if(self.paints_transit.length > 0){
+        //       $.ajax({
+        //         method: "POST",
+        //         url: "/battlefloor/update",
+        //         data: {battlefloorId: self.id, "draws":self.paints_transit},
+        //         success: function(result){
+        //           self.paints_transit = [];
+        //           self.saveServerDraw(result);
+        //           setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
+        //         },
+        //         error: function(result,code){
+        //           console.log(result);
+        //           setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
+        //         }
+        //       });
+        //     } else{
+        //     setTimeout(self.updateServer.bind(self), self.delayUpdateTimer);
+        //   }
+        // }
+
+        // addServerDrawToLocal(serverDraw){
+        //   var origin={
+        //       "x": serverDraw.originX,
+        //       "y": serverDraw.originY
+        //   }
+        //   var destination = {
+        //       "x": serverDraw.destinationX,
+        //       "y": serverDraw.destinationY
+        //   }
+        //   var aDraw = new this.Draw(origin, destination, serverDraw.color);
+        //   aDraw.id = serverDraw.id;
+        //   this.drawIds.push(serverDraw.id);
+        // }
+        //
+        // saveServerDraw(result){
+        //   for (var i = 0; i < result.length; i++) {
+        //     this.addServerDrawToLocal(result[i]);
+        //   }
+        // }
+
+        // loadServerDraw(result){
+        //   var self = this;
+        //   // if (this.active) {
+        //
+        //     $.ajax({
+        //       method: "POST",
+        //       url: "/battlefloor/getDraws",
+        //       data: {battlefloorId: self.id, alreadyHaveIds: self.drawIds},
+        //       success: function(result){
+        //         self.paints_transit = [];
+        //         self.updateDrawList(result);
+        //         setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
+        //       },
+        //       error: function(result,code){
+        //         console.log(result);
+        //         setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
+        //       }
+        //     });
+        //   // } else{
+        //   //   setTimeout(self.loadServerDraw.bind(self), self.delayUpdateTimer);
+        //   // }
+        //
+        // }
+
+        // updateDrawList(serverDrawList){
+        //   for (var i = 0; i < serverDrawList.length; i++) {
+        //     if (!this.paints_saved.filter(localDraw => this._objectIdEquals(localDraw,serverDrawList[i].id))[0]) {
+        //       this.addServerDrawToLocal(serverDrawList[i]);
+        //     }
+        //   }
+        // }
+
+        /**************************
+            Helper functions
+        **************************/
+
+    }]);
+
+    return Battlefloor;
 }(Helpers);
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 3 */,
@@ -10767,7 +10776,7 @@ $.ajaxSetup({
     Variable Declaration
 **************************/
 var app;
-app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID);
+app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID, LISTEN_SOCKET, USER_ID);
 
 /**************************
  Remove Default Html Events
@@ -10805,6 +10814,21 @@ $("#" + VIEWPORT_ID).on('wheel', function (ev) {
     app.zoom(step, ev.originalEvent.offsetX, ev.originalEvent.offsetY);
 });
 
+//listen for battleplan Change event
+LISTEN_SOCKET.on("BattleplanChange." + ROOM_CONN_STRING + ":App\\Events\\Room\\BattleplanChange", function (message) {
+    app.getRoomsBattleplan(app.load.bind(app));
+});
+
+//listen for someone elses draws
+LISTEN_SOCKET.on("BattlefloorDraw." + ROOM_CONN_STRING + ":App\\Events\\Battlefloor\\CreateDraws", function (message) {
+    app.serverDraw(message);
+});
+
+//listen for someone elses draws
+LISTEN_SOCKET.on("ChangeOperatorSlot." + ROOM_CONN_STRING + ":App\\Events\\Battleplan\\ChangeOperatorSlot", function (message) {
+    app.changeOperatorSlotDom(message.operatorSlot.id, message.operator);
+});
+
 /**************************
  Windows Event Assignment
 **************************/
@@ -10838,7 +10862,7 @@ var App = function () {
             Constructor
     **************************/
 
-    function App(conn_string, viewportId, canvasBackgroundId, canvasOverlayId) {
+    function App(conn_string, viewportId, canvasBackgroundId, canvasOverlayId, listenSocket, user_id) {
         _classCallCheck(this, App);
 
         // Instantiatable class types
@@ -10855,6 +10879,12 @@ var App = function () {
         this.viewportId = viewportId;
         this.canvasBackgroundId = canvasBackgroundId;
         this.canvasOverlayId = canvasOverlayId;
+        this.socket = listenSocket;
+        this.user_id = user_id;
+
+        // When we draw once, we start a timer to send to server so that we do not send a request per draw
+        this.acquiringDelayedDraws = false;
+        this.delayUpdateTimer = 200;
 
         // hide them until a map is chosen
         $("#" + this.viewportId).hide();
@@ -10878,7 +10908,8 @@ var App = function () {
         this.resizeRangeY = false;
         this.placeholderResizing = null;
 
-        this.RoomMapChangeCheck();
+        // load battleplan if already set
+        this.getRoomsBattleplan(this.load.bind(this));
     }
 
     /**************************
@@ -10895,34 +10926,20 @@ var App = function () {
             this.ui.update();
         }
     }, {
-        key: 'RoomMapChangeCheck',
-        value: function RoomMapChangeCheck() {
-            this.getRoomsBattleplan(function (result) {
-                if (result != null) {
-                    if (!this.battleplan || this.battleplan.id != result.battleplan.id) {
-                        this.load(result.battleplan, result.battlefloors);
-                    }
-                }
-                // Check again in 1 second
-                setTimeout(this.RoomMapChangeCheck.bind(this), 5000);
-            }.bind(this));
-        }
-    }, {
         key: 'changeColor',
         value: function changeColor(newColor) {
             this.color = newColor;
         }
     }, {
-        key: 'newBattlePlan',
-        value: function newBattlePlan(mapId) {
+        key: 'createBattleplan',
+        value: function createBattleplan(mapId) {
             var self = this;
             $.ajax({
                 method: "POST",
-                url: "/battleplan/new",
+                url: "/battleplan/create",
                 data: { map: mapId, room: this.conn_string },
-                success: function success(result) {
-                    self.load(result.battleplan, result.battlefloors);
-                    self.setRoomsBattleplan(result.battleplan.id);
+                success: function success(battleplan) {
+                    self.setRoomsBattleplan(battleplan.id);
                 },
                 error: function error(result, code) {
                     console.log(result);
@@ -10935,10 +10952,10 @@ var App = function () {
             var self = this;
             $.ajax({
                 method: "POST",
-                url: "/room/battleplan/delete",
+                url: "/battleplan/delete",
                 data: { "battleplanId": battleplanId },
                 success: function success(result) {
-                    alert("Successfully deleted!");
+                    alert("Successfully deleted! Refresh page to update 'load' list");
                 },
                 error: function error(result, code) {
                     console.log(result);
@@ -10965,7 +10982,7 @@ var App = function () {
             var self = this;
             $.ajax({
                 method: "POST",
-                url: "/room/battleplan/save",
+                url: "/battleplan/save",
                 data: { conn_string: this.conn_string, name: $("#battleplan_name").val() },
                 success: function success(result) {
                     alert("Saved!");
@@ -10977,11 +10994,24 @@ var App = function () {
         }
     }, {
         key: 'load',
-        value: function load(battleplan, battlefloors) {
-            if (battleplan && battlefloors) {
+        value: function load(battleplan) {
+            if (battleplan) {
                 $("#battleplan_name").val(battleplan.name);
-                this.battleplan = new this.Battleplan(battleplan, battlefloors);
+                this.battleplan = new this.Battleplan(battleplan);
                 this.ui = new this.Ui(this.viewportId, this.canvasBackgroundId, this.canvasOverlayId, this.battleplan);
+
+                // change ids of operator slots
+                var slots = $(".operator-slot");
+                for (var i = 0; i < slots.length; i++) {
+                    // $(slots[i]).data("id", battleplan.slots[i].id);
+                    slots[i].dataset["id"] = battleplan.slots[i].id;
+                    $(slots[i]).attr("id", "operatorSlot-" + battleplan.slots[i].id);
+                }
+
+                // Update operator doms
+                for (var i = 0; i < battleplan.slots.length; i++) {
+                    this.changeOperatorSlotDom(battleplan.slots[i].id, battleplan.slots[i].operator);
+                }
             }
         }
     }, {
@@ -10992,10 +11022,9 @@ var App = function () {
             var self = this;
             $.ajax({
                 method: "POST",
-                url: "/room/battleplan/set",
-                data: { battleplan: battleplanId, conn_string: this.conn_string },
+                url: "/room/setBattleplan",
+                data: { battleplanId: battleplanId, conn_string: this.conn_string },
                 success: function success(result) {
-                    console.log(result);
                     if (callback) {
                         callback(result);
                     }
@@ -11010,9 +11039,9 @@ var App = function () {
         value: function getRoomsBattleplan(callback) {
             var self = this;
             $.ajax({
-                method: "POST",
-                url: "/room/battleplan/get",
-                data: { conn_string: this.conn_string },
+                method: "GET",
+                url: this.conn_string + '/getBattleplan',
+                // data: { conn_string : this.conn_string},
                 success: function success(result) {
                     if (callback) {
                         callback(result);
@@ -11023,6 +11052,81 @@ var App = function () {
                 }
             });
         }
+    }, {
+        key: 'pushDrawServer',
+        value: function pushDrawServer() {
+            this.acquiringDelayedDraws = false;
+            var draws_transit = [];
+
+            for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
+                draws_transit = draws_transit.concat(this.battleplan.battlefloors[i].draws_unpushed);
+                this.battleplan.battlefloors[i].draws = this.battleplan.battlefloors[i].draws.concat(this.battleplan.battlefloors[i].draws_unpushed);
+                this.battleplan.battlefloors[i].draws_unpushed = [];
+            }
+
+            this.draws_transit = this.draws_unpushed;
+            this.draws_unpushed = [];
+            var self = this;
+
+            $.ajax({
+                method: "POST",
+                url: "/battlefloor/draw",
+                data: { conn_string: this.conn_string, userId: this.user_id, "draws": draws_transit },
+                success: function success(result) {
+                    console.log(result);
+                },
+                error: function error(result, code) {
+                    console.log(result);
+                }
+            });
+        }
+    }, {
+        key: 'serverDraw',
+        value: function serverDraw(result) {
+            for (var i = 0; i < result.draws.length; i++) {
+
+                var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
+
+                battlefloor.serverDraw({
+                    "x": result.draws[i]["originX"],
+                    "y": result.draws[i]["originY"]
+                }, {
+                    "x": result.draws[i]["destinationX"],
+                    "y": result.draws[i]["destinationY"]
+                }, result.draws[i].color);
+            }
+            this.ui.overlayUpdate = true;
+            this.ui.update();
+        }
+    }, {
+        key: 'changeOperatorSlot',
+        value: function changeOperatorSlot(slotId, operatorId) {
+
+            $.ajax({
+                method: "POST",
+                url: "/operatorSlot/update",
+                data: { conn_string: this.conn_string, userId: this.user_id, operatorSlotId: slotId, operatorId: operatorId },
+                success: function (result) {
+                    this.changeOperatorSlotDom(result.operatorSlot.id, result.operator);
+                    console.log(result);
+                }.bind(this),
+                error: function error(result, code) {
+                    console.log(result);
+                }
+            });
+        }
+    }, {
+        key: 'changeOperatorSlotDom',
+        value: function changeOperatorSlotDom(operatorSlotId, operator) {
+            if (operator != null) {
+                $("#operatorSlot-" + operatorSlotId).attr("src", operator.icon);
+                $("#operatorSlot-" + operatorSlotId).css("border-color", "#" + operator.colour);
+            } else {
+                $("#operatorSlot-" + operatorSlotId).attr("src", "/media/ops/empty.png");
+                $("#operatorSlot-" + operatorSlotId).css("border-color", "black");
+            }
+        }
+
         /**************************
               Floor Methods
         **************************/
@@ -11065,7 +11169,14 @@ var App = function () {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
             this._clickActivateEventListen(ev);
             if (this.lmb) {
-                this.battleplan.battlefloor.addPaint(coordinates, coordinates, this.color);
+                this.battleplan.battlefloor.draw(coordinates, coordinates, this.color);
+
+                // Push new drawings to server
+                if (!this.acquiringDelayedDraws) {
+                    this.acquiringDelayedDraws = true;
+                    setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+                }
+
                 this.lastCoordinates = coordinates;
                 // Update UI
                 this.ui.overlayUpdate = true;
@@ -11083,7 +11194,14 @@ var App = function () {
             }
 
             if (this.lmb) {
-                this.battleplan.battlefloor.addPaint(this.lastCoordinates, coordinates, this.color);
+                this.battleplan.battlefloor.draw(this.lastCoordinates, coordinates, this.color);
+
+                // Push new drawings to server
+                if (!this.acquiringDelayedDraws) {
+                    this.acquiringDelayedDraws = true;
+                    setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+                }
+
                 this.ui.overlayUpdate = true;
                 this.ui.update();
             } else {
@@ -11241,7 +11359,7 @@ var Battleplan = function (_Helpers) {
             Constructor
     **************************/
 
-    function Battleplan(battleplan, battlefloors) {
+    function Battleplan(battleplan) {
         _classCallCheck(this, Battleplan);
 
         // Instantiatable class types
@@ -11259,7 +11377,7 @@ var Battleplan = function (_Helpers) {
         _this.battlefloor = null;
         _this.battlefloors = [];
 
-        _this.initialization(battlefloors);
+        _this.initialization(battleplan.battlefloors);
         return _this;
     }
 
@@ -11402,7 +11520,19 @@ var Battleplan = function (_Helpers) {
         key: 'loadFloors',
         value: function loadFloors(floorSources) {
             for (var i = 0; i < floorSources.length; i++) {
-                this.battlefloors.push(new this.Battlefloor(floorSources[i]));
+                var battlefloor = new this.Battlefloor(floorSources[i]);
+                this.battlefloors.push(battlefloor);
+
+                for (var j = 0; j < floorSources[i].draws.length; j++) {
+
+                    battlefloor.serverDraw({
+                        "x": floorSources[i].draws[j]["originX"],
+                        "y": floorSources[i].draws[j]["originY"]
+                    }, {
+                        "x": floorSources[i].draws[j]["destinationX"],
+                        "y": floorSources[i].draws[j]["destinationY"]
+                    }, floorSources[i].draws[j].color);
+                }
             }
 
             // init the current floor
@@ -11457,7 +11587,7 @@ var Draw = function (_Helpers) {
             Constructor
     **************************/
 
-    function Draw(origin, destination, color) {
+    function Draw(origin, destination, color, battlefloorId) {
         _classCallCheck(this, Draw);
 
         var _this = _possibleConstructorReturn(this, (Draw.__proto__ || Object.getPrototypeOf(Draw)).call(this));
@@ -11469,6 +11599,7 @@ var Draw = function (_Helpers) {
         _this.origin = origin;
         _this.destination = destination;
         _this.color = color;
+        _this.battlefloorId = battlefloorId;
         return _this;
     }
 
@@ -11655,34 +11786,34 @@ var Ui = function () {
             // var lastDrag = null;
 
             // Redraw saved
-            for (var i = 0; i < this.battleplan.battlefloor.paints_saved.length; i++) {
+            for (var i = 0; i < this.battleplan.battlefloor.draws.length; i++) {
 
                 ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.paints_saved[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.paints_saved[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.paints_saved[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.paints_saved[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.paints_saved[i].color;
+                ctx.moveTo(this.battleplan.battlefloor.draws[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws[i].origin.y * this.ratio - this.offsetY);
+                ctx.lineTo(this.battleplan.battlefloor.draws[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws[i].destination.y * this.ratio - this.offsetY + 1);
+                ctx.strokeStyle = this.battleplan.battlefloor.draws[i].color;
                 ctx.closePath();
                 ctx.stroke();
             }
 
-            // Redraw
-            for (var i = 0; i < this.battleplan.battlefloor.paints_unsaved.length; i++) {
+            // Redraw unpushed ones
+            for (var i = 0; i < this.battleplan.battlefloor.draws_unpushed.length; i++) {
 
                 ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.paints_unsaved[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.paints_unsaved[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.paints_unsaved[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.paints_unsaved[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.paints_unsaved[i].color;
+                ctx.moveTo(this.battleplan.battlefloor.draws_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_unpushed[i].origin.y * this.ratio - this.offsetY);
+                ctx.lineTo(this.battleplan.battlefloor.draws_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
+                ctx.strokeStyle = this.battleplan.battlefloor.draws_unpushed[i].color;
                 ctx.closePath();
                 ctx.stroke();
             }
 
-            // Redraw
-            for (var i = 0; i < this.battleplan.battlefloor.paints_transit.length; i++) {
+            // Redraw transit ones
+            for (var i = 0; i < this.battleplan.battlefloor.draws_transit.length; i++) {
 
                 ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.paints_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.paints_transit[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.paints_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.paints_transit[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.paints_transit[i].color;
+                ctx.moveTo(this.battleplan.battlefloor.draws_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_transit[i].origin.y * this.ratio - this.offsetY);
+                ctx.lineTo(this.battleplan.battlefloor.draws_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_transit[i].destination.y * this.ratio - this.offsetY + 1);
+                ctx.strokeStyle = this.battleplan.battlefloor.draws_transit[i].color;
                 ctx.closePath();
                 ctx.stroke();
             }

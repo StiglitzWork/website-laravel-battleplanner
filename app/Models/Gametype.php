@@ -10,6 +10,9 @@ class Gametype extends Model
     'name',
   ];
 
+  /*****
+   Relationships
+  *****/
   public function battleplans() {
     return $this->hasMany('App\Models\Battleplans', 'gametype_id');
   }

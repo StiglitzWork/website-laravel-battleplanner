@@ -10,6 +10,9 @@ class Room extends Model
     'owner', 'connection_string', 'battleplan_id'
   ];
 
+  /*****
+   Relationships
+  *****/
   public function Owner() {
     return $this->hasOne('App\Models\User', 'id', 'owner');
   }
@@ -18,4 +21,7 @@ class Room extends Model
     return $this->belongsTo('App\Models\Battleplan');
   }
 
+  public static function Connection($conn_string) {
+    return Room::where('connection_string', $conn_string)->first();
+  }
 }

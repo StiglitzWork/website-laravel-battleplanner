@@ -62,11 +62,26 @@
                       {{-- <div class="text-center"> --}}
                           {{-- <button type="button" name="button" class="btn btn-primary col-{{floor(12/count($room->battleplan->slots))}} " onclick="app.engine.changeFloor(1)">Floor &uarr;</button> --}}
 
-                        @if ($slot->operator == null)
-                                <input type="image" src="/media/ops/empty.png" class="op-icon operator-border" data-toggle="modal" data-target="#opModal" style="border-color: black" />
+                              {{-- {{dd($slot->operator)}} --}}
+                      @if ($room->Owner == Auth::User())
+                          @if (!$slot->operator || !$slot->operator->exists)
+                                  <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))" style="border-color: black" />
+                          @else
+                                  <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))" style="border-color: #{{$slot->operator->colour}}"/>
+                          @endif
+                      @else
+                          @if (!$slot->operator || !$slot->operator->exists)
+                                  <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" style="border-color: black" />
+                          @else
+                                  <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}" class="op-icon operator-slot operator-border" style="border-color: #{{$slot->operator->colour}}"/>
+                          @endif
+                      @endif
+
+                        {{-- @if (!$slot->operator->exists)
+                                <input type="image" id="operatorSlot-{{$slot->id}}" src="/media/ops/empty.png" class="op-icon operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot({{$slot->id}})" style="border-color: black" />
                         @else
-                                 <input type="image" src="{{$slot->operator->icon}}" class="op-icon operator-border" data-toggle="modal" data-target="#opModal"  style="border-color: {{$slot->operator->color}}"/>
-                        @endif
+                                <input type="image" id="operatorSlot-{{$slot->id}}" src="{{$slot->operator->icon}}" class="op-icon operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot({{$slot->id}})" style="border-color: #{{$slot->operator->colour}}"/>
+                        @endif --}}
                         {{-- </div> --}}
                   @endforeach
               @endif
@@ -87,7 +102,7 @@
                            <button type="button" name="button" class="btn btn-primary col-6" onclick="app.engine.changeFloor(1)">Floor &uarr;</button>
                        </div>
                    </div>
-                   <div class="col-md-3 col-sm-12 text-center">
+                   <div class="col-md-3 col-sm-12 text-center mt-2">
                        {{-- <p style="color:white;">Pencil</p> --}}
                        <input type="color" id='colorPicker' id="head" name="color" value="#e66465" onChange="app.engine.changeColor(this.value)" />
                    </div>
@@ -125,3 +140,11 @@
       </div>
   </div>
 </div>
+
+@push('js')
+    <script type="text/javascript">
+        function setEditingOperatorSlot(id){
+            $("#EditingOperatorSlot").val(id);
+        }
+    </script>
+@endpush

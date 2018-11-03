@@ -10,6 +10,9 @@ class Operator extends Model
     'name', 'icon', 'colour', 'atk'
   ];
 
+  /*****
+   Relationships
+  *****/
   public function battleplan() {
     return $this->belongsToMany('App\Models\Battleplan');
   }
@@ -22,6 +25,9 @@ class Operator extends Model
     return $this->belongsToMany('App\Models\OperatorSlot');
   }
 
+  /*****
+    Public methods
+  *****/
   public static function attackers() {
     return Operator::where("atk", true)->get();
   }

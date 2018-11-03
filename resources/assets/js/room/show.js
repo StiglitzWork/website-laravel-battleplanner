@@ -28,7 +28,7 @@ $.ajaxSetup({
     Variable Declaration
 **************************/
 var app;
-app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID)
+app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID, LISTEN_SOCKET, USER_ID)
 
 /**************************
  Remove Default Html Events
@@ -65,6 +65,22 @@ $("#" + VIEWPORT_ID).on('wheel', function (ev) {
 
     app.zoom(step,ev.originalEvent.offsetX,ev.originalEvent.offsetY);
 });
+
+//listen for battleplan Change event
+LISTEN_SOCKET.on(`BattleplanChange.${ROOM_CONN_STRING}:App\\Events\\Room\\BattleplanChange`, function(message){
+    app.getRoomsBattleplan(app.load.bind(app));
+});
+
+//listen for someone elses draws
+LISTEN_SOCKET.on(`BattlefloorDraw.${ROOM_CONN_STRING}:App\\Events\\Battlefloor\\CreateDraws`, function(message){
+    app.serverDraw(message);
+});
+
+//listen for someone elses draws
+LISTEN_SOCKET.on(`ChangeOperatorSlot.${ROOM_CONN_STRING}:App\\Events\\Battleplan\\ChangeOperatorSlot`, function(message){
+    app.changeOperatorSlotDom(message.operatorSlot.id,message.operator);
+});
+
 
 /**************************
  Windows Event Assignment

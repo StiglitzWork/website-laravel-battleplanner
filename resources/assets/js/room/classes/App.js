@@ -10,7 +10,7 @@ class App {
             Constructor
     **************************/
 
-    constructor(conn_string, viewportId, canvasBackgroundId , canvasOverlayId) {
+    constructor(conn_string, viewportId, canvasBackgroundId , canvasOverlayId, listenSocket, user_id) {
         // Instantiatable class types
         this.Battleplan = require('./Battleplan.js').default;
         this.Battlefloor = require('./Battlefloor.js').default;
@@ -25,6 +25,12 @@ class App {
         this.viewportId = viewportId
         this.canvasBackgroundId = canvasBackgroundId
         this.canvasOverlayId = canvasOverlayId
+        this.socket = listenSocket;
+        this.user_id = user_id;
+
+        // When we draw once, we start a timer to send to server so that we do not send a request per draw
+        this.acquiringDelayedDraws = false;
+        this.delayUpdateTimer = 200;
 
         // hide them until a map is chosen
         $("#"+this.viewportId).hide();
@@ -49,7 +55,8 @@ class App {
         this.resizeRangeY = false;
         this.placeholderResizing = null;
 
-        this.RoomMapChangeCheck();
+        // load battleplan if already set
+        this.getRoomsBattleplan(this.load.bind(this));
     }
 
     /**************************
@@ -64,31 +71,18 @@ class App {
         this.ui.update();
     }
 
-    RoomMapChangeCheck(){
-      this.getRoomsBattleplan(function(result){
-        if(result != null){
-          if (!this.battleplan || this.battleplan.id != result.battleplan.id) {
-            this.load(result.battleplan,result.battlefloors);
-          }
-        }
-        // Check again in 1 second
-        setTimeout(this.RoomMapChangeCheck.bind(this), 5000);
-      }.bind(this));
-    }
-
     changeColor(newColor){
       this.color = newColor
     }
 
-    newBattlePlan(mapId){
+    createBattleplan(mapId){
       var self = this;
       $.ajax({
         method: "POST",
-        url: "/battleplan/new",
+        url: "/battleplan/create",
         data: { map: mapId, room : this.conn_string},
-        success: function(result){
-          self.load(result.battleplan,result.battlefloors);
-          self.setRoomsBattleplan(result.battleplan.id);
+        success: function(battleplan){
+          self.setRoomsBattleplan(battleplan.id);
         },
         error: function(result,code){
           console.log(result);
@@ -100,10 +94,10 @@ class App {
       var self = this;
       $.ajax({
         method: "POST",
-        url: "/room/battleplan/delete",
+        url: "/battleplan/delete",
         data: { "battleplanId": battleplanId},
         success: function(result){
-            alert("Successfully deleted!");
+            alert("Successfully deleted! Refresh page to update 'load' list");
         },
         error: function(result,code){
             console.log(result);
@@ -128,7 +122,7 @@ class App {
       var self = this;
       $.ajax({
         method: "POST",
-        url: "/room/battleplan/save",
+        url: "/battleplan/save",
         data: { conn_string : this.conn_string, name : $("#battleplan_name").val()},
         success: function(result){
           alert("Saved!");
@@ -139,22 +133,34 @@ class App {
       });
     }
 
-    load(battleplan,battlefloors){
-      if (battleplan && battlefloors) {
-        $("#battleplan_name").val(battleplan.name);
-        this.battleplan = new this.Battleplan(battleplan, battlefloors);
-        this.ui = new this.Ui(this.viewportId, this.canvasBackgroundId, this.canvasOverlayId, this.battleplan);
-      }
+    load(battleplan){
+        if (battleplan) {
+            $("#battleplan_name").val(battleplan.name);
+            this.battleplan = new this.Battleplan(battleplan);
+            this.ui = new this.Ui(this.viewportId, this.canvasBackgroundId, this.canvasOverlayId, this.battleplan);
+
+            // change ids of operator slots
+            var slots = $(".operator-slot");
+            for (var i = 0; i < slots.length; i++) {
+                // $(slots[i]).data("id", battleplan.slots[i].id);
+                slots[i].dataset["id"] = battleplan.slots[i].id;
+                $(slots[i]).attr("id", "operatorSlot-" + battleplan.slots[i].id);
+            }
+
+            // Update operator doms
+            for (var i = 0; i < battleplan.slots.length; i++) {
+                this.changeOperatorSlotDom(battleplan.slots[i].id, battleplan.slots[i].operator);
+            }
+        }
     }
 
     setRoomsBattleplan(battleplanId, callback = null){
       var self = this;
       $.ajax({
         method: "POST",
-        url: "/room/battleplan/set",
-        data: { battleplan: battleplanId, conn_string : this.conn_string},
+        url: "/room/setBattleplan",
+        data: { battleplanId: battleplanId, conn_string : this.conn_string},
         success: function(result){
-          console.log(result);
           if (callback) {
               callback(result)
           }
@@ -168,9 +174,9 @@ class App {
     getRoomsBattleplan(callback){
       var self = this;
       $.ajax({
-        method: "POST",
-        url: "/room/battleplan/get",
-        data: { conn_string : this.conn_string},
+        method: "GET",
+        url: `${this.conn_string}/getBattleplan`,
+        // data: { conn_string : this.conn_string},
         success: function(result){
           if (callback) {
             callback(result);
@@ -181,6 +187,79 @@ class App {
         }
       });
     }
+
+    pushDrawServer(){
+        this.acquiringDelayedDraws = false;
+        var draws_transit = [];
+
+        for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
+            draws_transit = draws_transit.concat(this.battleplan.battlefloors[i].draws_unpushed);
+            this.battleplan.battlefloors[i].draws = this.battleplan.battlefloors[i].draws.concat(this.battleplan.battlefloors[i].draws_unpushed);
+            this.battleplan.battlefloors[i].draws_unpushed = [];
+        }
+
+        this.draws_transit = this.draws_unpushed;
+        this.draws_unpushed = [];
+        var self = this;
+
+          $.ajax({
+            method: "POST",
+            url: "/battlefloor/draw",
+            data: {conn_string:this.conn_string, userId: this.user_id, "draws" : draws_transit},
+            success: function(result){
+                console.log(result);
+            },
+            error: function(result,code){
+              console.log(result);
+            }
+          });
+    }
+
+    serverDraw(result){
+        for (var i = 0; i < result.draws.length; i++) {
+
+            var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
+
+            battlefloor.serverDraw({
+                "x":result.draws[i]["originX"],
+                "y":result.draws[i]["originY"],
+            },
+            {
+                "x":result.draws[i]["destinationX"],
+                "y":result.draws[i]["destinationY"],
+            },
+            result.draws[i].color);
+        }
+        this.ui.overlayUpdate = true;
+        this.ui.update();
+    }
+
+    changeOperatorSlot(slotId,operatorId){
+
+        $.ajax({
+          method: "POST",
+          url: "/operatorSlot/update",
+          data: {conn_string:this.conn_string, userId: this.user_id, operatorSlotId : slotId, operatorId: operatorId},
+          success: function(result){
+              this.changeOperatorSlotDom(result.operatorSlot.id,result.operator)
+              console.log(result);
+          }.bind(this),
+          error: function(result,code){
+            console.log(result);
+          }
+        });
+    }
+
+    changeOperatorSlotDom(operatorSlotId,operator){
+        if (operator != null) {
+            $("#operatorSlot-" + operatorSlotId).attr("src",operator.icon);
+            $("#operatorSlot-" + operatorSlotId).css("border-color","#"+operator.colour);
+        } else{
+            $("#operatorSlot-" + operatorSlotId).attr("src","/media/ops/empty.png");
+            $("#operatorSlot-" + operatorSlotId).css("border-color","black");
+        }
+    }
+
     /**************************
           Floor Methods
     **************************/
@@ -219,7 +298,14 @@ class App {
         var coordinates = this._calculateOffset(ev.offsetX,ev.offsetY);
         this._clickActivateEventListen(ev)
         if (this.lmb) {
-            this.battleplan.battlefloor.addPaint(coordinates, coordinates , this.color);
+            this.battleplan.battlefloor.draw(coordinates, coordinates , this.color);
+
+            // Push new drawings to server
+            if(!this.acquiringDelayedDraws){
+                this.acquiringDelayedDraws = true;
+                setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+            }
+
             this.lastCoordinates = coordinates;
             // Update UI
             this.ui.overlayUpdate = true;
@@ -236,7 +322,14 @@ class App {
         }
 
         if (this.lmb) {
-            this.battleplan.battlefloor.addPaint(this.lastCoordinates, coordinates, this.color);
+            this.battleplan.battlefloor.draw(this.lastCoordinates, coordinates, this.color);
+
+            // Push new drawings to server
+            if(!this.acquiringDelayedDraws){
+                this.acquiringDelayedDraws = true;
+                setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+            }
+
             this.ui.overlayUpdate = true;
             this.ui.update();
 

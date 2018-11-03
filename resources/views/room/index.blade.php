@@ -23,7 +23,7 @@
       <div class="row mt-4">
 
         <div class="col-6">
-          <a href="/room/new" type="button" class="col-6 btn btn-primary">Create a new Room</a>
+          <a href="/room/create" type="button" class="col-6 btn btn-primary">Create a new Room</a>
         </div>
 
         <div class="col-6">

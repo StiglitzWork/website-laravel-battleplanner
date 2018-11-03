@@ -10,6 +10,9 @@ class Floor extends Model
     'name', 'src', 'floorNum', 'map_id', 'battlefloor_id',
   ];
 
+  /*****
+   Relationships
+  *****/
   public function map() {
     return $this->belongsTo('App\Models\Map', 'map_id', 'id');
   }

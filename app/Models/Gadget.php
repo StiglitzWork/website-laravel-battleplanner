@@ -10,6 +10,9 @@ class Gadget extends Model
     'name', 'icon', 'prime', 'general'
   ];
 
+  /*****
+   Relationships
+  *****/
   public function operators() {
     return $this->belongsToMany('App\Models\Operator');
   }

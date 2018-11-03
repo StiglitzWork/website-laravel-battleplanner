@@ -27,11 +27,14 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /*****
+     Relationships
+    *****/
     public function battleplans() {
       return $this->hasMany('App\Models\Battleplan', 'user_id');
     }
 
     public function room() {
-      return $this->hasOne('App\Models\Room', 'owner');
+      return $this->hasMany('App\Models\Room', 'owner');
     }
 }

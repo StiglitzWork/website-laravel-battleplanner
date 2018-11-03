@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Draw;
+
 class Battlefloor extends Model
 {
   protected $fillable = [
     'battleplan_id', 'floor_id'
   ];
 
+  /*****
+  Relationships
+  *****/
   public function floor() {
     return $this->belongsTo('App\Models\Floor');
   }
@@ -28,16 +32,23 @@ class Battlefloor extends Model
       ->get();
   }
 
-  public function saveDraws(){
-    $draws = $this->draws;
-    foreach ($draws as $key => $draw) {
+  /*****
+    Public methods
+  *****/
+
+  public function saveValues(){
+
+    // Save the new draws
+    foreach ($this->draws as $key => $draw) {
         $draw->saved = true;
         $draw->save();
     }
+
   }
-  public function removeUnsavedDraws(){
-    $draws = $this->draws;
-    foreach ($draws as $key => $draw) {
+
+  public function undo(){
+     // Undo unsaved draws
+    foreach ($this->draws as $this->draws => $draw) {
         if(!$draw->saved){
             $draw->delete();
         }

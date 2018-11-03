@@ -9,7 +9,7 @@ class Battleplan extends Helpers {
             Constructor
     **************************/
 
-    constructor(battleplan, battlefloors) {
+    constructor(battleplan) {
         // Super Class constructor call
         super();
 
@@ -24,7 +24,7 @@ class Battleplan extends Helpers {
         this.battlefloor = null;
         this.battlefloors = [];
 
-        this.initialization(battlefloors)
+        this.initialization(battleplan.battlefloors)
     }
 
     /**************************
@@ -142,7 +142,23 @@ class Battleplan extends Helpers {
 
     loadFloors(floorSources){
         for (var i = 0; i < floorSources.length; i++) {
-          this.battlefloors.push(new this.Battlefloor(floorSources[i]));
+          var battlefloor = new this.Battlefloor(floorSources[i])
+          this.battlefloors.push(battlefloor);
+
+          for (var j = 0; j < floorSources[i].draws.length; j++) {
+
+
+              battlefloor.serverDraw({
+                  "x":floorSources[i].draws[j]["originX"],
+                  "y":floorSources[i].draws[j]["originY"],
+              },
+              {
+                  "x":floorSources[i].draws[j]["destinationX"],
+                  "y":floorSources[i].draws[j]["destinationY"],
+              },
+              floorSources[i].draws[j].color);
+          }
+
         }
 
         // init the current floor

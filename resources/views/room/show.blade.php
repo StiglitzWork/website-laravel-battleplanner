@@ -5,10 +5,13 @@
 @endpush
 
 @push ('js')
-  <script type="text/javascript">
-    const ROOM_CONN_STRING = "{{$room->connection_string}}";
-  </script>
-  <script src="{{r_asset("js/room/show.bundle.js")}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        const ROOM_CONN_STRING = "{{$room->connection_string}}";
+        const LISTEN_SOCKET = io('{{$listenSocket}}');
+        const USER_ID = {{Auth::User()->id}};
+    </script>
+    <script src="{{r_asset("js/room/show.bundle.js")}}"></script>
 @endpush
 
 @section ('content')
@@ -52,6 +55,7 @@
 
           {{-- Pill content --}}
           <div class="tab-content" id="myTabContent">
+            <input type="hidden" id="EditingOperatorSlot" name="" value="">
             <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="home-tab">
               @include('room.new')
             </div>

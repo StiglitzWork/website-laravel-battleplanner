@@ -10,6 +10,9 @@ class Map extends Model
     'name', 'thumbsrc', 'comp', 'battleplan_id',
   ];
 
+  /*****
+   Relationships
+  *****/
   public function floors() {
     return $this->hasMany('App\Models\Floor', 'map_id');
   }
