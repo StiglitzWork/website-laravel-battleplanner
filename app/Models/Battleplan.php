@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Battleplan extends Model
 {
     protected $fillable = [
-        'name', 'description', 'owner', 'gametype_id', 'map_id', 'saved'
+        'name', 'description', 'owner', 'gametype_id', 'map_id', 'saved', 'notes'
     ];
+
 
     /*****
     Relationships
     *****/
-
     public function owner() {
         return $this->belongsTo('App\Models\User', 'owner', 'id');
     }
@@ -37,9 +37,9 @@ class Battleplan extends Model
     }
 
 
-  /*****
+    /*****
     Static methods
-  *****/
+    *****/
     public static function json($id){
         return Battleplan::where('id', $id)
         ->with("battlefloors")
@@ -50,8 +50,9 @@ class Battleplan extends Model
         ->first();
     }
 
+
   /*****
-    Public methods
+  Public methods
   *****/
   public function undo() {
     // Undo every battlefloor
@@ -60,10 +61,11 @@ class Battleplan extends Model
     }
   }
 
-  public function saveValues($name = "") {
+  public function saveValues($name = "", $notes = "") {
 
     $this->name = $name;
     $this->saved = true;
+    $this->notes = $notes;
 
     // save every battlefloor
     foreach ($this->battlefloors as $key => $battlefloor) {
@@ -71,8 +73,10 @@ class Battleplan extends Model
     }
     $this->save(); // Calls Default Save
   }
+
+
   /*****
-    Overrides
+  Overrides
   *****/
   public static function create(array $attributes = [])
     {
@@ -83,7 +87,7 @@ class Battleplan extends Model
         $operatorSlots = (isset($attributes["operatorSlots"])) ? $attributes["operatorSlots"] : 5;
         $attributes["name"] = (isset($attributes["name"])) ? $attributes["name"] : "Untitled";
         $attributes["description"] = (isset($attributes["description"])) ? $attributes["description"] : "";
-
+        $attributes["notes"] = (isset($attributes["notes"])) ? $attributes["notes"] : "";
         // Parent Create method
         $battleplan = static::query()->create($attributes);
 

@@ -120,9 +120,17 @@
       <div class="row text-center">
           {{-- <div class="col-11 text-center" style="color:white"> --}}
               @if (Auth::user() == $room->Owner)
-                  <textarea class="form-control battleplan_notes" id="comment"></textarea>
+                @if ($room->battleplan && $room->battleplan->notes)
+                  <textarea class="form-control battleplan_notes" id="battleplan_notes">{{$room->battleplan->notes}}</textarea>
+                @else
+                  <textarea class="form-control battleplan_notes" id="battleplan_notes"></textarea>
+                @endif
               @else
-                  <textarea class="form-control battleplan_notes" id="comment" disabled></textarea>
+                @if ($room->battleplan && $room->battleplan->notes)
+                  <textarea class="form-control battleplan_notes" id="battleplan_notes" disabled>{{$room->battleplan->notes}}</textarea>
+                @else
+                  <textarea class="form-control battleplan_notes" id="battleplan_notes" disabled></textarea>
+                @endif
               @endif
           {{-- </div> --}}
       </div>
