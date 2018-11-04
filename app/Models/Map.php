@@ -20,4 +20,11 @@ class Map extends Model
   public function battleplan() {
     return $this->belongsTo('App\Models\Battleplan', 'battleplan_id', 'id');
   }
+
+  /*****
+   Public method
+  *****/
+  public static function byName($name){
+      return Map::where("name", $name)->first();
+  }
 }
