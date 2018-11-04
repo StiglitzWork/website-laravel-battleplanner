@@ -6,6 +6,11 @@
 
 @push('css')
   <link rel="stylesheet" href="{{r_asset("css/index/index.css")}}">
+  <style media="screen">
+      .black-border{
+          text-shadow: 2px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+      }
+  </style>
 @endpush
 
 @section('content')
@@ -15,12 +20,12 @@
         <div class="row">
           <div class="col-lg-10 mx-auto">
             <h1 class="text-uppercase">
-              <strong>Plan Your Victory</strong>
+              <strong class="black-border">Plan Your Victory</strong>
             </h1>
             <hr>
           </div>
           <div class="col-lg-8 mx-auto">
-            <p class="text-faded mb-5">Make the difference</p>
+            <p class="mb-5 black-border" style="size:20px;font-size: 40px;">Make the difference</p>
             <a class="btn btn-primary btn-xl js-scroll-trigger" href="/room">Start Now</a>
           </div>
         </div>
