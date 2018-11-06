@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Draw extends Model
+class Line extends Model
 {
     protected $fillable = [
-        "battlefloor_id", "originX",
-        "originY", "destinationX",
-        "destinationY", "user_id", "saved",
-        "Draw"
+        "color",
     ];
 
     /*****

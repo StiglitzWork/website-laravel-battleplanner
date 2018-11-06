@@ -30,7 +30,7 @@ class App {
         this.isOwner = isOwner;
 
         // When we draw once, we start a timer to send to server so that we do not send a request per draw
-        this.acquiringDelayedDraws = false;
+        this.acquiringDelayedLines = false;
         this.delayUpdateTimer = 200;
 
         // hide them until a map is chosen
@@ -196,27 +196,27 @@ class App {
         });
     }
 
-    pushDrawServer() {
-        this.acquiringDelayedDraws = false;
-        var draws_transit = [];
+    pushServer() {
+        this.acquiringDelayedLines = false;
+        var lines_transit = [];
 
         for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
-            draws_transit = draws_transit.concat(this.battleplan.battlefloors[i].draws_unpushed);
-            this.battleplan.battlefloors[i].draws = this.battleplan.battlefloors[i].draws.concat(this.battleplan.battlefloors[i].draws_unpushed);
-            this.battleplan.battlefloors[i].draws_unpushed = [];
+            lines_transit = lines_transit.concat(this.battleplan.battlefloors[i].lines_unpushed);
+            this.battleplan.battlefloors[i].lines = this.battleplan.battlefloors[i].lines.concat(this.battleplan.battlefloors[i].lines_unpushed);
+            this.battleplan.battlefloors[i].lines_unpushed = [];
         }
 
-        this.draws_transit = this.draws_unpushed;
-        this.draws_unpushed = [];
+        this.lines_transit = this.lines_unpushed;
+        this.lines_unpushed = [];
         var self = this;
 
         $.ajax({
             method: "POST",
-            url: "/battlefloor/draw",
+            url: "/battlefloor/line",
             data: {
                 conn_string: this.conn_string,
                 userId: this.user_id,
-                "draws": draws_transit
+                "lines": lines_transit
             },
             success: function(result) {
                 // debugging only
@@ -227,19 +227,19 @@ class App {
         });
     }
 
-    serverDraw(result) {
-        for (var i = 0; i < result.draws.length; i++) {
+    serverLine(result) {
+        for (var i = 0; i < result.lines.length; i++) {
 
-            var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
+            var battlefloor = this.battleplan.getFloor(result.lines[i].battlefloor_id);
 
-            battlefloor.serverDraw({
-                    "x": result.draws[i]["originX"],
-                    "y": result.draws[i]["originY"],
+            battlefloor.serverLine({
+                    "x": result.lines[i]["originX"],
+                    "y": result.lines[i]["originY"],
                 }, {
-                    "x": result.draws[i]["destinationX"],
-                    "y": result.draws[i]["destinationY"],
+                    "x": result.lines[i]["destinationX"],
+                    "y": result.lines[i]["destinationY"],
                 },
-                result.draws[i].color);
+                result.lines[i].color);
         }
         this.ui.overlayUpdate = true;
         this.ui.update();
@@ -309,12 +309,12 @@ class App {
         var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._clickActivateEventListen(ev)
         if (this.lmb) {
-            this.battleplan.battlefloor.draw(coordinates, coordinates, this.color);
+            this.battleplan.battlefloor.line(coordinates, coordinates, this.color);
 
-            // Push new drawings to server
-            if (!this.acquiringDelayedDraws) {
-                this.acquiringDelayedDraws = true;
-                setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+            // Push new lineings to server
+            if (!this.acquiringDelayedLines) {
+                this.acquiringDelayedLines = true;
+                setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
             }
 
             this.lastCoordinates = coordinates;
@@ -333,12 +333,12 @@ class App {
         }
 
         if (this.lmb) {
-            this.battleplan.battlefloor.draw(this.lastCoordinates, coordinates, this.color);
+            this.battleplan.battlefloor.line(this.lastCoordinates, coordinates, this.color);
 
-            // Push new drawings to server
-            if (!this.acquiringDelayedDraws) {
-                this.acquiringDelayedDraws = true;
-                setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+            // Push new lineings to server
+            if (!this.acquiringDelayedLines) {
+                this.acquiringDelayedLines = true;
+                setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
             }
 
             this.ui.overlayUpdate = true;

@@ -143,34 +143,34 @@ class Ui {
         // var lastDrag = null;
 
         // Redraw saved
-        for (var i = 0; i < this.battleplan.battlefloor.draws.length; i++) {
+        for (var i = 0; i < this.battleplan.battlefloor.lines.length; i++) {
 
           ctx.beginPath();
-          ctx.moveTo(this.battleplan.battlefloor.draws[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws[i].origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(this.battleplan.battlefloor.draws[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws[i].destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = this.battleplan.battlefloor.draws[i].color;
+          ctx.moveTo(this.battleplan.battlefloor.lines[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines[i].origin.y * this.ratio - this.offsetY);
+          ctx.lineTo(this.battleplan.battlefloor.lines[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines[i].destination.y * this.ratio - this.offsetY + 1);
+          ctx.strokeStyle = this.battleplan.battlefloor.lines[i].color;
           ctx.closePath();
           ctx.stroke();
         }
 
         // Redraw unpushed ones
-        for (var i = 0; i < this.battleplan.battlefloor.draws_unpushed.length; i++) {
+        for (var i = 0; i < this.battleplan.battlefloor.lines_unpushed.length; i++) {
 
           ctx.beginPath();
-          ctx.moveTo(this.battleplan.battlefloor.draws_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_unpushed[i].origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(this.battleplan.battlefloor.draws_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = this.battleplan.battlefloor.draws_unpushed[i].color;
+          ctx.moveTo(this.battleplan.battlefloor.lines_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_unpushed[i].origin.y * this.ratio - this.offsetY);
+          ctx.lineTo(this.battleplan.battlefloor.lines_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
+          ctx.strokeStyle = this.battleplan.battlefloor.lines_unpushed[i].color;
           ctx.closePath();
           ctx.stroke();
         }
 
         // Redraw transit ones
-        for (var i = 0; i < this.battleplan.battlefloor.draws_transit.length; i++) {
+        for (var i = 0; i < this.battleplan.battlefloor.lines_transit.length; i++) {
 
           ctx.beginPath();
-          ctx.moveTo(this.battleplan.battlefloor.draws_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_transit[i].origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(this.battleplan.battlefloor.draws_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_transit[i].destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = this.battleplan.battlefloor.draws_transit[i].color;
+          ctx.moveTo(this.battleplan.battlefloor.lines_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_transit[i].origin.y * this.ratio - this.offsetY);
+          ctx.lineTo(this.battleplan.battlefloor.lines_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_transit[i].destination.y * this.ratio - this.offsetY + 1);
+          ctx.strokeStyle = this.battleplan.battlefloor.lines_transit[i].color;
           ctx.closePath();
           ctx.stroke();
         }

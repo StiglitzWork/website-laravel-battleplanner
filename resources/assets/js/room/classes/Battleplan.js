@@ -174,18 +174,18 @@ class Battleplan extends Helpers {
           var battlefloor = new this.Battlefloor(floorSources[i])
           this.battlefloors.push(battlefloor);
 
-          for (var j = 0; j < floorSources[i].draws.length; j++) {
+          for (var j = 0; j < floorSources[i].lines.length; j++) {
 
 
-              battlefloor.serverDraw({
-                  "x":floorSources[i].draws[j]["originX"],
-                  "y":floorSources[i].draws[j]["originY"],
+              battlefloor.serverLine({
+                  "x":floorSources[i].lines[j]["originX"],
+                  "y":floorSources[i].lines[j]["originY"],
               },
               {
-                  "x":floorSources[i].draws[j]["destinationX"],
-                  "y":floorSources[i].draws[j]["destinationY"],
+                  "x":floorSources[i].lines[j]["destinationX"],
+                  "y":floorSources[i].lines[j]["destinationY"],
               },
-              floorSources[i].draws[j].color);
+              floorSources[i].lines[j].color);
           }
 
         }

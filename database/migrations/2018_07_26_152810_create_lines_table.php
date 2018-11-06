@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDrawsTable extends Migration
+class CreateLinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateDrawsTable extends Migration
      */
     public function up()
     {
-        Schema::create('draws', function (Blueprint $table) {
+        Schema::create('lines', function (Blueprint $table) {
             $table->increments('id');
-            $table->float("originX",10,5);
-            $table->float("originY",10,5);
-            $table->float("destinationX",10,5);
-            $table->float("destinationY",10,5);
+            $table->float("originX", 10, 5);
+            $table->float("originY", 10, 5);
+            $table->float("destinationX", 10, 5);
+            $table->float("destinationY", 10, 5);
             $table->string("color");
             $table->boolean("saved")->default(false);
 
@@ -46,6 +46,6 @@ class CreateDrawsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('draws');
+        Schema::dropIfExists('lines');
     }
 }

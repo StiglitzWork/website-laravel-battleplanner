@@ -10,11 +10,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class CreateDraws implements ShouldBroadcast
+class CreateLines implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $draws;
+    public $lines;
     public $creator;
     public $identifier;
 
@@ -23,9 +23,9 @@ class CreateDraws implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($draws,$identifier,$creator)
+    public function __construct($lines, $identifier, $creator)
     {
-        $this->draws = $draws;
+        $this->lines = $lines;
         $this->identifier = $identifier;
         $this->creator = $creator;
     }
@@ -38,6 +38,6 @@ class CreateDraws implements ShouldBroadcast
     public function broadcastOn()
     {
         // return new PrivateChannel('test-channel');
-        return ['BattlefloorDraw']; // TODO add room id!
+        return ['BattlefloorLine']; // TODO add room id!
     }
 }

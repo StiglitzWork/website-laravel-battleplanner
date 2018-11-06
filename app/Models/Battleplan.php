@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\OperatorSlot;
 use App\Models\Map;
 
@@ -16,23 +17,28 @@ class Battleplan extends Model
     /*****
     Relationships
     *****/
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo('App\Models\User', 'owner', 'id');
     }
 
-    public function map() {
+    public function map()
+    {
         return $this->hasOne('App\Models\Map', "id", 'map_id');
     }
 
-    public function battlefloors() {
+    public function battlefloors()
+    {
         return $this->hasMany('App\Models\Battlefloor', 'battleplan_id');
     }
 
-    public function gametype() {
+    public function gametype()
+    {
         return $this->belongsTo('App\Models\Gametype', 'gametype_id', 'id');
     }
 
-    public function slots() {
+    public function slots()
+    {
         return $this->hasMany('App\Models\OperatorSlot', 'battleplan_id');
     }
 
@@ -40,45 +46,47 @@ class Battleplan extends Model
     /*****
     Static methods
     *****/
-    public static function json($id){
+    public static function json($id)
+    {
         return Battleplan::where('id', $id)
         ->with("battlefloors")
         ->with("battlefloors.floor")
-        ->with("battlefloors.draws")
+        ->with("battlefloors.lines")
         ->with("slots")
         ->with("slots.operator")
         ->first();
     }
 
 
-  /*****
-  Public methods
-  *****/
-  public function undo() {
-    // Undo every battlefloor
-    foreach ($this->battlefloors as $key => $battlefloor) {
-        $battlefloor->undo();
+    /*****
+    Public methods
+    *****/
+    public function undo()
+    {
+        // Undo every battlefloor
+        foreach ($this->battlefloors as $key => $battlefloor) {
+            $battlefloor->undo();
+        }
     }
-  }
 
-  public function saveValues($name = "", $notes = "") {
+    public function saveValues($name = "", $notes = "")
+    {
+        $this->name = $name;
+        $this->saved = true;
+        $this->notes = $notes;
 
-    $this->name = $name;
-    $this->saved = true;
-    $this->notes = $notes;
-
-    // save every battlefloor
-    foreach ($this->battlefloors as $key => $battlefloor) {
-        $battlefloor->saveValues();
+        // save every battlefloor
+        foreach ($this->battlefloors as $key => $battlefloor) {
+            $battlefloor->saveValues();
+        }
+        $this->save(); // Calls Default Save
     }
-    $this->save(); // Calls Default Save
-  }
 
 
-  /*****
-  Overrides
-  *****/
-  public static function create(array $attributes = [])
+    /*****
+    Overrides
+    *****/
+    public static function create(array $attributes = [])
     {
         // variable declarations
         $map = Map::findOrFail($attributes["map_id"]);
@@ -100,7 +108,7 @@ class Battleplan extends Model
 
         // Generate the number of battlefloors from map
         foreach ($map->floors as $key => $floor) {
-          Battlefloor::create([
+            Battlefloor::create([
             "floor_id" => $floor->id,
             "battleplan_id" => $battleplan->id,
           ]);
@@ -109,6 +117,4 @@ class Battleplan extends Model
         // Create slots
         return $battleplan;
     }
-
-
 }

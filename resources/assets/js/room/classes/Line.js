@@ -3,7 +3,7 @@
 **************************/
 const Helpers = require('./Helpers.js').default;
 
-class Draw extends Helpers {
+class Line extends Helpers {
 
     /**************************
             Constructor
@@ -13,7 +13,7 @@ class Draw extends Helpers {
         // Super Class constructor call
         super();
 
-        this.type = "Draw"; // Json identifier
+        this.type = "Line"; // Json identifier
         this.id = null;
         this.origin = origin;
         this.destination = destination;
@@ -28,6 +28,6 @@ class Draw extends Helpers {
 
 }
 export {
-    Draw as
+    Line as
     default
 }

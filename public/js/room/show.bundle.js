@@ -10584,7 +10584,7 @@ var Battlefloor = function (_Helpers) {
         // Super Class constructor call
 
 
-        _this.Draw = __webpack_require__(14).default;
+        _this.Line = __webpack_require__(14).default;
 
         // Identifiers
         _this.type = "Battlefloor"; // Json identifier
@@ -10592,9 +10592,9 @@ var Battlefloor = function (_Helpers) {
         _this.number = _Battlefloor.floor.floorNum;
         _this.src = _Battlefloor.floor.src;
 
-        _this.draws = [];
-        _this.draws_unpushed = [];
-        _this.draws_transit = [];
+        _this.lines = [];
+        _this.lines_unpushed = [];
+        _this.lines_transit = [];
 
         return _this;
     }
@@ -10605,14 +10605,14 @@ var Battlefloor = function (_Helpers) {
 
 
     _createClass(Battlefloor, [{
-        key: 'draw',
-        value: function draw(originCoordinates, currentCoordinates, color) {
-            this.draws_unpushed.push(new this.Draw(originCoordinates, currentCoordinates, color, this.id));
+        key: 'line',
+        value: function line(originCoordinates, currentCoordinates, color) {
+            this.lines_unpushed.push(new this.Line(originCoordinates, currentCoordinates, color, this.id));
         }
     }, {
-        key: 'serverDraw',
-        value: function serverDraw(originCoordinates, currentCoordinates, color) {
-            this.draws.push(new this.Draw(originCoordinates, currentCoordinates, color, this.id));
+        key: 'serverLine',
+        value: function serverLine(originCoordinates, currentCoordinates, color) {
+            this.lines.push(new this.Line(originCoordinates, currentCoordinates, color, this.id));
         }
 
         /**************************
@@ -10718,8 +10718,8 @@ LISTEN_SOCKET.on("BattleplanChange." + ROOM_CONN_STRING + ":App\\Events\\Room\\B
 });
 
 //listen for someone elses draws
-LISTEN_SOCKET.on("BattlefloorDraw." + ROOM_CONN_STRING + ":App\\Events\\Battlefloor\\CreateDraws", function (message) {
-    app.serverDraw(message);
+LISTEN_SOCKET.on("BattlefloorLine." + ROOM_CONN_STRING + ":App\\Events\\Battlefloor\\CreateLines", function (message) {
+    app.serverLine(message);
 });
 
 //listen for someone elses draws
@@ -10782,7 +10782,7 @@ var App = function () {
         this.isOwner = isOwner;
 
         // When we draw once, we start a timer to send to server so that we do not send a request per draw
-        this.acquiringDelayedDraws = false;
+        this.acquiringDelayedLines = false;
         this.delayUpdateTimer = 200;
 
         // hide them until a map is chosen
@@ -10958,28 +10958,28 @@ var App = function () {
             });
         }
     }, {
-        key: 'pushDrawServer',
-        value: function pushDrawServer() {
-            this.acquiringDelayedDraws = false;
-            var draws_transit = [];
+        key: 'pushServer',
+        value: function pushServer() {
+            this.acquiringDelayedLines = false;
+            var lines_transit = [];
 
             for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
-                draws_transit = draws_transit.concat(this.battleplan.battlefloors[i].draws_unpushed);
-                this.battleplan.battlefloors[i].draws = this.battleplan.battlefloors[i].draws.concat(this.battleplan.battlefloors[i].draws_unpushed);
-                this.battleplan.battlefloors[i].draws_unpushed = [];
+                lines_transit = lines_transit.concat(this.battleplan.battlefloors[i].lines_unpushed);
+                this.battleplan.battlefloors[i].lines = this.battleplan.battlefloors[i].lines.concat(this.battleplan.battlefloors[i].lines_unpushed);
+                this.battleplan.battlefloors[i].lines_unpushed = [];
             }
 
-            this.draws_transit = this.draws_unpushed;
-            this.draws_unpushed = [];
+            this.lines_transit = this.lines_unpushed;
+            this.lines_unpushed = [];
             var self = this;
 
             $.ajax({
                 method: "POST",
-                url: "/battlefloor/draw",
+                url: "/battlefloor/line",
                 data: {
                     conn_string: this.conn_string,
                     userId: this.user_id,
-                    "draws": draws_transit
+                    "lines": lines_transit
                 },
                 success: function success(result) {
                     // debugging only
@@ -10990,19 +10990,19 @@ var App = function () {
             });
         }
     }, {
-        key: 'serverDraw',
-        value: function serverDraw(result) {
-            for (var i = 0; i < result.draws.length; i++) {
+        key: 'serverLine',
+        value: function serverLine(result) {
+            for (var i = 0; i < result.lines.length; i++) {
 
-                var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
+                var battlefloor = this.battleplan.getFloor(result.lines[i].battlefloor_id);
 
-                battlefloor.serverDraw({
-                    "x": result.draws[i]["originX"],
-                    "y": result.draws[i]["originY"]
+                battlefloor.serverLine({
+                    "x": result.lines[i]["originX"],
+                    "y": result.lines[i]["originY"]
                 }, {
-                    "x": result.draws[i]["destinationX"],
-                    "y": result.draws[i]["destinationY"]
-                }, result.draws[i].color);
+                    "x": result.lines[i]["destinationX"],
+                    "y": result.lines[i]["destinationY"]
+                }, result.lines[i].color);
             }
             this.ui.overlayUpdate = true;
             this.ui.update();
@@ -11078,12 +11078,12 @@ var App = function () {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
             this._clickActivateEventListen(ev);
             if (this.lmb) {
-                this.battleplan.battlefloor.draw(coordinates, coordinates, this.color);
+                this.battleplan.battlefloor.line(coordinates, coordinates, this.color);
 
-                // Push new drawings to server
-                if (!this.acquiringDelayedDraws) {
-                    this.acquiringDelayedDraws = true;
-                    setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+                // Push new lineings to server
+                if (!this.acquiringDelayedLines) {
+                    this.acquiringDelayedLines = true;
+                    setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
                 }
 
                 this.lastCoordinates = coordinates;
@@ -11103,12 +11103,12 @@ var App = function () {
             }
 
             if (this.lmb) {
-                this.battleplan.battlefloor.draw(this.lastCoordinates, coordinates, this.color);
+                this.battleplan.battlefloor.line(this.lastCoordinates, coordinates, this.color);
 
-                // Push new drawings to server
-                if (!this.acquiringDelayedDraws) {
-                    this.acquiringDelayedDraws = true;
-                    setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
+                // Push new lineings to server
+                if (!this.acquiringDelayedLines) {
+                    this.acquiringDelayedLines = true;
+                    setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
                 }
 
                 this.ui.overlayUpdate = true;
@@ -11468,15 +11468,15 @@ var Battleplan = function (_Helpers) {
                 var battlefloor = new this.Battlefloor(floorSources[i]);
                 this.battlefloors.push(battlefloor);
 
-                for (var j = 0; j < floorSources[i].draws.length; j++) {
+                for (var j = 0; j < floorSources[i].lines.length; j++) {
 
-                    battlefloor.serverDraw({
-                        "x": floorSources[i].draws[j]["originX"],
-                        "y": floorSources[i].draws[j]["originY"]
+                    battlefloor.serverLine({
+                        "x": floorSources[i].lines[j]["originX"],
+                        "y": floorSources[i].lines[j]["originY"]
                     }, {
-                        "x": floorSources[i].draws[j]["destinationX"],
-                        "y": floorSources[i].draws[j]["destinationY"]
-                    }, floorSources[i].draws[j].color);
+                        "x": floorSources[i].lines[j]["destinationX"],
+                        "y": floorSources[i].lines[j]["destinationY"]
+                    }, floorSources[i].lines[j].color);
                 }
             }
 
@@ -11514,7 +11514,7 @@ var Battleplan = function (_Helpers) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Draw; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Line; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -11526,21 +11526,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 **************************/
 var Helpers = __webpack_require__(1).default;
 
-var Draw = function (_Helpers) {
-    _inherits(Draw, _Helpers);
+var Line = function (_Helpers) {
+    _inherits(Line, _Helpers);
 
     /**************************
             Constructor
     **************************/
 
-    function Draw(origin, destination, color, battlefloorId) {
-        _classCallCheck(this, Draw);
+    function Line(origin, destination, color, battlefloorId) {
+        _classCallCheck(this, Line);
 
-        var _this = _possibleConstructorReturn(this, (Draw.__proto__ || Object.getPrototypeOf(Draw)).call(this));
+        var _this = _possibleConstructorReturn(this, (Line.__proto__ || Object.getPrototypeOf(Line)).call(this));
         // Super Class constructor call
 
 
-        _this.type = "Draw"; // Json identifier
+        _this.type = "Line"; // Json identifier
         _this.id = null;
         _this.origin = origin;
         _this.destination = destination;
@@ -11553,7 +11553,7 @@ var Draw = function (_Helpers) {
         Helper functions
     **************************/
 
-    return Draw;
+    return Line;
 }(Helpers);
 
 
@@ -11822,34 +11822,34 @@ var Ui = function () {
             // var lastDrag = null;
 
             // Redraw saved
-            for (var i = 0; i < this.battleplan.battlefloor.draws.length; i++) {
+            for (var i = 0; i < this.battleplan.battlefloor.lines.length; i++) {
 
                 ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.draws[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.draws[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.draws[i].color;
+                ctx.moveTo(this.battleplan.battlefloor.lines[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines[i].origin.y * this.ratio - this.offsetY);
+                ctx.lineTo(this.battleplan.battlefloor.lines[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines[i].destination.y * this.ratio - this.offsetY + 1);
+                ctx.strokeStyle = this.battleplan.battlefloor.lines[i].color;
                 ctx.closePath();
                 ctx.stroke();
             }
 
             // Redraw unpushed ones
-            for (var i = 0; i < this.battleplan.battlefloor.draws_unpushed.length; i++) {
+            for (var i = 0; i < this.battleplan.battlefloor.lines_unpushed.length; i++) {
 
                 ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.draws_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_unpushed[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.draws_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.draws_unpushed[i].color;
+                ctx.moveTo(this.battleplan.battlefloor.lines_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_unpushed[i].origin.y * this.ratio - this.offsetY);
+                ctx.lineTo(this.battleplan.battlefloor.lines_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
+                ctx.strokeStyle = this.battleplan.battlefloor.lines_unpushed[i].color;
                 ctx.closePath();
                 ctx.stroke();
             }
 
             // Redraw transit ones
-            for (var i = 0; i < this.battleplan.battlefloor.draws_transit.length; i++) {
+            for (var i = 0; i < this.battleplan.battlefloor.lines_transit.length; i++) {
 
                 ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.draws_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_transit[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.draws_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_transit[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.draws_transit[i].color;
+                ctx.moveTo(this.battleplan.battlefloor.lines_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_transit[i].origin.y * this.ratio - this.offsetY);
+                ctx.lineTo(this.battleplan.battlefloor.lines_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_transit[i].destination.y * this.ratio - this.offsetY + 1);
+                ctx.strokeStyle = this.battleplan.battlefloor.lines_transit[i].color;
                 ctx.closePath();
                 ctx.stroke();
             }

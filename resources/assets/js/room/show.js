@@ -72,8 +72,8 @@ LISTEN_SOCKET.on(`BattleplanChange.${ROOM_CONN_STRING}:App\\Events\\Room\\Battle
 });
 
 //listen for someone elses draws
-LISTEN_SOCKET.on(`BattlefloorDraw.${ROOM_CONN_STRING}:App\\Events\\Battlefloor\\CreateDraws`, function(message){
-    app.serverDraw(message);
+LISTEN_SOCKET.on(`BattlefloorLine.${ROOM_CONN_STRING}:App\\Events\\Battlefloor\\CreateLines`, function(message){
+    app.serverLine(message);
 });
 
 //listen for someone elses draws
