@@ -74,6 +74,10 @@ class App {
         this.color = newColor
     }
 
+    /**************************
+        Battleplan Methods
+    **************************/
+
     createBattleplan(mapId) {
         var self = this;
         $.ajax({
