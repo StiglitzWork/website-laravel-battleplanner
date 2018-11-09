@@ -10,7 +10,7 @@ class Draw extends Model
         "battlefloor_id", "originX",
         "originY", "destinationX",
         "destinationY", "user_id", "saved",
-        "Draw"
+        "drawable_id", "drawable_type"
     ];
 
     /*****
@@ -24,5 +24,15 @@ class Draw extends Model
     public function battlefloor()
     {
         return $this->belongsTo('App\Models\Battlefloor');
+    }
+
+    /**
+     * Morph Productable
+     *
+     * @var array
+     */
+    public function drawable()
+    {
+        return $this->morphTo();
     }
 }

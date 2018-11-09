@@ -24,9 +24,9 @@ class Battlefloor extends Model
         return $this->belongsTo('App\Models\Battleplan', 'battleplan_id', 'id');
     }
 
-    public function lines()
+    public function draws()
     {
-        return $this->hasMany('App\Models\Line');
+        return $this->hasMany('App\Models\Draw', 'battlefloor_id');
     }
 
     /*****
@@ -37,9 +37,9 @@ class Battlefloor extends Model
     {
 
     // Save the new lines
-        foreach ($this->lines as $key => $line) {
-            $line->saved = true;
-            $line->save();
+        foreach ($this->draws as $key => $draw) {
+            $draw->saved = true;
+            $draw->save();
         }
         $this->save();
     }
@@ -47,9 +47,9 @@ class Battlefloor extends Model
     public function undo()
     {
         // Undo unsaved lines
-        foreach ($this->lines as $this->lines => $line) {
-            if (!$line->saved) {
-                $line->delete();
+        foreach ($this->draws as $this->draws => $draw) {
+            if (!$draw->saved) {
+                $draw->delete();
             }
         }
     }

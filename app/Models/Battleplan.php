@@ -51,7 +51,8 @@ class Battleplan extends Model
         return Battleplan::where('id', $id)
         ->with("battlefloors")
         ->with("battlefloors.floor")
-        ->with("battlefloors.lines")
+        ->with("battlefloors.draws")
+        ->with("battlefloors.draws.drawable")
         ->with("slots")
         ->with("slots.operator")
         ->first();

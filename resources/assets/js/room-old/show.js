@@ -1,5 +1,5 @@
 /**************************
-        Imports
+        Inports
 **************************/
 var bootstrap  = window.bootstrap;
 
