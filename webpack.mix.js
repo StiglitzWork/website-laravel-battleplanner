@@ -10,11 +10,11 @@ mix.webpackConfig({
             'jQuery': 'jquery',
             'window.jQuery': 'jquery',
             'bootstrap': 'bootstrap'
-        })
+        }),
+        // "@babel/plugin-syntax-dynamic-import",
+        // new webpack.optimize.ModuleConcatenationPlugin()
     ]
 });
-
-
 
 // Main
 mix.sass('resources/assets/sass/app.scss', 'public/css')
@@ -58,11 +58,7 @@ mix.copy('resources/assets/js/login/*', 'public/js/login')
     .copy('resources/assets/js/register/*', 'public/js/register')
     .copy('resources/assets/sass/register/*', 'public/css/register');
 
-// Maps
-// mix.js('resources/assets/js/maps/show.js', 'public/js/maps/show.bundle.js')
-//     .copy('resources/assets/sass/maps/*', 'public/css/maps');
-
-// Maps
+// Rooms
 mix.js('resources/assets/js/room/join.js', 'public/js/room/join.js')
     .js('resources/assets/js/room/index.js', 'public/js/room/index.js')
     .js('resources/assets/js/room/show.js', 'public/js/room/show.bundle.js')

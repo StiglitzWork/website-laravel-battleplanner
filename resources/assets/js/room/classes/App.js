@@ -10,33 +10,26 @@ class App {
             Constructor
     **************************/
 
-    constructor(conn_string, viewportId, canvasBackgroundId , canvasOverlayId, listenSocket, user_id, isOwner) {
+    constructor(conn_string, viewports, user_id, isOwner) {
         // Instantiatable class types
         this.Battleplan = require('./Battleplan.js').default;
         this.Battlefloor = require('./Battlefloor.js').default;
         this.Ui = require('./Ui.js').default;
 
-        // Identifiers
-        this.type = "App"; // Json identifier
+        // Settings
+        this.acquiringDelayedLines = false;
+        this.delayUpdateTimer = 200;
 
         // Varable declarations
         this.color = "#e66465"; //draw color
         this.conn_string = conn_string
-        this.viewportId = viewportId
-        this.canvasBackgroundId = canvasBackgroundId
-        this.canvasOverlayId = canvasOverlayId
-        this.socket = listenSocket;
+        this.viewports = viewports
         this.user_id = user_id;
         this.isOwner = isOwner;
 
-        // When we draw once, we start a timer to send to server so that we do not send a request per draw
-        this.acquiringDelayedLines = false;
-        this.delayUpdateTimer = 200;
-
-        // hide them until a map is chosen
-        $("#" + this.viewportId).hide();
-        $("#" + this.canvasBackgroundId).hide();
-        $("#" + this.canvasOverlayId).hide();
+        // // When we draw once, we start a timer to send to server so that we do not send a request per draw
+        // this.acquiringDelayedLines = false;
+        // this.delayUpdateTimer = 200;
 
         // Event variables
         this.lastCoordinates = {
@@ -52,17 +45,22 @@ class App {
         this.lmb = false;
         this.rmb = false;
 
-        this.resizeRangeX = false;
-        this.resizeRangeY = false;
-        this.placeholderResizing = null;
-
-        // load battleplan if already set
-        this.getRoomsBattleplan(this.load.bind(this));
     }
 
     /**************************
             App Methods
     **************************/
+    init(){
+        // hide them until a map is chosen
+        $("#" + this.viewportId).hide();
+        $("#" + this.canvasBackgroundId).hide();
+        $("#" + this.canvasOverlayId).hide();
+
+        // load battleplan if already set
+        this.getRoomsBattleplan(
+            this.load.bind(this)
+        );
+    }
 
     zoom(amount, x, y) {
         var coordinates = this._calculateOffset(x, y);

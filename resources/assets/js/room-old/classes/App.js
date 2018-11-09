@@ -1,9 +1,3 @@
-/**
- * Main appication class, includes all ui functionality and application flow of the various parts
- *
- * @version 0.1
- * @author Erik Smith
- */
 class App {
 
     /**************************

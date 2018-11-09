@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10435,231 +10435,46 @@ return jQuery;
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Helpers; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Helpers = function () {
-
-    /**************************
-            Constructor
-    **************************/
-
-    function Helpers() {
-        _classCallCheck(this, Helpers);
-    }
-
-    /**************************
-        Filter Functions
-    **************************/
-
-    _createClass(Helpers, [{
-        key: '_objectNotDeleted',
-        value: function _objectNotDeleted(object) {
-            if (!object.deleted) {
-                return object;
-            }
-        }
-    }, {
-        key: '_objectIdEquals',
-        value: function _objectIdEquals(object, id) {
-            if (object.id == id) {
-                return object;
-            }
-        }
-    }, {
-        key: '_objectDbIdEquals',
-        value: function _objectDbIdEquals(object, id) {
-            if (object.dbId == id) {
-                return object;
-            }
-        }
-    }, {
-        key: '_objectInside',
-        value: function _objectInside(object, x, y) {
-            if (object.inside(x, y)) {
-                return object;
-            }
-        }
-    }, {
-        key: '_objectSelected',
-        value: function _objectSelected(object) {
-            if (object.selected) {
-                return object;
-            }
-        }
-
-        /**************************
-            Id Generation Methods
-        **************************/
-
-        /**
-         * @description makes a unique id
-         * @method _makeId
-         * @return {string}
-         */
-
-    }, {
-        key: '_makeId',
-        value: function _makeId(relevantIds) {
-            var id = this._guid();
-            while (relevantIds.includes(id)) {
-                id = this._guid();
-            }
-            return id;
-        }
-
-        // Helper for _makeId
-
-    }, {
-        key: '_guid',
-        value: function _guid() {
-            return this._s4() + this._s4() + '-' + this._s4() + '-' + this._s4() + '-' + this._s4() + '-' + this._s4() + this._s4() + this._s4();
-        }
-
-        // Helper for _guid
-
-    }, {
-        key: '_s4',
-        value: function _s4() {
-            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-        }
-
-        // Makes array of id from the objects
-
-    }, {
-        key: '_getIds',
-        value: function _getIds(arrayObjects) {
-            var results = [];
-            for (var i = 0; i < arrayObjects.length; i++) {
-                results.push(arrayObjects[i].id);
-            }
-            return results;
-        }
-    }]);
-
-    return Helpers;
-}();
-
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Battlefloor; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**************************
-	Extention class type
-**************************/
-var Helpers = __webpack_require__(1).default;
-
-var Battlefloor = function (_Helpers) {
-    _inherits(Battlefloor, _Helpers);
-
-    /**************************
-            Constructor
-    **************************/
-
-    function Battlefloor(_Battlefloor) {
-        _classCallCheck(this, Battlefloor);
-
-        // Instantiatable class types
-        var _this = _possibleConstructorReturn(this, (Battlefloor.__proto__ || Object.getPrototypeOf(Battlefloor)).call(this));
-        // Super Class constructor call
-
-
-        _this.Line = __webpack_require__(14).default;
-
-        // Identifiers
-        _this.type = "Battlefloor"; // Json identifier
-        _this.id = _Battlefloor.id;
-        _this.number = _Battlefloor.floor.floorNum;
-        _this.src = _Battlefloor.floor.src;
-
-        _this.lines = [];
-        _this.lines_unpushed = [];
-        _this.lines_transit = [];
-
-        return _this;
-    }
-
-    /**************************
-             Public methods
-    **************************/
-
-
-    _createClass(Battlefloor, [{
-        key: 'line',
-        value: function line(originCoordinates, currentCoordinates, color) {
-            this.lines_unpushed.push(new this.Line(originCoordinates, currentCoordinates, color, this.id));
-        }
-    }, {
-        key: 'serverLine',
-        value: function serverLine(originCoordinates, currentCoordinates, color) {
-            this.lines.push(new this.Line(originCoordinates, currentCoordinates, color, this.id));
-        }
-
-        /**************************
-            Helper functions
-        **************************/
-
-    }]);
-
-    return Battlefloor;
-}(Helpers);
-
-
-
-/***/ }),
+/* 1 */,
+/* 2 */,
 /* 3 */,
 /* 4 */,
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(11);
+module.exports = __webpack_require__(9);
 
 
 /***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {/**************************
-        Imports
+    Imports
 **************************/
-var bootstrap = window.bootstrap;
-
-/**************************
-    Class type definition
-**************************/
-var App = __webpack_require__(12).default;
+var App = __webpack_require__(10).default;
+var EventListeners = __webpack_require__(11);
+var SocketListeners = __webpack_require__(12);
 
 /**************************
     Constant declarations
 **************************/
-var CANVAS_BACKGROUND_ID = "background";
-var CANVAS_OVERLAY_ID = "overlay";
-var VIEWPORT_ID = "viewport";
+var VIEWPORTS = {
+    "CANVAS_BACKGROUND_ID": "background",
+    "CANVAS_OVERLAY_ID": "overlay",
+    "VIEWPORT_ID": "viewport"
+};
+
+/**************************
+    Variables that must be defined in html view due to blade template limitations
+**************************/
+// const ROOM_CONN_STRING;
+// const LISTEN_SOCKET;
+// const USER_ID;
+// const IS_OWNER;
 
 /**************************
     Setup Ajax CSRF
@@ -10673,59 +10488,17 @@ $.ajaxSetup({
 /**************************
     Variable Declaration
 **************************/
-var app;
-app = new App(ROOM_CONN_STRING, VIEWPORT_ID, CANVAS_BACKGROUND_ID, CANVAS_OVERLAY_ID, LISTEN_SOCKET, USER_ID, IS_OWNER);
+var app = new App(ROOM_CONN_STRING, VIEWPORTS, LISTEN_SOCKET, USER_ID, IS_OWNER);
 
 /**************************
- Remove Default Html Events
+ Event Listeners
 **************************/
-$("#" + CANVAS_BACKGROUND_ID + ', #' + CANVAS_OVERLAY_ID).on("contextmenu", function (e) {
-    return false;
-});
+EventListeners.init(VIEWPORTS, app);
 
-// Resize needs to reasjust the canvas sizes
-$(window).resize(function () {
-
-    app.ui.floorChange = true;
-    app.ui.overlayUpdate = true;
-    app.ui.backgroundUpdate = true;
-
-    app.ui._initViewports();
-    app.ui.update();
-});
-
-// Zoom eventlistener
-$("#" + VIEWPORT_ID).on('wheel', function (ev) {
-    ev.preventDefault();
-
-    var step;
-    var incr = 0.1;
-
-    if (ev.originalEvent.wheelDelta) {
-        step = ev.originalEvent.wheelDelta > 0 ? -incr : incr;
-    }
-
-    if (ev.originalEvent.deltaY) {
-        step = ev.originalEvent.deltaY > 0 ? -incr : incr;
-    }
-
-    app.zoom(step, ev.originalEvent.offsetX, ev.originalEvent.offsetY);
-});
-
-//listen for battleplan Change event
-LISTEN_SOCKET.on("BattleplanChange." + ROOM_CONN_STRING + ":App\\Events\\Room\\BattleplanChange", function (message) {
-    app.getRoomsBattleplan(app.load.bind(app));
-});
-
-//listen for someone elses draws
-LISTEN_SOCKET.on("BattlefloorLine." + ROOM_CONN_STRING + ":App\\Events\\Battlefloor\\CreateLines", function (message) {
-    app.serverLine(message);
-});
-
-//listen for someone elses draws
-LISTEN_SOCKET.on("ChangeOperatorSlot." + ROOM_CONN_STRING + ":App\\Events\\Battleplan\\ChangeOperatorSlot", function (message) {
-    app.changeOperatorSlotDom(message.operatorSlot.id, message.operator);
-});
+/**************************
+ Socket Listeners
+**************************/
+SocketListeners.init(LISTEN_SOCKET, ROOM_CONN_STRING, app);
 
 /**************************
  Windows Event Assignment
@@ -10733,12 +10506,11 @@ LISTEN_SOCKET.on("ChangeOperatorSlot." + ROOM_CONN_STRING + ":App\\Events\\Battl
 if (typeof window.app === "undefined") {
     window.app = {};
 }
-
 window.app.engine = app;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10760,63 +10532,64 @@ var App = function () {
             Constructor
     **************************/
 
-    function App(conn_string, viewportId, canvasBackgroundId, canvasOverlayId, listenSocket, user_id, isOwner) {
+    function App(conn_string, viewports, listenSocket, user_id, isOwner) {
         _classCallCheck(this, App);
-
-        // Instantiatable class types
-        this.Battleplan = __webpack_require__(13).default;
-        this.Battlefloor = __webpack_require__(2).default;
-        this.Ui = __webpack_require__(16).default;
-
-        // Identifiers
-        this.type = "App"; // Json identifier
-
-        // Varable declarations
-        this.color = "#e66465"; //draw color
-        this.conn_string = conn_string;
-        this.viewportId = viewportId;
-        this.canvasBackgroundId = canvasBackgroundId;
-        this.canvasOverlayId = canvasOverlayId;
-        this.socket = listenSocket;
-        this.user_id = user_id;
-        this.isOwner = isOwner;
-
-        // When we draw once, we start a timer to send to server so that we do not send a request per draw
-        this.acquiringDelayedLines = false;
-        this.delayUpdateTimer = 200;
-
-        // hide them until a map is chosen
-        $("#" + this.viewportId).hide();
-        $("#" + this.canvasBackgroundId).hide();
-        $("#" + this.canvasOverlayId).hide();
-
-        // Event variables
-        this.lastCoordinates = {
-            "x": 0,
-            "y": 0
-        };
-        this.originPoints = {
-            "x": 0,
-            "y": 0
-
-            // Eventing variables
-        };this.lmb = false;
-        this.rmb = false;
-
-        this.resizeRangeX = false;
-        this.resizeRangeY = false;
-        this.placeholderResizing = null;
-
-        // load battleplan if already set
-        this.getRoomsBattleplan(this.load.bind(this));
     }
+    // Instantiatable class types
+    // this.Battleplan = require('./Battleplan.js').default;
+    // this.Battlefloor = require('./Battlefloor.js').default;
+    // this.Ui = require('./Ui.js').default;
+    //
+    // // Identifiers
+    // this.type = "App"; // Json identifier
+    //
+    // // Varable declarations
+    // this.color = "#e66465"; //draw color
+    // this.conn_string = conn_string
+    // this.viewportId = viewportId
+    // this.canvasBackgroundId = canvasBackgroundId
+    // this.canvasOverlayId = canvasOverlayId
+    // this.socket = listenSocket;
+    // this.user_id = user_id;
+    // this.isOwner = isOwner;
+    //
+    // // When we draw once, we start a timer to send to server so that we do not send a request per draw
+    // this.acquiringDelayedLines = false;
+    // this.delayUpdateTimer = 200;
+    //
+    // // hide them until a map is chosen
+    // $("#" + this.viewportId).hide();
+    // $("#" + this.canvasBackgroundId).hide();
+    // $("#" + this.canvasOverlayId).hide();
+    //
+    // // Event variables
+    // this.lastCoordinates = {
+    //     "x": 0,
+    //     "y": 0
+    // }
+    // this.originPoints = {
+    //     "x": 0,
+    //     "y": 0
+    // }
+    //
+    // // Eventing variables
+    // this.lmb = false;
+    // this.rmb = false;
+    //
+    // this.resizeRangeX = false;
+    // this.resizeRangeY = false;
+    // this.placeholderResizing = null;
+    //
+    // // load battleplan if already set
+    // this.getRoomsBattleplan(this.load.bind(this));
+
 
     /**************************
             App Methods
     **************************/
 
     _createClass(App, [{
-        key: 'zoom',
+        key: "zoom",
         value: function zoom(amount, x, y) {
             var coordinates = this._calculateOffset(x, y);
             this.ui.zoomCanvases(amount, x, y);
@@ -10825,12 +10598,12 @@ var App = function () {
             this.ui.update();
         }
     }, {
-        key: 'changeColor',
+        key: "changeColor",
         value: function changeColor(newColor) {
             this.color = newColor;
         }
     }, {
-        key: 'createBattleplan',
+        key: "createBattleplan",
         value: function createBattleplan(mapId) {
             var self = this;
             $.ajax({
@@ -10849,7 +10622,7 @@ var App = function () {
             });
         }
     }, {
-        key: 'deleteBattlePlan',
+        key: "deleteBattlePlan",
         value: function deleteBattlePlan(battleplanId) {
             var r = confirm("Are you sure you want to delete? There is no goint back!");
             if (r == true) {
@@ -10870,7 +10643,7 @@ var App = function () {
             }
         }
     }, {
-        key: 'loadBattlePlan',
+        key: "loadBattlePlan",
         value: function loadBattlePlan(battleplanId) {
             // set the battleplan
             var self = this;
@@ -10884,7 +10657,7 @@ var App = function () {
             });
         }
     }, {
-        key: 'save',
+        key: "save",
         value: function save() {
             var tmp = $("#battleplan_notes").val();
             var self = this;
@@ -10905,7 +10678,7 @@ var App = function () {
             });
         }
     }, {
-        key: 'load',
+        key: "load",
         value: function load(battleplan) {
             if (battleplan) {
                 $("#battleplan_name").val(battleplan.name);
@@ -10917,7 +10690,7 @@ var App = function () {
             }
         }
     }, {
-        key: 'setRoomsBattleplan',
+        key: "setRoomsBattleplan",
         value: function setRoomsBattleplan(battleplanId) {
             var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
@@ -10940,12 +10713,12 @@ var App = function () {
             });
         }
     }, {
-        key: 'getRoomsBattleplan',
+        key: "getRoomsBattleplan",
         value: function getRoomsBattleplan(callback) {
             var self = this;
             $.ajax({
                 method: "GET",
-                url: this.conn_string + '/getBattleplan',
+                url: this.conn_string + "/getBattleplan",
                 // data: { conn_string : this.conn_string},
                 success: function success(result) {
                     if (callback) {
@@ -10958,7 +10731,7 @@ var App = function () {
             });
         }
     }, {
-        key: 'pushServer',
+        key: "pushServer",
         value: function pushServer() {
             this.acquiringDelayedLines = false;
             var lines_transit = [];
@@ -10990,7 +10763,7 @@ var App = function () {
             });
         }
     }, {
-        key: 'serverLine',
+        key: "serverLine",
         value: function serverLine(result) {
             for (var i = 0; i < result.lines.length; i++) {
 
@@ -11008,7 +10781,7 @@ var App = function () {
             this.ui.update();
         }
     }, {
-        key: 'changeOperatorSlot',
+        key: "changeOperatorSlot",
         value: function changeOperatorSlot(slotId, operatorId) {
 
             $.ajax({
@@ -11029,7 +10802,7 @@ var App = function () {
             });
         }
     }, {
-        key: 'changeOperatorSlotDom',
+        key: "changeOperatorSlotDom",
         value: function changeOperatorSlotDom(operatorSlotId, operator) {
             var slot = this.battleplan.getOperatorSlot(operatorSlotId);
             slot.setOperator(operator);
@@ -11041,14 +10814,14 @@ var App = function () {
         **************************/
 
     }, {
-        key: 'changeFloor',
+        key: "changeFloor",
         value: function changeFloor(amount) {
             this.battleplan.changeFloor(amount);
             this.ui.floorChange = true;
             this.ui.update();
         }
     }, {
-        key: 'changeFloorById',
+        key: "changeFloorById",
         value: function changeFloorById(floorId) {
             this.battleplan.changeFloorById(floorId);
             this.ui.floorChange = true;
@@ -11060,7 +10833,7 @@ var App = function () {
         **************************/
 
     }, {
-        key: 'canvasUp',
+        key: "canvasUp",
         value: function canvasUp(ev) {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
             this._clickDeactivateEventListen(ev);
@@ -11071,7 +10844,7 @@ var App = function () {
             }
         }
     }, {
-        key: 'canvasDown',
+        key: "canvasDown",
         value: function canvasDown(ev) {
             // var eventX = (ev.offsetX)/ this.ui.ratio;
             // var eventY = (ev.offsetY) / this.ui.ratio;
@@ -11093,7 +10866,7 @@ var App = function () {
             }
         }
     }, {
-        key: 'canvasMove',
+        key: "canvasMove",
         value: function canvasMove(ev) {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
 
@@ -11128,7 +10901,7 @@ var App = function () {
             }
         }
     }, {
-        key: 'canvasEnter',
+        key: "canvasEnter",
         value: function canvasEnter(ev) {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
             this._deactivateClickEventListen();
@@ -11138,7 +10911,7 @@ var App = function () {
             this.ui.update();
         }
     }, {
-        key: 'canvasLeave',
+        key: "canvasLeave",
         value: function canvasLeave(ev) {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
             this._deactivateClickEventListen();
@@ -11166,7 +10939,7 @@ var App = function () {
          */
 
     }, {
-        key: '_clickActivateEventListen',
+        key: "_clickActivateEventListen",
         value: function _clickActivateEventListen(ev) {
             var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
 
@@ -11185,7 +10958,7 @@ var App = function () {
          */
 
     }, {
-        key: '_clickDeactivateEventListen',
+        key: "_clickDeactivateEventListen",
         value: function _clickDeactivateEventListen(ev) {
             if (ev.button == 0) this.lmb = false;
             if (ev.button == 2) this.rmb = false;
@@ -11201,7 +10974,7 @@ var App = function () {
          */
 
     }, {
-        key: '_deactivateClickEventListen',
+        key: "_deactivateClickEventListen",
         value: function _deactivateClickEventListen() {
             this.lmb = false;
             this.rmb = false;
@@ -11219,14 +10992,14 @@ var App = function () {
          */
 
     }, {
-        key: '_contains',
+        key: "_contains",
         value: function _contains(haystack, arr) {
             return arr.some(function (v) {
                 return haystack.indexOf(v) >= 0;
             });
         }
     }, {
-        key: '_calculateOffset',
+        key: "_calculateOffset",
         value: function _calculateOffset(evx, evy) {
             var jsonResponse = {};
             jsonResponse.x = evx / this.ui.ratio + this.ui.offsetX / this.ui.ratio;
@@ -11242,704 +11015,79 @@ var App = function () {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Battleplan; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**************************
-	Extention class type
-**************************/
-var Helpers = __webpack_require__(1).default;
-
-var Battleplan = function (_Helpers) {
-    _inherits(Battleplan, _Helpers);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "init", function() { return init; });
+function init(VIEWPORTS, app) {
 
     /**************************
-            Constructor
+     Remove Default Html Events
     **************************/
-
-    function Battleplan(battleplan, isOwner) {
-        _classCallCheck(this, Battleplan);
-
-        // Instantiatable class types
-        var _this = _possibleConstructorReturn(this, (Battleplan.__proto__ || Object.getPrototypeOf(Battleplan)).call(this));
-        // Super Class constructor call
-
-
-        _this.Battlefloor = __webpack_require__(2).default;
-        _this.OperatorSlot = __webpack_require__(15).default;
-
-        // Identifiers
-        _this.id = battleplan.id;
-        _this.type = "Battleplan"; // Json identifier
-
-        // Variables
-        _this.battlefloor = null;
-        _this.battlefloors = [];
-        _this.operatorSlots = [];
-        _this.isOwner = isOwner;
-        _this.notes = battleplan.notes;
-
-        _this.initialization(battleplan.battlefloors);
-        return _this;
-    }
+    $("#" + VIEWPORTS.CANVAS_BACKGROUND_ID + ', #' + VIEWPORTS.CANVAS_OVERLAY_ID).on("contextmenu", function (e) {
+        return false;
+    });
 
     /**************************
-        Floor Methods
+     Resize needs to reasjust the canvas sizes
     **************************/
+    $(window).resize(function () {
 
-    _createClass(Battleplan, [{
-        key: 'getOperatorSlot',
-        value: function getOperatorSlot(id) {
-            var _this2 = this;
+        app.ui.floorChange = true;
+        app.ui.overlayUpdate = true;
+        app.ui.backgroundUpdate = true;
 
-            return this.operatorSlots.filter(function (slot) {
-                return _this2._objectIdEquals(slot, id);
-            })[0];
-        }
-    }, {
-        key: 'getFloor',
-        value: function getFloor(id) {
-            var _this3 = this;
+        app.ui._initViewports();
+        app.ui.update();
+    });
 
-            return this.battlefloors.filter(function (floor) {
-                return _this3._objectIdEquals(floor, id);
-            })[0];
-        }
-    }, {
-        key: 'getFloorDbId',
-        value: function getFloorDbId(dbId) {
-            var _this4 = this;
+    /**************************
+     Zoom eventlistener
+    **************************/
+    $("#" + VIEWPORTS.VIEWPORT_ID).on('wheel', function (ev) {
+        ev.preventDefault();
 
-            return this.battlefloors.filter(function (floor) {
-                return _this4._objectDbIdEquals(floor, dbId);
-            })[0];
+        var step;
+        var incr = 0.1;
+
+        if (ev.originalEvent.wheelDelta) {
+            step = ev.originalEvent.wheelDelta > 0 ? -incr : incr;
         }
 
-        //Positive or negative values accepted
-
-    }, {
-        key: 'changeFloor',
-        value: function changeFloor(amount) {
-            if (amount == 0) {
-                throw new Error("Cannot change floor by 0.");
-                return;
-            }
-
-            // positive
-            if (amount > 0) {
-                for (var i = 0; i != amount; i++) {
-                    if (this.hasNextFloor()) {
-                        this.nextFloor();
-                    } else {
-                        return;
-                    }
-                }
-                //Negative
-            } else {
-                for (var i = 0; i != amount; i--) {
-                    if (this.hasPreviousFloor()) {
-                        this.previousFloor();
-                    } else {
-                        return;
-                    }
-                }
-            }
-            // Error checking
-            if (!this.battlefloor) {
-                throw new Error("Something when wrong when changing floors");
-            }
-        }
-    }, {
-        key: 'changeFloorById',
-        value: function changeFloorById(floorId) {
-            // if (this.battlefloor) {
-            //   this.battlefloor.active=false;
-            // }
-            this.battlefloor = this.getFloor(floorId);
-            // this.battlefloor.active=true;
-        }
-    }, {
-        key: 'nextFloor',
-        value: function nextFloor() {
-            if (this.hasNextFloor()) {
-                // if (this.battlefloor) {
-                //   this.battlefloor.active=false;
-                // }
-                this.battlefloor = this.battlefloors[this.battlefloor.number + 1];
-                // this.battlefloor.active=true;
-            }
-        }
-    }, {
-        key: 'previousFloor',
-        value: function previousFloor() {
-            if (this.hasPreviousFloor()) {
-
-                // if (this.battlefloor) {
-                //   this.battlefloor.active=false;
-                // }
-                this.battlefloor = this.battlefloors[this.battlefloor.number - 1];
-                // this.battlefloor.active=true;
-            }
-        }
-    }, {
-        key: 'hasNextFloor',
-        value: function hasNextFloor() {
-            if (this.battlefloor.number < this.battlefloors.length - 1) {
-                return true;
-            }
-            return false;
-        }
-    }, {
-        key: 'hasPreviousFloor',
-        value: function hasPreviousFloor() {
-            if (this.battlefloor.number - 1 >= 0) {
-                return true;
-            }
-            return false;
-        }
-    }, {
-        key: 'setFloor',
-        value: function setFloor(id) {
-            var floor = this.getFloor(id);
-            if (floor) {
-
-                // if (this.battlefloor) {
-                //   this.battlefloor.active=false;
-                // }
-                this.battlefloor = floor;
-                // this.battlefloor.active=true;
-            }
+        if (ev.originalEvent.deltaY) {
+            step = ev.originalEvent.deltaY > 0 ? -incr : incr;
         }
 
-        /**************************
-            Display Methods
-        **************************/
-
-        /**
-         * @description innitialisation of the DOM. Sets the size of background and overlay and paints the background. Also creates all the questions from sidebar
-         * @method _initialization
-         * @return {undefined}
-         */
-
-    }, {
-        key: 'initialization',
-        value: function initialization(floorSources) {
-            // Innitialize the floors
-            this.loadFloors(floorSources);
-            $("#battleplan_notes").val(this.notes);
-        }
-    }, {
-        key: 'loadSlots',
-        value: function loadSlots(slots) {
-            this.operatorSlots = [];
-            for (var i = 0; i < slots.length; i++) {
-                var operatorSlot = new this.OperatorSlot(slots[i].id, this.isOwner);
-                if (slots[i].operator != null) {
-                    operatorSlot.setOperator(slots[i].operator);
-                }
-                this.operatorSlots.push(operatorSlot);
-            }
-            this.updateSlotsDom();
-        }
-    }, {
-        key: 'updateSlotsDom',
-        value: function updateSlotsDom() {
-            var newDom = "";
-            for (var i = 0; i < this.operatorSlots.length; i++) {
-                newDom += this.operatorSlots[i].generateDom();
-            }
-            $("#operatorSlotList").html(newDom);
-        }
-    }, {
-        key: 'loadFloors',
-        value: function loadFloors(floorSources) {
-            for (var i = 0; i < floorSources.length; i++) {
-                var battlefloor = new this.Battlefloor(floorSources[i]);
-                this.battlefloors.push(battlefloor);
-
-                for (var j = 0; j < floorSources[i].lines.length; j++) {
-
-                    battlefloor.serverLine({
-                        "x": floorSources[i].lines[j]["originX"],
-                        "y": floorSources[i].lines[j]["originY"]
-                    }, {
-                        "x": floorSources[i].lines[j]["destinationX"],
-                        "y": floorSources[i].lines[j]["destinationY"]
-                    }, floorSources[i].lines[j].color);
-                }
-            }
-
-            // init the current floor
-            this.battlefloor = this.battlefloors[0];
-        }
-
-        /**
-         * @description updates the active subclasses
-         * @method _update
-         * @return {undefined}
-         */
-
-    }, {
-        key: '_update',
-        value: function _update() {
-            this.battlefloor.update();
-        }
-
-        /**************************
-            Helper functions
-        **************************/
-
-    }]);
-
-    return Battleplan;
-}(Helpers);
-
-
+        app.zoom(step, ev.originalEvent.offsetX, ev.originalEvent.offsetY);
+    });
+}
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Line; });
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**************************
-	Extention class type
-**************************/
-var Helpers = __webpack_require__(1).default;
-
-var Line = function (_Helpers) {
-    _inherits(Line, _Helpers);
-
-    /**************************
-            Constructor
-    **************************/
-
-    function Line(origin, destination, color, battlefloorId) {
-        _classCallCheck(this, Line);
-
-        var _this = _possibleConstructorReturn(this, (Line.__proto__ || Object.getPrototypeOf(Line)).call(this));
-        // Super Class constructor call
-
-
-        _this.type = "Line"; // Json identifier
-        _this.id = null;
-        _this.origin = origin;
-        _this.destination = destination;
-        _this.color = color;
-        _this.battlefloorId = battlefloorId;
-        return _this;
-    }
-
-    /**************************
-        Helper functions
-    **************************/
-
-    return Line;
-}(Helpers);
-
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return OperatorSlot; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**************************
-	Extention class type
-**************************/
-var Helpers = __webpack_require__(1).default;
-
-var OperatorSlot = function (_Helpers) {
-    _inherits(OperatorSlot, _Helpers);
-
-    /**************************
-            Constructor
-    **************************/
-
-    function OperatorSlot(id, isOwner) {
-        _classCallCheck(this, OperatorSlot);
-
-        var _this = _possibleConstructorReturn(this, (OperatorSlot.__proto__ || Object.getPrototypeOf(OperatorSlot)).call(this));
-        // Super Class constructor call
-
-
-        _this.type = "OperatorSlot"; // Json identifier
-        _this.id = id;
-        _this.operatorId = null;
-        _this.color = "000000";
-        _this.operatorName = null;
-        _this.image_src = null;
-        _this.isOwner = isOwner;
-        return _this;
-    }
-
-    _createClass(OperatorSlot, [{
-        key: "setOperator",
-        value: function setOperator(operator) {
-            if (operator != null) {
-                this.operatorId = operator.id;
-                this.color = operator.colour;
-                this.operatorName = operator.name;
-                this.image_src = operator.icon;
-            } else {
-                this.operatorId = null;
-                this.color = "000000";
-                this.operatorName = null;
-                this.image_src = null;
-            }
-        }
-    }, {
-        key: "generateDom",
-        value: function generateDom() {
-            var dom = "";
-            if (this.isOwner) {
-                if (this.operatorId == null) {
-                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"/media/ops/empty.png\" class=\"op-icon operator-slot operator-border\" data-toggle=\"modal\" data-target=\"#opModal\" onclick=\"setEditingOperatorSlot($(this).data('id'))\" style=\"border-color: #" + this.color + "\" />";
-                } else {
-                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"" + this.image_src + "\" class=\"op-icon operator-slot operator-border\" data-toggle=\"modal\" data-target=\"#opModal\" onclick=\"setEditingOperatorSlot($(this).data('id'))\" style=\"border-color: #" + this.color + "\"/>";
-                }
-            } else {
-                if (this.operatorId == null) {
-                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"/media/ops/empty.png\" class=\"op-icon operator-slot operator-border no-pointer\" style=\"border-color: #" + this.color + "\" />";
-                } else {
-                    dom += "<input type=\"image\" id=\"operatorSlot-" + this.id + "\" data-id=\"" + this.id + "\" src=\"" + this.image_src + "\" class=\"op-icon operator-slot operator-border\" style=\"border-color: #" + this.color + "\"/>";
-                }
-            }
-            return dom;
-        }
-
-        /**************************
-            Public functions
-        **************************/
-
-    }]);
-
-    return OperatorSlot;
-}(Helpers);
-
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Ui; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Ui = function () {
-
-    /**************************
-            Constructor
-    **************************/
-
-    function Ui(viewportId, canvasBackgroundId, canvasOverlayId, map) {
-        _classCallCheck(this, Ui);
-
-        // Identifiers
-        this.type = "Ui"; // Json identifier
-
-        // Document Ids
-        this.canvasBackgroundId = canvasBackgroundId;
-        this.canvasOverlayId = canvasOverlayId;
-        this.viewportId = viewportId;
-
-        // Public variables
-        this.backgroundImage = null;
-
-        // Zoom variables
-        this.ratio = 1;
-        this.height = 0;
-        this.width = 0;
-        this.offsetX = 0;
-        this.offsetY = 0;
-        this.vpx = 0;
-        this.vpy = 0;
-        this.vpw = $("#" + this.viewportId).innerWidth;
-        this.vph = $("#" + this.viewportId).innerHeight;
-
-        // Subscribed objects
-        this.battleplan = map;
-
-        // updateFlags
-        this.floorChange = true;
-        this.overlayUpdate = false;
-        this.backgroundUpdate = false;
-
-        this._initViewports();
-        this.update();
-    }
-
-    /**************************
-        Initialisation methods
-    **************************/
-
-
-    _createClass(Ui, [{
-        key: "_initFloor",
-        value: function _initFloor() {
-            this.clearAllScreen();
-
-            // Variable declarations
-            var myBackground = document.getElementById(this.canvasBackgroundId);
-            var ctx = myBackground.getContext('2d');
-            var img = new Image();
-
-            // acquire image
-            img.src = this.battleplan.battlefloor.src;
-
-            // Fille background color
-            ctx.fillStyle = 'black';
-            ctx.fillRect(0, 0, myBackground.width, myBackground.height);
-
-            // Load the image in memory
-            img.onload = function () {
-                // Draw the image
-                ctx.drawImage(img, -this.offsetX, -this.offsetY, img.width * this.ratio, img.height * this.ratio);
-                this.backgroundImage = img;
-                this.overlayUpdate = true;
-                this.floorChange = false;
-                this.update();
-                $("#loading").hide();
-            }.bind(this);
-
-            // Update floor Button
-            $(".floorSelector").removeClass("active");
-            $("#floorSelector-" + this.battleplan.battlefloor.id).addClass("active");
-        }
-
-        // Set the size of the viewports
-
-    }, {
-        key: "_initViewports",
-        value: function _initViewports() {
-
-            // hide them until a map is chosen
-            $("#" + this.viewportId).show();
-            $("#" + this.canvasBackgroundId).show();
-            $("#" + this.canvasOverlayId).show();
-
-            var myBackground = document.getElementById(this.canvasBackgroundId);
-            var myOverlay = document.getElementById(this.canvasOverlayId);
-            myBackground.height = $("#viewport").height();
-            myBackground.width = $("#viewport").width();
-            myOverlay.height = $("#viewport").height();
-            myOverlay.width = $("#viewport").width();
-        }
-
-        /**************************
-            Clear methods
-        **************************/
-
-    }, {
-        key: "clearAllScreen",
-        value: function clearAllScreen() {
-            this.clearBackground();
-            this.clearOverlay();
-        }
-    }, {
-        key: "clearBackground",
-        value: function clearBackground() {
-            var myCanvas = document.getElementById(this.canvasBackgroundId);
-            var ctx = myCanvas.getContext('2d');
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-        }
-    }, {
-        key: "clearOverlay",
-        value: function clearOverlay() {
-            var myCanvas = document.getElementById(this.canvasOverlayId);
-            var ctx = myCanvas.getContext('2d');
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-        }
-
-        /**************************
-            Update methods
-        **************************/
-
-        // Master update call to all other updaters
-
-    }, {
-        key: "update",
-        value: function update() {
-
-            // floor needs to be initialized
-            if (this.floorChange) {
-                this._initFloor();
-            }
-
-            // floor needs to be initialized
-            if (this.backgroundUpdate) {
-                this.updateBackground();
-            }
-
-            // floor needs to be updated
-            if (this.overlayUpdate) {
-                this.updateOverlay();
-            }
-        }
-    }, {
-        key: "updateOverlay",
-        value: function updateOverlay() {
-            // variable declaration
-            var myCanvas = document.getElementById(this.canvasOverlayId);
-            var ctx = myCanvas.getContext('2d');
-
-            // Clear all
-            this.clearOverlay();
-
-            // var lastDrag = null;
-
-            // Redraw saved
-            for (var i = 0; i < this.battleplan.battlefloor.lines.length; i++) {
-
-                ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.lines[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.lines[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.lines[i].color;
-                ctx.closePath();
-                ctx.stroke();
-            }
-
-            // Redraw unpushed ones
-            for (var i = 0; i < this.battleplan.battlefloor.lines_unpushed.length; i++) {
-
-                ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.lines_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_unpushed[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.lines_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.lines_unpushed[i].color;
-                ctx.closePath();
-                ctx.stroke();
-            }
-
-            // Redraw transit ones
-            for (var i = 0; i < this.battleplan.battlefloor.lines_transit.length; i++) {
-
-                ctx.beginPath();
-                ctx.moveTo(this.battleplan.battlefloor.lines_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_transit[i].origin.y * this.ratio - this.offsetY);
-                ctx.lineTo(this.battleplan.battlefloor.lines_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_transit[i].destination.y * this.ratio - this.offsetY + 1);
-                ctx.strokeStyle = this.battleplan.battlefloor.lines_transit[i].color;
-                ctx.closePath();
-                ctx.stroke();
-            }
-
-            this.overlayUpdate = false;
-        }
-    }, {
-        key: "updateBackground",
-        value: function updateBackground() {
-            this.clearBackground();
-            var myCanvas = document.getElementById(this.canvasBackgroundId);
-            var ctx = myCanvas.getContext('2d');
-
-            // Fill background color
-            ctx.fillStyle = 'black';
-            ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
-
-            ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY, this.backgroundImage.width * this.ratio, this.backgroundImage.height * this.ratio);
-            this.overlayUpdate = true;
-        }
-
-        /**************************
-            Action Methods
-        **************************/
-
-    }, {
-        key: "zoomCanvases",
-        value: function zoomCanvases(step, x, y) {
-            // update ratio and dimentsions
-            this.ratio = this.ratio + step;
-            this.vpx = x * -1;
-            this.vpy = y * -1;
-        }
-    }, {
-        key: "move",
-        value: function move(distanceX, distanceY) {
-            this.offsetX += distanceX * this.ratio;
-            this.offsetY += distanceY * this.ratio;
-            this.backgroundUpdate = true;
-            this.overlayUpdate = true;
-            this.update();
-        }
-
-        /**************************
-            Id Generation Methods
-        **************************/
-
-        /**
-         * @description makes a unique id
-         * @method _makeId
-         * @return {string}
-         */
-
-    }, {
-        key: "_makeId",
-        value: function _makeId() {
-            var id = this._guid();
-            while (this.getQuestion(id)) {
-                id = this._guid();
-            }
-            return id;
-        }
-
-        // Helper for _makeId
-
-    }, {
-        key: "_guid",
-        value: function _guid() {
-            return "UILM-" + this._s4() + this._s4() + '-' + this._s4() + '-' + this._s4() + '-' + this._s4() + '-' + this._s4() + this._s4() + this._s4();
-        }
-
-        // Helper for _guid
-
-    }, {
-        key: "_s4",
-        value: function _s4() {
-            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-        }
-
-        /**************************
-            Helper Methods
-        **************************/
-
-    }]);
-
-    return Ui;
-}();
-
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "init", function() { return init; });
+function init(LISTEN_SOCKET, ROOM_CONN_STRING, app) {
+    //listen for battleplan Change event
+    LISTEN_SOCKET.on("BattleplanChange." + ROOM_CONN_STRING + ":App\\Events\\Room\\BattleplanChange", function (message) {
+        app.getRoomsBattleplan(app.load.bind(app));
+    });
+
+    //listen for someone elses draws
+    LISTEN_SOCKET.on("BattlefloorLine." + ROOM_CONN_STRING + ":App\\Events\\Battlefloor\\CreateLines", function (message) {
+        app.serverLine(message);
+    });
+
+    //listen for someone elses draws
+    LISTEN_SOCKET.on("ChangeOperatorSlot." + ROOM_CONN_STRING + ":App\\Events\\Battleplan\\ChangeOperatorSlot", function (message) {
+        app.changeOperatorSlotDom(message.operatorSlot.id, message.operator);
+    });
+}
 
 /***/ })
 /******/ ]);
