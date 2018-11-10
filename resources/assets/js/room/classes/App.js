@@ -208,10 +208,10 @@ class App {
 
 		// Var declarations
         this.acquisitionLock = false;
-        var draws_transit = [];
+        this.battleplan.draws_transit = [];
         var self = this;
 
-		draws_transit = this.battleplan.acquireUnsavedDraws();
+		this.battleplan.draws_transit = this.battleplan.acquireUnsavedDraws();
 
 		// Push to server API
         $.ajax({
@@ -220,12 +220,13 @@ class App {
             data: {
                 conn_string: this.conn_string,
                 userId: this.user_id,
-                "draws": draws_transit
+                "draws": this.battleplan.draws_transit
             },
             success: function(result) {
-                // debugging only
-				console.log(result);
-            },
+                this.ui.overlayUpdate = true;
+                this.ui.update();
+				// console.log(result);
+            }.bind(this),
             error: function(result, code) {
                 console.log(result);
             }
@@ -233,19 +234,12 @@ class App {
     }
 
 	// Draw the lines that the server has propagated to you
-    serverLine(result) {
-        for (var i = 0; i < result.lines.length; i++) {
+    serverDraw(result) {
+        for (var i = 0; i < result.draws.length; i++) {
 
-            var battlefloor = this.battleplan.getFloor(result.lines[i].battlefloor_id);
+            var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
 
-            battlefloor.serverLine({
-                    "x": result.lines[i]["originX"],
-                    "y": result.lines[i]["originY"],
-                }, {
-                    "x": result.lines[i]["destinationX"],
-                    "y": result.lines[i]["destinationY"],
-                },
-                result.lines[i].color);
+            battlefloor.serverDraw(result.draws[i]);
         }
         this.ui.overlayUpdate = true;
         this.ui.update();
@@ -307,6 +301,9 @@ class App {
             this.ui.overlayUpdate = true;
             this.ui.update();
         }
+
+		// Update last know coordinated
+        this.lastCoordinates = coordinates;
     }
 
     canvasDown(ev) {
@@ -354,9 +351,11 @@ class App {
 
         }
 
+        this.lastCoordinates = coordinates;
+
 		// Update last known location of mouse
         if (this.rmb || this.lmb) {
-            this.lastCoordinates = coordinates;
+            // this.lastCoordinates = coordinates;
             this.originPoints = {
                 "x": (ev.offsetX / this.ui.ratio),
                 "y": (ev.offsetY / this.ui.ratio)

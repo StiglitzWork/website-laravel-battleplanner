@@ -35,4 +35,11 @@ class Draw extends Model
     {
         return $this->morphTo();
     }
+
+    public function withMorph(){
+        $morph = $this->drawable()->first();
+        $this["drawable"] = $morph;
+        return $this;
+    }
+
 }

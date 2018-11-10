@@ -146,38 +146,36 @@ class Ui {
         // Clear all
         this.clearOverlay()
 
-        // // Redraw saved
-        // for (var i = 0; i < this.battleplan.battlefloor.lines.length; i++) {
-		//
-        //   ctx.beginPath();
-        //   ctx.moveTo(this.battleplan.battlefloor.lines[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines[i].origin.y * this.ratio - this.offsetY);
-        //   ctx.lineTo(this.battleplan.battlefloor.lines[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines[i].destination.y * this.ratio - this.offsetY + 1);
-        //   ctx.strokeStyle = this.battleplan.battlefloor.lines[i].color;
-        //   ctx.closePath();
-        //   ctx.stroke();
-        // }
-		//
-        // // Redraw unpushed ones
-        // for (var i = 0; i < this.battleplan.battlefloor.lines_unpushed.length; i++) {
-		//
-        //   ctx.beginPath();
-        //   ctx.moveTo(this.battleplan.battlefloor.lines_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_unpushed[i].origin.y * this.ratio - this.offsetY);
-        //   ctx.lineTo(this.battleplan.battlefloor.lines_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
-        //   ctx.strokeStyle = this.battleplan.battlefloor.lines_unpushed[i].color;
-        //   ctx.closePath();
-        //   ctx.stroke();
-        // }
-		//
-        // // Redraw transit ones
-        // for (var i = 0; i < this.battleplan.battlefloor.lines_transit.length; i++) {
-		//
-        //   ctx.beginPath();
-        //   ctx.moveTo(this.battleplan.battlefloor.lines_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.lines_transit[i].origin.y * this.ratio - this.offsetY);
-        //   ctx.lineTo(this.battleplan.battlefloor.lines_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.lines_transit[i].destination.y * this.ratio - this.offsetY + 1);
-        //   ctx.strokeStyle = this.battleplan.battlefloor.lines_transit[i].color;
-        //   ctx.closePath();
-        //   ctx.stroke();
-        // }
+        // draw saved
+        for (var i = 0; i < this.battleplan.battlefloor.draws.length; i++) {
+          var myDraw = this.battleplan.battlefloor.draws[i];
+          myDraw.draw(ctx, this);
+        }
+
+        // Redraw unpushed ones
+        for (var i = 0; i < this.battleplan.battlefloor.draws_unpushed.length; i++) {
+          var myDraw = this.battleplan.battlefloor.draws_unpushed[i];
+
+          ctx.beginPath();
+          ctx.moveTo(myDraw.origin.x * this.ratio - this.offsetX, myDraw.origin.y * this.ratio - this.offsetY);
+          ctx.lineTo(myDraw.destination.x * this.ratio - this.offsetX + 1, myDraw.destination.y * this.ratio - this.offsetY + 1);
+          ctx.strokeStyle = myDraw.color;
+          ctx.closePath();
+          ctx.stroke();
+        }
+
+        // Redraw transit ones
+        for (var i = 0; i < this.battleplan.draws_transit.length; i++) {
+
+          var myDraw = this.battleplan.draws_transit[i];
+
+          ctx.beginPath();
+          ctx.moveTo(myDraw.origin.x * this.ratio - this.offsetX, myDraw.origin.y * this.ratio - this.offsetY);
+          ctx.lineTo(myDraw.destination.x * this.ratio - this.offsetX + 1, myDraw.destination.y * this.ratio - this.offsetY + 1);
+          ctx.strokeStyle = myDraw.color;
+          ctx.closePath();
+          ctx.stroke();
+        }
 
         this.overlayUpdate = false;
     }

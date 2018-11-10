@@ -25,6 +25,6 @@ class Line extends Model
      */
     public function Drawable()
     {
-        return $this->morphMany('App\Models\Draw', 'drawable');
+        return $this->morphOne('App\Models\Draw', 'drawable');
     }
 }

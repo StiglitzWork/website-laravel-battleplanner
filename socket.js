@@ -5,7 +5,7 @@ var Redis = require('ioredis');
 var redis = new Redis();
 
 redis.subscribe('BattleplanChange', function(err, count) {});
-redis.subscribe('BattlefloorLine', function(err, count) {});
+redis.subscribe('BattlefloorDraw', function(err, count) {});
 redis.subscribe('ChangeOperatorSlot', function(err, count) {});
 
 redis.on('message', function(channel, message) {

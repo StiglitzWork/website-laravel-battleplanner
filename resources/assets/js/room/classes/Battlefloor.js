@@ -17,18 +17,10 @@ class Battlefloor extends Helpers {
 		this.Line = require('./Line.js').default;
         this.Draw = require('./Draw.js').default;
 
-        // Identifiers
-        // this.type = "Battlefloor"; // Json identifier
-        // this.id = Battlefloor.id;
-        // this.number = Battlefloor.floor.floorNum;
-        // this.src = Battlefloor.floor.src;
-		//
-
         this.draws = []
         this.draws_unpushed = [];
         this.draws_transit = [];
 
-		// this.init();
     }
 
 	init(){
@@ -38,6 +30,7 @@ class Battlefloor extends Helpers {
 	initDraws(){
 		for (var i = 0; i < this.draws.length; i++) {
 			this.draws[i] = Object.assign(new this.Draw, this.draws[i]);
+            this.draws[i].init();
 		}
 	}
 
@@ -45,11 +38,17 @@ class Battlefloor extends Helpers {
              Public methods
     **************************/
     line(originCoordinates,destinationCoordinates, color){
-      this.draws_unpushed.push(new this.Line(originCoordinates,destinationCoordinates, color, this.id));
+      this.draws_unpushed.push({
+          "origin" : originCoordinates,
+          "destination" : destinationCoordinates,
+          "color" : color,
+          "battlefloorId" : this.id});
     }
 
-    serverDraw(originCoordinates,destinationCoordinates, color){
-      this.draws.push(new this.Line(originCoordinates,destinationCoordinates, color, this.id));
+    serverDraw(draw){
+      draw = Object.assign(new this.Draw, draw);
+      draw.init();
+      this.draws.push(draw);
     }
 
     /**************************

@@ -5,8 +5,8 @@ function init(LISTEN_SOCKET,ROOM_CONN_STRING,app){
     });
 
     //listen for someone elses draws
-    LISTEN_SOCKET.on(`BattlefloorLine.${ROOM_CONN_STRING}:App\\Events\\Battlefloor\\CreateLines`, function(message){
-        app.serverLine(message);
+    LISTEN_SOCKET.on(`BattlefloorDraw.${ROOM_CONN_STRING}:App\\Events\\Battlefloor\\CreateDraws`, function(message){
+        app.serverDraw(message);
     });
 
     //listen for someone elses draws
