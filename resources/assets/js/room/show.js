@@ -15,12 +15,11 @@ const VIEWPORTS = {
 };
 
 /**************************
-    Variables that must be defined in html view due to blade template limitations
+    Variables that must be defined in html view due to blade limitations
 **************************/
 // const ROOM_CONN_STRING;
 // const LISTEN_SOCKET;
 // const USER_ID;
-// const IS_OWNER;
 
 /**************************
     Setup Ajax CSRF
@@ -34,7 +33,7 @@ $.ajaxSetup({
 /**************************
     Variable Declaration
 **************************/
-var app = new App(ROOM_CONN_STRING, VIEWPORTS, LISTEN_SOCKET, USER_ID, IS_OWNER);
+var app = new App(ROOM_CONN_STRING, VIEWPORTS,USER_ID);
 
 /**************************
     Event Listeners

@@ -10,26 +10,24 @@ class App {
             Constructor
     **************************/
 
-    constructor(conn_string, viewports, user_id, isOwner) {
+    constructor(conn_string, viewports, user_id) {
         // Instantiatable class types
         this.Battleplan = require('./Battleplan.js').default;
-        this.Battlefloor = require('./Battlefloor.js').default;
+		this.Battlefloor = require('./Battlefloor.js').default;
+        this.ToolLine = require('./ToolLine.js').default; // useable tool
+
         this.Ui = require('./Ui.js').default;
 
         // Settings
-        this.acquiringDelayedLines = false;
-        this.delayUpdateTimer = 200;
+        this.acquisitionTime = 200;  // changeable for different
 
         // Varable declarations
+        this.acquisitionLock = false;
         this.color = "#e66465"; //draw color
         this.conn_string = conn_string
         this.viewports = viewports
-        this.user_id = user_id;
-        this.isOwner = isOwner;
-
-        // // When we draw once, we start a timer to send to server so that we do not send a request per draw
-        // this.acquiringDelayedLines = false;
-        // this.delayUpdateTimer = 200;
+		this.user_id = user_id;
+        this.tool;
 
         // Event variables
         this.lastCoordinates = {
@@ -45,16 +43,21 @@ class App {
         this.lmb = false;
         this.rmb = false;
 
+		this.init();
+
     }
 
     /**************************
             App Methods
     **************************/
     init(){
+		// Set curent tool type
+		this.tool = new this.ToolLine();
+
         // hide them until a map is chosen
-        $("#" + this.viewportId).hide();
-        $("#" + this.canvasBackgroundId).hide();
-        $("#" + this.canvasOverlayId).hide();
+		for (var property in this.viewports) {
+	        $("#"+this.viewports[property]).hide();
+		}
 
         // load battleplan if already set
         this.getRoomsBattleplan(
@@ -96,8 +99,24 @@ class App {
         });
     }
 
+    getRoomsBattleplan(callback) {
+        var self = this;
+        $.ajax({
+            method: "GET",
+            url: `${this.conn_string}/getBattleplan`,
+            success: function(result) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error: function(result, code) {
+                console.log(result);
+            }
+        });
+    }
+
     deleteBattlePlan(battleplanId) {
-        var r = confirm("Are you sure you want to delete? There is no goint back!");
+        var r = confirm("Are you sure you want to delete? There is no going back!");
         if (r == true) {
             var self = this;
             $.ajax({
@@ -114,11 +133,10 @@ class App {
                 }
             });
         }
-
     }
 
+	// Loading a saved battleplan
     loadBattlePlan(battleplanId) {
-        // set the battleplan
         var self = this;
         this.setRoomsBattleplan(battleplanId, function() {
             // Reset
@@ -130,6 +148,7 @@ class App {
         });
     }
 
+	// Tell the server to save its current state
     save() {
         var tmp = $("#battleplan_notes").val();
         var self = this;
@@ -150,17 +169,20 @@ class App {
         });
     }
 
+	// Load a battle plan into the app
     load(battleplan) {
         if (battleplan) {
-            $("#battleplan_name").val(battleplan.name);
-            this.battleplan = new this.Battleplan(battleplan, this.isOwner);
-            this.ui = new this.Ui(this.viewportId, this.canvasBackgroundId, this.canvasOverlayId, this.battleplan);
 
-            // Update operator doms
-            this.battleplan.loadSlots(battleplan.slots);
+			// Init battleplan
+			this.battleplan = Object.assign(new this.Battleplan, battleplan);
+			this.battleplan.init();
+
+			// Init UI class
+            this.ui = new this.Ui(this.viewports, this.battleplan);
         }
     }
 
+	// Set the rooms current battleplan
     setRoomsBattleplan(battleplanId, callback = null) {
         var self = this;
         $.ajax({
@@ -181,47 +203,28 @@ class App {
         });
     }
 
-    getRoomsBattleplan(callback) {
-        var self = this;
-        $.ajax({
-            method: "GET",
-            url: `${this.conn_string}/getBattleplan`,
-            // data: { conn_string : this.conn_string},
-            success: function(result) {
-                if (callback) {
-                    callback(result);
-                }
-            },
-            error: function(result, code) {
-                console.log(result);
-            }
-        });
-    }
-
+	// Push changes to the server to propagate to others on the socket + add them to the DB
     pushServer() {
-        this.acquiringDelayedLines = false;
-        var lines_transit = [];
 
-        for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
-            lines_transit = lines_transit.concat(this.battleplan.battlefloors[i].lines_unpushed);
-            this.battleplan.battlefloors[i].lines = this.battleplan.battlefloors[i].lines.concat(this.battleplan.battlefloors[i].lines_unpushed);
-            this.battleplan.battlefloors[i].lines_unpushed = [];
-        }
-
-        this.lines_transit = this.lines_unpushed;
-        this.lines_unpushed = [];
+		// Var declarations
+        this.acquisitionLock = false;
+        var draws_transit = [];
         var self = this;
 
+		draws_transit = this.battleplan.acquireUnsavedDraws();
+
+		// Push to server API
         $.ajax({
             method: "POST",
             url: "/battlefloor/line",
             data: {
                 conn_string: this.conn_string,
                 userId: this.user_id,
-                "lines": lines_transit
+                "draws": draws_transit
             },
             success: function(result) {
                 // debugging only
+				console.log(result);
             },
             error: function(result, code) {
                 console.log(result);
@@ -229,6 +232,7 @@ class App {
         });
     }
 
+	// Draw the lines that the server has propagated to you
     serverLine(result) {
         for (var i = 0; i < result.lines.length; i++) {
 
@@ -247,6 +251,7 @@ class App {
         this.ui.update();
     }
 
+	// Tell the server to change the operator in a given slot
     changeOperatorSlot(slotId, operatorId) {
 
         $.ajax({
@@ -267,6 +272,7 @@ class App {
         });
     }
 
+	// Update the DOM to reflect an operator change
     changeOperatorSlotDom(operatorSlotId,operator){
         var slot = this.battleplan.getOperatorSlot(operatorSlotId);
         slot.setOperator(operator);
@@ -289,7 +295,6 @@ class App {
         this.ui.update();
     }
 
-
     /**************************
         Canvas Methods
     **************************/
@@ -302,25 +307,26 @@ class App {
             this.ui.overlayUpdate = true;
             this.ui.update();
         }
-
     }
 
     canvasDown(ev) {
-        // var eventX = (ev.offsetX)/ this.ui.ratio;
-        // var eventY = (ev.offsetY) / this.ui.ratio;
         var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._clickActivateEventListen(ev)
-        if (this.lmb) {
-            this.battleplan.battlefloor.line(coordinates, coordinates, this.color);
 
-            // Push new lineings to server
-            if (!this.acquiringDelayedLines) {
-                this.acquiringDelayedLines = true;
-                setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
+        if (this.lmb) {
+			this.tool.action(this.battleplan.battlefloor,this.lastCoordinates, coordinates, this.color);
+            // this.battleplan.battlefloor.line(coordinates, coordinates, this.color);
+
+            // Push new lines to server
+            if (!this.acquisitionLock) {
+                this.acquisitionLock = true;
+                setTimeout(this.pushServer.bind(this), this.acquisitionTime);
             }
 
+			// Update last know coordinated
             this.lastCoordinates = coordinates;
-            // Update UI
+
+            // signal Update UI
             this.ui.overlayUpdate = true;
             this.ui.update();
         }
@@ -337,21 +343,18 @@ class App {
         if (this.lmb) {
             this.battleplan.battlefloor.line(this.lastCoordinates, coordinates, this.color);
 
-            // Push new lineings to server
-            if (!this.acquiringDelayedLines) {
-                this.acquiringDelayedLines = true;
-                setTimeout(this.pushServer.bind(this), this.delayUpdateTimer);
+            // Push new lines to server
+            if (!this.acquisitionLock) {
+                this.acquisitionLock = true;
+                setTimeout(this.pushServer.bind(this), this.acquisitionTime);
             }
 
             this.ui.overlayUpdate = true;
             this.ui.update();
 
-        } else {
-            // Resize event check
-            this.resizeRangeY = false;
-            this.resizeRangeX = false;
         }
 
+		// Update last known location of mouse
         if (this.rmb || this.lmb) {
             this.lastCoordinates = coordinates;
             this.originPoints = {
@@ -376,11 +379,11 @@ class App {
         this._deactivateClickEventListen();
 
         if (this.lmb) {
-
             // Update UI
             this.ui.overlayUpdate = true;
             this.ui.update();
         }
+
         // Update UI
         this.ui.overlayUpdate = true;
         this.ui.update();
@@ -441,11 +444,11 @@ class App {
      * @param {array} arr the array providing items to check for in the haystack.
      * @return {boolean} true|false if haystack contains at least one item from arr.
      */
-    _contains(haystack, arr) {
-        return arr.some(function(v) {
-            return haystack.indexOf(v) >= 0;
-        });
-    };
+    // _contains(haystack, arr) {
+    //     return arr.some(function(v) {
+    //         return haystack.indexOf(v) >= 0;
+    //     });
+    // };
 
     _calculateOffset(evx, evy) {
         var jsonResponse = {}

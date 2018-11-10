@@ -3,25 +3,20 @@
 **************************/
 const Helpers = require('./Helpers.js').default;
 
-class OperatorSlot extends Helpers {
+class Slot extends Helpers {
 
     /**************************
             Constructor
     **************************/
 
-    constructor(id, isOwner) {
+    constructor() {
         // Super Class constructor call
         super();
-
-        this.type = "OperatorSlot"; // Json identifier
-        this.id = id;
-        this.operatorId = null;
-        this.color = "000000";
-        this.operatorName = null;
-        this.image_src = null;
-        this.isOwner = isOwner;
     }
 
+	init(){
+		
+	}
     setOperator(operator){
         if(operator != null){
             this.operatorId = operator.id;
@@ -40,9 +35,9 @@ class OperatorSlot extends Helpers {
         var dom = "";
         if (this.isOwner) {
             if (this.operatorId == null) {
-                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))" style="border-color: #${this.color}" />`
+                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingSlot($(this).data('id'))" style="border-color: #${this.color}" />`
             } else{
-                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="${this.image_src}" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))" style="border-color: #${this.color}"/>`
+                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="${this.image_src}" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingSlot($(this).data('id'))" style="border-color: #${this.color}"/>`
             }
         } else{
             if (this.operatorId == null) {
@@ -60,6 +55,6 @@ class OperatorSlot extends Helpers {
 
 }
 export {
-    OperatorSlot as
+    Slot as
     default
 }

@@ -9,35 +9,47 @@ class Battlefloor extends Helpers {
             Constructor
     **************************/
 
-    constructor(Battlefloor) {
+    constructor() {
         // Super Class constructor call
         super();
 
         // Instantiatable class types
-        this.Line = require('./Line.js').default;
+		this.Line = require('./Line.js').default;
+        this.Draw = require('./Draw.js').default;
 
         // Identifiers
-        this.type = "Battlefloor"; // Json identifier
-        this.id = Battlefloor.id;
-        this.number = Battlefloor.floor.floorNum;
-        this.src = Battlefloor.floor.src;
+        // this.type = "Battlefloor"; // Json identifier
+        // this.id = Battlefloor.id;
+        // this.number = Battlefloor.floor.floorNum;
+        // this.src = Battlefloor.floor.src;
+		//
 
-        this.lines = []
-        this.lines_unpushed = [];
-        this.lines_transit = [];
+        this.draws = []
+        this.draws_unpushed = [];
+        this.draws_transit = [];
 
-
+		// this.init();
     }
+
+	init(){
+		this.initDraws()
+	}
+
+	initDraws(){
+		for (var i = 0; i < this.draws.length; i++) {
+			this.draws[i] = Object.assign(new this.Draw, this.draws[i]);
+		}
+	}
 
     /**************************
              Public methods
     **************************/
-    line(originCoordinates,currentCoordinates, color){
-      this.lines_unpushed.push(new this.Line(originCoordinates,currentCoordinates, color, this.id));
+    line(originCoordinates,destinationCoordinates, color){
+      this.draws_unpushed.push(new this.Line(originCoordinates,destinationCoordinates, color, this.id));
     }
 
-    serverLine(originCoordinates,currentCoordinates, color){
-      this.lines.push(new this.Line(originCoordinates,currentCoordinates, color, this.id));
+    serverDraw(originCoordinates,destinationCoordinates, color){
+      this.draws.push(new this.Line(originCoordinates,destinationCoordinates, color, this.id));
     }
 
     /**************************
