@@ -9,19 +9,39 @@ class Tool extends Helpers {
             Constructor
     **************************/
 
-    constructor() {
+    constructor(app) {
         // Super Class constructor call
         super();
+        this.app = app
     }
 
-	action(){
-		// Must override in children classes
-		console.error("This should have been overloaded");
-	}
+    draw(ctx, ui) {
+        // Action to be overriten in child
+    }
 
-    /**************************
-        Helper functions
-    **************************/
+    actionUp() {
+        // Action to be overriten in child
+    }
+
+    actionDown() {
+        // Action to be overriten in child
+    }
+
+    actionLeave() {
+        // Action to be overriten in child
+    }
+
+    actionEnter() {
+        // Action to be overriten in child
+    }
+
+    actionMove() {
+        // Action to be overriten in child
+    }
+    
+    actionScroll(){
+
+    }
 
 }
 export {

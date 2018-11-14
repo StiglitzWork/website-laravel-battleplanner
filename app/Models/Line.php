@@ -10,14 +10,6 @@ class Line extends Model
         "color", "lineSize"
     ];
 
-    /*****
-     Relationships
-    *****/
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User');
-    }
-
     /**
      * Morph Drawable
      *

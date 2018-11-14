@@ -10,19 +10,6 @@ class Square extends Model
         "color", "lineSize"
     ];
 
-    /*****
-     Relationships
-    *****/
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User');
-    }
-
-    public function battlefloor()
-    {
-        return $this->belongsTo('App\Models\Battlefloor');
-    }
-
     /**
      * Morph Drawable
      *
@@ -30,6 +17,6 @@ class Square extends Model
      */
     public function Drawable()
     {
-        return $this->morphMany('App\Models\Draw', 'drawable');
+        return $this->morphOne('App\Models\Draw', 'drawable');
     }
 }

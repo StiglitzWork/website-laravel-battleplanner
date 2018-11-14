@@ -49,6 +49,7 @@ class Battleplan extends Model
     public static function json($id)
     {
         return Battleplan::where('id', $id)
+        // $bp = Battleplan::where('id', $id)
         ->with("battlefloors")
         ->with("battlefloors.floor")
         ->with("battlefloors.draws")
@@ -56,6 +57,7 @@ class Battleplan extends Model
         ->with("slots")
         ->with("slots.operator")
         ->first();
+        // dd($bp);
     }
 
 

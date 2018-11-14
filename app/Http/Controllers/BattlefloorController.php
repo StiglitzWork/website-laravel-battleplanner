@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Square;
 use App\Models\Line;
 use App\Models\Draw;
 use App\Models\Battlefloor;
@@ -15,9 +16,9 @@ class BattlefloorController extends Controller
     {
         // Declarations
         $draws = [];
-
+        // dd($request->draws);
         $draws = $request->draws;
-
+        // dd($draws);
         // Create each new draw
         foreach ($draws as $key => $draw) {
             // Create the specific draw type
@@ -26,8 +27,12 @@ class BattlefloorController extends Controller
                 case 'Line':
                     $subDraw = $this->makeLine($draw["drawable"]);
                     break;
+                
+                case 'Square':
+                    $subDraw = $this->makeSquare($draw["drawable"]);
+                    break;
             }
-
+            
             // Make draw morph relationship
             $draw = Draw::create([
                 "battlefloor_id" => $draw["battlefloor_id"],
@@ -36,7 +41,7 @@ class BattlefloorController extends Controller
                 "destinationX" => $draw["destinationX"],
                 "destinationY" => $draw["destinationY"],
                 "user_id" => Auth::User()->id,
-                "drawable_type" => "App\Models\Line",
+                "drawable_type" => "App\Models\\" . $draw["drawable_type"],
                 "drawable_id" => $subDraw->id
             ]);
 
@@ -58,5 +63,14 @@ class BattlefloorController extends Controller
             "lineSize"=> $object["lineSize"],
         ]);
         return $line;
+    }
+
+    private function makeSquare($object)
+    {
+        $square = Square::create([
+            "color"=> $object["color"],
+            "lineSize"=> $object["lineSize"],
+        ]);
+        return $square;
     }
 }

@@ -1,15 +1,17 @@
+import { throws } from "assert";
+
 class Ui {
 
     /**************************
             Constructor
     **************************/
 
-    constructor(viewports, battleplan) {
+    constructor(app) {
 
-        // Document Ids
-        this.viewports = viewports;
+        // Save the app for access later
+        this.app = app;
 
-        // Public variables
+        // reload variables
         this.backgroundImage = null;
 
         // Zoom variables
@@ -23,13 +25,11 @@ class Ui {
         this.vpw = $("#" + this.viewportId).innerWidth;
         this.vph = $("#" + this.viewportId).innerHeight;
 
-        // Subscribed objects
-        this.battleplan = battleplan;
-
         // updateFlags
         this.floorChange = true;
         this.overlayUpdate = false;
         this.backgroundUpdate = false;
+        this.slotUpdate = false;
 
 		this.init();
     }
@@ -40,12 +40,13 @@ class Ui {
 	init(){
 		this.initViewports();
 		this.initBackground();
+		this.updateSlots();
         this.update();
 	}
 
 	showViewports(){
-		for (var property in this.viewports) {
-	        $("#"+this.viewports[property]).show();
+		for (var property in this.app.viewports) {
+	        $("#"+this.app.viewports[property]).show();
 		}
 	}
 
@@ -56,9 +57,9 @@ class Ui {
         this.showViewports()
 
 		// Acquire DOMS
-        var background = document.getElementById(this.viewports.CANVAS_BACKGROUND_ID);
-		var overlay = document.getElementById(this.viewports.CANVAS_OVERLAY_ID);
-        var viewport = document.getElementById(this.viewports.VIEWPORT_ID);
+        var background = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
+		var overlay = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
+        var viewport = document.getElementById(this.app.viewports.VIEWPORT_ID);
 
 		// Set Heights
         background.height = $(viewport).height();
@@ -72,12 +73,12 @@ class Ui {
 		this.clearAllScreen();
 
         // Variable declarations
-        var background = document.getElementById(this.viewports.CANVAS_BACKGROUND_ID);
+        var background = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
         var ctx = background.getContext('2d');
         var img = new Image;
 
         // acquire image
-        img.src = this.battleplan.battlefloor.floor.src;
+        img.src = this.app.battleplan.battlefloor.floor.src;
 
         // Fill background color
         ctx.fillStyle = 'black';
@@ -103,13 +104,13 @@ class Ui {
     }
 
     clearBackground(){
-        var myCanvas = document.getElementById(this.viewports.CANVAS_BACKGROUND_ID);
+        var myCanvas = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
         var ctx = myCanvas.getContext('2d');
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
     }
 
     clearOverlay(){
-        var myCanvas = document.getElementById(this.viewports.CANVAS_OVERLAY_ID);
+        var myCanvas = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
         var ctx = myCanvas.getContext('2d');
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
     }
@@ -135,41 +136,59 @@ class Ui {
         if(this.overlayUpdate){
             this.updateOverlay();
         }
+
+        if(this.slotUpdate){
+            this.updateSlots();
+        }
     }
 
     updateOverlay(){
 
 		// variable declaration
-        var myCanvas = document.getElementById(this.viewports.CANVAS_OVERLAY_ID);
+        var myCanvas = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
         var ctx = myCanvas.getContext('2d');
 
         // Clear all
         this.clearOverlay()
 
         // draw saved
-        for (var i = 0; i < this.battleplan.battlefloor.draws.length; i++) {
-          var myDraw = this.battleplan.battlefloor.draws[i];
+        for (var i = 0; i < this.app.battleplan.battlefloor.draws.length; i++) {
+          var myDraw = this.app.battleplan.battlefloor.draws[i];
           myDraw.draw(ctx, this);
         }
 
         // Redraw unpushed ones
-        for (var i = 0; i < this.battleplan.battlefloor.draws_unpushed.length; i++) {
-          var myDraw = this.battleplan.battlefloor.draws_unpushed[i];
+        for (var i = 0; i < this.app.battleplan.battlefloor.draws_unpushed.length; i++) {
+          var myDraw = this.app.battleplan.battlefloor.draws_unpushed[i];
           myDraw.draw(ctx, this);
         }
 
         // Redraw transit ones
-		for (var i = 0; i < this.battleplan.battlefloor.draws_transit.length; i++) {
-		  var myDraw = this.battleplan.battlefloor.draws_transit[i];
+		for (var i = 0; i < this.app.battleplan.draws_transit.length; i++) {
+		  var myDraw = this.app.battleplan.draws_transit[i];
 		  myDraw.draw(ctx, this);
 		}
+        
+        // Draw temporaried of tools
+        for (const key in this.app.buttonEvents) {
+            if(this.app.buttonEvents[key].tool) this.app.buttonEvents[key].tool.draw(ctx,this);
+        }
 
+        // Update flag to finished
         this.overlayUpdate = false;
+    }
+
+    updateSlots(){
+        var newDom = "";
+        for (var i = 0; i < this.app.battleplan.slots.length; i++) {
+            newDom += this.app.battleplan.slots[i].generateDom(this.app.user_id == this.app.battleplan.owner);
+        }
+        $("#operatorSlotList").html(newDom);
     }
 
     updateBackground(){
         this.clearBackground();
-        var canvas = document.getElementById(this.viewports.CANVAS_BACKGROUND_ID);
+        var canvas = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
         var ctx = canvas.getContext('2d');
 
         // Fill background color
@@ -186,17 +205,12 @@ class Ui {
 
     zoomCanvases(step, x, y){
         // update ratio and dimentions
-        this.ratio = this.ratio + step
-        this.vpx = x * -1
-        this.vpy = y * -1
+        this.ratio = this.ratio + step;
     }
 
     move(distanceX, distanceY){
         this.offsetX += distanceX * this.ratio;
         this.offsetY += distanceY * this.ratio;
-        this.backgroundUpdate = true;
-        this.overlayUpdate = true;
-        this.update();
     }
 }
 export {

@@ -18,19 +18,20 @@ class Square extends Draw {
     }
 
     draw(draw,ctx,ui){
+        var tmp = this;
 		ctx.fillStyle= draw.drawable.color;
 		ctx.globalAlpha = 0.2;
 
-		oX = draw.originX * ui.ratio - ui.offsetX;
-		oY = draw.originY * ui.ratio - ui.offsetY;
-		dX = draw.destinationX * ui.ratio - ui.offsetX;
-		dY = draw.destinationY * ui.ratio - ui.offsetY;
+		var oX = draw.originX * ui.ratio - ui.offsetX;
+		var oY = draw.originY * ui.ratio - ui.offsetY;
+		var dX = draw.destinationX * ui.ratio - ui.offsetX;
+		var dY = draw.destinationY * ui.ratio - ui.offsetY;
 
 		ctx.fillRect(
 			oX,
 			oY,
-			oX - dX,
-			oY - dY
+			dX - oX,
+			dY - oY
 		);
 
 		ctx.globalAlpha = 1.0;

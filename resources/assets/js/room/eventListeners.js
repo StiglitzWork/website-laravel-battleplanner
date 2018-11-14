@@ -23,21 +23,21 @@ function init(VIEWPORTS, app){
     /**************************
      Zoom eventlistener
     **************************/
-    $("#" + VIEWPORTS.VIEWPORT_ID).on('wheel', function (ev) {
+    $("#" + VIEWPORTS.VIEWPORT_ID).on('mousewheel', function (ev) {
         ev.preventDefault();
+        app.canvasScroll(ev);
+        // var step;
+        // var incr = 0.1;
 
-        var step;
-        var incr = 0.1;
+        // if (ev.originalEvent.wheelDelta) {
+        //   step = (ev.originalEvent.wheelDelta > 0) ? -incr : incr
+        // }
 
-        if (ev.originalEvent.wheelDelta) {
-          step = (ev.originalEvent.wheelDelta > 0) ? -incr : incr
-        }
+        // if (ev.originalEvent.deltaY) {
+        //   step = (ev.originalEvent.deltaY > 0) ?  -incr:  incr
+        // }
 
-        if (ev.originalEvent.deltaY) {
-          step = (ev.originalEvent.deltaY > 0) ?  -incr:  incr
-        }
-
-        app.zoom(step,ev.originalEvent.offsetX,ev.originalEvent.offsetY);
+        // app.zoom(step,ev.originalEvent.offsetX,ev.originalEvent.offsetY);
     });
 
 } export {
