@@ -155,27 +155,14 @@ class Ui {
         // Redraw unpushed ones
         for (var i = 0; i < this.battleplan.battlefloor.draws_unpushed.length; i++) {
           var myDraw = this.battleplan.battlefloor.draws_unpushed[i];
-
-          ctx.beginPath();
-          ctx.moveTo(myDraw.origin.x * this.ratio - this.offsetX, myDraw.origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(myDraw.destination.x * this.ratio - this.offsetX + 1, myDraw.destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = myDraw.color;
-          ctx.closePath();
-          ctx.stroke();
+          myDraw.draw(ctx, this);
         }
 
         // Redraw transit ones
-        for (var i = 0; i < this.battleplan.draws_transit.length; i++) {
-
-          var myDraw = this.battleplan.draws_transit[i];
-
-          ctx.beginPath();
-          ctx.moveTo(myDraw.origin.x * this.ratio - this.offsetX, myDraw.origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(myDraw.destination.x * this.ratio - this.offsetX + 1, myDraw.destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = myDraw.color;
-          ctx.closePath();
-          ctx.stroke();
-        }
+		for (var i = 0; i < this.battleplan.battlefloor.draws_transit.length; i++) {
+		  var myDraw = this.battleplan.battlefloor.draws_transit[i];
+		  myDraw.draw(ctx, this);
+		}
 
         this.overlayUpdate = false;
     }

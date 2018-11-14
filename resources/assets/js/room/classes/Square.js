@@ -3,7 +3,7 @@
 **************************/
 const Draw = require('./Draw.js').default;
 
-class Line extends Draw {
+class Square extends Draw {
 
     /**************************
             Constructor
@@ -18,12 +18,23 @@ class Line extends Draw {
     }
 
     draw(draw,ctx,ui){
-        ctx.beginPath();
-        ctx.moveTo(draw.originX * ui.ratio - ui.offsetX, draw.originY * ui.ratio - ui.offsetY);
-        ctx.lineTo(draw.destinationX * ui.ratio - ui.offsetX + 1, draw.destinationY * ui.ratio - ui.offsetY + 1);
-        ctx.strokeStyle = draw.drawable.color;
-        ctx.closePath();
-        ctx.stroke();
+		ctx.fillStyle= draw.drawable.color;
+		ctx.globalAlpha = 0.2;
+
+		oX = draw.originX * ui.ratio - ui.offsetX;
+		oY = draw.originY * ui.ratio - ui.offsetY;
+		dX = draw.destinationX * ui.ratio - ui.offsetX;
+		dY = draw.destinationY * ui.ratio - ui.offsetY;
+
+		ctx.fillRect(
+			oX,
+			oY,
+			oX - dX,
+			oY - dY
+		);
+
+		ctx.globalAlpha = 1.0;
+
     }
     /**************************
         Helper functions
@@ -31,6 +42,6 @@ class Line extends Draw {
 
 }
 export {
-    Line as
+    Square as
     default
 }

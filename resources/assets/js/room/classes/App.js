@@ -14,8 +14,8 @@ class App {
         // Instantiatable class types
         this.Battleplan = require('./Battleplan.js').default;
 		this.Battlefloor = require('./Battlefloor.js').default;
-        this.ToolLine = require('./ToolLine.js').default; // useable tool
-
+		this.ToolLine = require('./ToolLine.js').default; // useable tool
+        this.ToolSquare = require('./ToolSquare.js').default; // useable tool
         this.Ui = require('./Ui.js').default;
 
         // Settings
@@ -52,7 +52,8 @@ class App {
     **************************/
     init(){
 		// Set curent tool type
-		this.tool = new this.ToolLine();
+		// this.tool = new this.ToolLine();
+		this.tool = new this.ToolSquare();
 
         // hide them until a map is chosen
 		for (var property in this.viewports) {
@@ -213,14 +214,17 @@ class App {
 
 		this.battleplan.draws_transit = this.battleplan.acquireUnsavedDraws();
 
+		// Strip object of prototypes
+		var tmop = JSON.parse(JSON.stringify(this.battleplan.draws_transit));
+
 		// Push to server API
         $.ajax({
             method: "POST",
-            url: "/battlefloor/line",
+            url: "/battlefloor/draw",
             data: {
                 conn_string: this.conn_string,
                 userId: this.user_id,
-                "draws": this.battleplan.draws_transit
+                "draws": JSON.parse(JSON.stringify(this.battleplan.draws_transit))
             },
             success: function(result) {
                 this.ui.overlayUpdate = true;

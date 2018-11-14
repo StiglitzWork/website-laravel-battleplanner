@@ -144,7 +144,7 @@ class Battleplan extends Helpers {
 		var draws_transit = [];
 		// Acquire the drawings that have not been saved
 		for (var i = 0; i < this.battlefloors.length; i++) {
-			draws_transit = this.battlefloors[i].draws_unpushed;
+			draws_transit = draws_transit.concat(this.battlefloors[i].draws_unpushed);
 			this.battlefloors[i].draws_unpushed = [];
 		}
 		return draws_transit;

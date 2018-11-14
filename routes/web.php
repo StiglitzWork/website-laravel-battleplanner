@@ -35,5 +35,5 @@ Route::prefix('/operatorSlot')->group(function () {
 });
 
 Route::prefix('/battlefloor')->group(function () {
-    Route::post('/line', 'BattlefloorController@line')->name("Battlefloor.line");
+    Route::post('/draw', 'BattlefloorController@draw')->name("Battlefloor.line");
 });
