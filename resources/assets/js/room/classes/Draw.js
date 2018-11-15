@@ -14,6 +14,7 @@ class Draw extends Helpers {
         super();
 		this.Line = require('./Line.js').default;
 		this.Square = require('./Square.js').default;
+		this.Icon = require('./Icon.js').default;
     }
 
     init(){

@@ -9,7 +9,7 @@ class Square extends Draw {
             Constructor
     **************************/
 
-    constructor(origin,destination,color, battlefloorId) {
+    constructor() {
         super();
     }
 

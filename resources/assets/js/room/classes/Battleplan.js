@@ -106,25 +106,25 @@ class Battleplan extends Helpers {
 
     nextFloor(){
       if (this.hasNextFloor()) {
-        this.battlefloor = this.battlefloors[this.battlefloor.number + 1];
+        this.battlefloor = this.battlefloors[this.battlefloor.floor.floorNum + 1];
       }
     }
 
     previousFloor(){
       if (this.hasPreviousFloor()) {
-        this.battlefloor = this.battlefloors[this.battlefloor.number - 1];
+        this.battlefloor = this.battlefloors[this.battlefloor.floor.floorNum - 1];
       }
     }
 
     hasNextFloor(){
-      if(this.battlefloor.number < this.battlefloors.length -1 ){
+      if(this.battlefloor.floor.floorNum < this.battlefloors.length -1 ){
         return true;
       }
       return false;
     }
 
     hasPreviousFloor(){
-        if(this.battlefloor.number - 1 >= 0){
+        if(this.battlefloor.floor.floorNum - 1 >= 0){
           return true;
         }
         return false;

@@ -32,13 +32,13 @@ class Slot extends Helpers {
             if (this.operator == null) {
                 dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingSlot($(this).data('id'))" style="border-color: #black" />`
             } else{
-                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="${this.operator.icon}" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingSlot($(this).data('id'))" style="border-color: #${this.operator.colour}"/>`
+                dom += `<input type="image" draggable="true" ondragstart="app.engine.drag(event)" id="operatorSlot-${this.id}" data-id="${this.id}" src="${this.operator.icon}" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingSlot($(this).data('id'))" style="border-color: #${this.operator.colour}"/>`
             }
         } else{
             if (this.operator == null) {
                 dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border no-pointer" style="border-color: black" />`
             } else{
-                dom += `<input type="image" id="operatorSlot-${this.id}" data-id="${this.id}" src="${this.operator.icon}" class="op-icon operator-slot operator-border" style="border-color: #${this.colour}"/>`
+                dom += `<input type="image" draggable="true" ondragstart="app.engine.drag(event)" id="operatorSlot-${this.id}" data-id="${this.id}" src="${this.operator.icon}" class="op-icon operator-slot operator-border" style="border-color: #${this.colour}"/>`
             }
         }
         return dom;

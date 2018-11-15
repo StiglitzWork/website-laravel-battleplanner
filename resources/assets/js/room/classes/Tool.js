@@ -40,7 +40,10 @@ class Tool extends Helpers {
     }
     
     actionScroll(){
-
+        // Action to be overriten in child
+    }
+    actionDrop(){
+        // Action to be overriten in child
     }
 
 }

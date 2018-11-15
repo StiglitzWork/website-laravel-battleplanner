@@ -1,22 +1,31 @@
 <div class="row text-center toggles">
-    <div class="col-3 text-center">
+    {{-- Offset --}}
+    <div class="col-md-1 text-center"></div>
+
+    <div class="col-md-2 text-center">
         <button class="btn btn-primary col-10" type="button" data-toggle="collapse" data-target="#room_info">
             Info
         </button>
     </div>
-    <div class="col-3">
+    <div class="col-md-2 ">
         <button class="btn btn-primary col-10" type="button" data-toggle="collapse" data-target="#room_functions">
             Controls
         </button>
     </div>
 
-    <div class="col-3">
+    <div class="col-md-2 ">
         <button class="btn btn-primary col-10" type="button" data-toggle="collapse" data-target="#room_notes">
             Notes
         </button>
     </div>
 
-    <div class="col-3">
+    <div class="col-md-2 ">
+        <button class="btn btn-primary col-10" type="button" data-toggle="collapse" data-target="#room_icons">
+            Icons
+        </button>
+    </div>
+    
+    <div class="col-md-2 ">
         <button class="btn btn-primary col-10" type="button" data-toggle="modal" data-target="#helpModal">
             Help
         </button>
@@ -109,8 +118,16 @@
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-12 text-center mt-2">
-                        {{-- <p style="color:white;">Pencil</p> --}}
-                        <input type="color" id='colorPicker' id="head" name="color" value="#e66465" onChange="app.engine.changeColor(this.value)" />
+                        <div class="col-12 text-center">
+                            <div class="row text-center">
+                                <label for="color">color</label><br>
+                                <input type="color" id='colorPicker' name="color" value="#e66465" onChange="app.engine.changeColor(this.value)" />
+                            </div>
+                            <div class="row text-right">
+                                <label for="color">Pen Size</label>
+                                <input type="number" id='sizePicker' name="size" onChange="app.engine.changeSize(this.value)" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,6 +156,18 @@
                 @endif
                 @endif
                 {{-- </div> --}}
+        </div>
+    </div>
+</div>
+
+{{-- Notes --}}
+<div class="collapse " id="room_icons">
+    <div class="card card-body bg-dark m-0 p-0">
+
+        <div class="row text-center">
+                @foreach ($gadgets as $key => $gadget)
+                    <img src="{{$gadget->icon}}" draggable="true" ondragstart="app.engine.drag(event)"  alt="" height="50px" width="50px">
+                @endforeach
         </div>
     </div>
 </div>

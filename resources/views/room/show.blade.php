@@ -48,7 +48,8 @@
             onmousemove="app.engine.canvasMove(event)"
             onmousedown="app.engine.canvasDown(event)"
             onmouseup="app.engine.canvasUp(event)"
-            onmousedown="app.engine.canvasDown(event)">
+            onmousedown="app.engine.canvasDown(event)"
+            ondrop="app.engine.canvasDrop(event)" ondragover="app.engine.allowDrop(event)">
         </canvas>
     </div>
 </div>

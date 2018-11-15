@@ -18,6 +18,7 @@ class Line extends Draw {
     }
 
     draw(draw,ctx,ui){
+        ctx.lineWidth=this.lineSize;
         ctx.beginPath();
         ctx.moveTo(draw.originX * ui.ratio - ui.offsetX, draw.originY * ui.ratio - ui.offsetY);
         ctx.lineTo(draw.destinationX * ui.ratio - ui.offsetX + 1, draw.destinationY * ui.ratio - ui.offsetY + 1);

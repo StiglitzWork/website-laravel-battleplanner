@@ -1,4 +1,6 @@
-import { throws } from "assert";
+import {
+    throws
+} from "assert";
 
 class Ui {
 
@@ -16,14 +18,8 @@ class Ui {
 
         // Zoom variables
         this.ratio = 1;
-        this.height = 0;
-        this.width = 0;
         this.offsetX = 0;
         this.offsetY = 0;
-        this.vpx = 0;
-        this.vpy = 0;
-        this.vpw = $("#" + this.viewportId).innerWidth;
-        this.vph = $("#" + this.viewportId).innerHeight;
 
         // updateFlags
         this.floorChange = true;
@@ -31,46 +27,50 @@ class Ui {
         this.backgroundUpdate = false;
         this.slotUpdate = false;
 
-		this.init();
+        this.init();
     }
 
     /**************************
         Initialisation methods
     **************************/
-	init(){
-		this.initViewports();
-		this.initBackground();
-		this.updateSlots();
+    init() {
+        this.initViewports();
+        this.initBackground();
+        this.updateSlots();
         this.update();
-	}
+    }
 
-	showViewports(){
-		for (var property in this.app.viewports) {
-	        $("#"+this.app.viewports[property]).show();
-		}
-	}
+    showViewports() {
+        for (var property in this.app.viewports) {
+            $("#" + this.app.viewports[property]).show();
+        }
+    }
 
     // Set the size of the viewports
-    initViewports(){
+    initViewports() {
 
-		// show the viewport now that we have a battleplan
+        // show the viewport now that we have a battleplan
         this.showViewports()
 
-		// Acquire DOMS
+        // Acquire DOMS
         var background = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
-		var overlay = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
+        var overlay = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
         var viewport = document.getElementById(this.app.viewports.VIEWPORT_ID);
 
-		// Set Heights
+        // Set Heights
         background.height = $(viewport).height();
         background.width = $(viewport).width();
         overlay.height = $(viewport).height();
         overlay.width = $(viewport).width();
+
+        // show Battleplan name
+        $("#battleplan_name").val(this.app.battleplan.name);
+        $("#sizePicker").val(this.app.lineSize);
     }
 
-	initBackground(){
-		// Fresh slate
-		this.clearAllScreen();
+    initBackground() {
+        // Fresh slate
+        this.clearAllScreen();
 
         // Variable declarations
         var background = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
@@ -82,34 +82,34 @@ class Ui {
 
         // Fill background color
         ctx.fillStyle = 'black';
-        ctx.fillRect(0,0,background.width, background.height);
+        ctx.fillRect(0, 0, background.width, background.height);
 
         // Load the image in memory
-        img.onload = function() {
+        img.onload = function () {
             // Draw the image
-            ctx.drawImage(img, -this.offsetX, -this.offsetY ,img.width * this.ratio ,img.height * this.ratio);
+            ctx.drawImage(img, -this.offsetX, -this.offsetY, img.width * this.ratio, img.height * this.ratio);
             this.backgroundImage = img;
             this.overlayUpdate = true;
             this.floorChange = false;
             this.update();
         }.bind(this);
-	}
+    }
 
     /**************************
         Clear methods
     **************************/
-    clearAllScreen(){
+    clearAllScreen() {
         this.clearBackground()
         this.clearOverlay()
     }
 
-    clearBackground(){
+    clearBackground() {
         var myCanvas = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
         var ctx = myCanvas.getContext('2d');
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
     }
 
-    clearOverlay(){
+    clearOverlay() {
         var myCanvas = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
         var ctx = myCanvas.getContext('2d');
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
@@ -123,28 +123,28 @@ class Ui {
     update() {
 
         // floor needs to be initialized
-        if(this.floorChange){
+        if (this.floorChange) {
             this.initBackground();
         }
 
         // floor needs to be initialized
-        if(this.backgroundUpdate){
+        if (this.backgroundUpdate) {
             this.updateBackground();
         }
 
         // floor needs to be updated
-        if(this.overlayUpdate){
+        if (this.overlayUpdate) {
             this.updateOverlay();
         }
 
-        if(this.slotUpdate){
+        if (this.slotUpdate) {
             this.updateSlots();
         }
     }
 
-    updateOverlay(){
+    updateOverlay() {
 
-		// variable declaration
+        // variable declaration
         var myCanvas = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
         var ctx = myCanvas.getContext('2d');
 
@@ -153,32 +153,35 @@ class Ui {
 
         // draw saved
         for (var i = 0; i < this.app.battleplan.battlefloor.draws.length; i++) {
-          var myDraw = this.app.battleplan.battlefloor.draws[i];
-          myDraw.draw(ctx, this);
+            var myDraw = this.app.battleplan.battlefloor.draws[i];
+            myDraw.draw(ctx, this);
         }
 
         // Redraw unpushed ones
         for (var i = 0; i < this.app.battleplan.battlefloor.draws_unpushed.length; i++) {
-          var myDraw = this.app.battleplan.battlefloor.draws_unpushed[i];
-          myDraw.draw(ctx, this);
+            var myDraw = this.app.battleplan.battlefloor.draws_unpushed[i];
+            myDraw.draw(ctx, this);
         }
 
         // Redraw transit ones
-		for (var i = 0; i < this.app.battleplan.draws_transit.length; i++) {
-		  var myDraw = this.app.battleplan.draws_transit[i];
-		  myDraw.draw(ctx, this);
-		}
-        
+        for (var i = 0; i < this.app.battleplan.draws_transit.length; i++) {
+            var myDraw = this.app.battleplan.draws_transit[i];
+            // Transit objects are not associated to a floor, so we must manually check if we are on the correct one
+            if (this.app.battleplan.battlefloor.id == myDraw.battlefloor_id) {
+                myDraw.draw(ctx, this);
+            }
+        }
+
         // Draw temporaried of tools
         for (const key in this.app.buttonEvents) {
-            if(this.app.buttonEvents[key].tool) this.app.buttonEvents[key].tool.draw(ctx,this);
+            if (this.app.buttonEvents[key].tool) this.app.buttonEvents[key].tool.draw(ctx, this);
         }
 
         // Update flag to finished
         this.overlayUpdate = false;
     }
 
-    updateSlots(){
+    updateSlots() {
         var newDom = "";
         for (var i = 0; i < this.app.battleplan.slots.length; i++) {
             newDom += this.app.battleplan.slots[i].generateDom(this.app.user_id == this.app.battleplan.owner);
@@ -186,16 +189,16 @@ class Ui {
         $("#operatorSlotList").html(newDom);
     }
 
-    updateBackground(){
+    updateBackground() {
         this.clearBackground();
         var canvas = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
         var ctx = canvas.getContext('2d');
 
         // Fill background color
         ctx.fillStyle = 'black';
-        ctx.fillRect(0,0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY ,this.backgroundImage.width * this.ratio ,this.backgroundImage.height * this.ratio);
+        ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY, this.backgroundImage.width * this.ratio, this.backgroundImage.height * this.ratio);
         this.overlayUpdate = true;
     }
 
@@ -203,12 +206,13 @@ class Ui {
         Action Methods
     **************************/
 
-    zoomCanvases(step, x, y){
+    zoomCanvases(step, x, y) {
         // update ratio and dimentions
         this.ratio = this.ratio + step;
+        var dir = Math.sign(step);
     }
 
-    move(distanceX, distanceY){
+    move(distanceX, distanceY) {
         this.offsetX += distanceX * this.ratio;
         this.offsetY += distanceY * this.ratio;
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Square;
 use App\Models\Line;
+use App\Models\Icon;
 use App\Models\Draw;
 use App\Models\Battlefloor;
 use App\Events\Battlefloor\CreateDraws;
@@ -30,6 +31,10 @@ class BattlefloorController extends Controller
                 
                 case 'Square':
                     $subDraw = $this->makeSquare($draw["drawable"]);
+                    break;
+
+                case 'Icon':
+                    $subDraw = $this->makeIcon($draw["drawable"]);
                     break;
             }
             
@@ -72,5 +77,12 @@ class BattlefloorController extends Controller
             "lineSize"=> $object["lineSize"],
         ]);
         return $square;
+    }
+    private function makeIcon($object)
+    {
+        $icon = Icon::create([
+            "src"=> $object["src"],
+        ]);
+        return $icon;
     }
 }

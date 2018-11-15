@@ -18,6 +18,7 @@ class App {
         this.ToolSquare = require('./ToolSquare.js').default; // useable tool
         this.ToolMove = require('./ToolMove.js').default; // useable tool
         this.ToolZoom = require('./ToolZoom.js').default; // useable tool
+        this.ToolIcon = require('./ToolIcon.js').default; // useable tool
         this.Ui = require('./Ui.js').default;
 
         // Settings
@@ -26,7 +27,7 @@ class App {
         // Varable declarations
         this.acquisitionLock = false;
         this.color = "#e66465"; //draw color
-        this.lineSize = 10;
+        this.lineSize = 3;
         this.conn_string = conn_string
         this.viewports = viewports
         this.user_id = user_id;
@@ -34,7 +35,8 @@ class App {
         this.toolLine; // useable tool
         this.toolSquare; // useable tool
         this.toolMove; // useable tool
-        this.ToolZoom; // useable tool
+        this.toolZoom; // useable tool
+        this.toolImage; // useable tool
 
         this.buttonEvents = {
             "lmb": {
@@ -64,7 +66,8 @@ class App {
         this.toolLine = new this.ToolLine(this);
         this.toolSquare = new this.ToolSquare(this);
         this.toolMove = new this.ToolMove(this);
-        this.ToolZoom = new this.ToolZoom(this);
+        this.toolZoom = new this.ToolZoom(this);
+        this.toolIcon = new this.ToolIcon(this);
 
         // Set defaults
         this.buttonEvents.lmb.tool = this.toolLine
@@ -288,8 +291,8 @@ class App {
         this.ui.update();
     }
 
-    setEditingSlot(id){
-        
+    changeSize(newSize){
+        this.lineSize = newSize;        
     }
     /**************************
           Floor Methods
@@ -373,7 +376,7 @@ class App {
             direction = -direction;
         }
 
-        this.ToolZoom.actionScroll(direction, coordinates);
+        this.toolZoom.actionScroll(direction, coordinates);
 
         for (const key in this.buttonEvents) {
             if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionScroll();
@@ -383,6 +386,36 @@ class App {
         this.ui.update();
     }
 
+    canvasDrop(ev) {
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
+
+        ev.preventDefault();
+        var src = ev.dataTransfer.getData("src");
+
+        this.toolIcon.actionDrop(coordinates,src);
+
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionDrop();
+        }
+
+        // Update UI
+        this.ui.update();
+    }
+
+    canvasDrag(ev) {
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
+
+        // Update UI
+        this.ui.update();
+    }
+
+    allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    drag(ev) {
+        ev.dataTransfer.setData("src", ev.target.src);
+    }
 
     /**************************
         Event detection
