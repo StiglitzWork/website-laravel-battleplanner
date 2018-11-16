@@ -14,6 +14,9 @@
 Auth::routes();
 
 Route::get('/', 'IndexController@index')->name("index");
+Route::get('/test', function(){
+    return view("test");
+});
 
 Route::prefix('/room')->group(function () {
     Route::get('/', 'RoomController@index')->name("Room.index");
@@ -36,4 +39,5 @@ Route::prefix('/operatorSlot')->group(function () {
 
 Route::prefix('/battlefloor')->group(function () {
     Route::post('/draw', 'BattlefloorController@draw')->name("Battlefloor.line");
+    Route::post('/deleteDraw', 'BattlefloorController@deleteDraw')->name("Battleplan.deleteDraw");
 });

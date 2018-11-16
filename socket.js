@@ -6,6 +6,7 @@ var redis = new Redis();
 
 redis.subscribe('BattleplanChange', function(err, count) {});
 redis.subscribe('BattlefloorDraw', function(err, count) {});
+redis.subscribe('BattlefloorDelete', function(err, count) {});
 redis.subscribe('ChangeOperatorSlot', function(err, count) {});
 
 redis.on('message', function(channel, message) {

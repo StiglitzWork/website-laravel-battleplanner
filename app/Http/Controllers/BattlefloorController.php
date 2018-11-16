@@ -9,6 +9,7 @@ use App\Models\Icon;
 use App\Models\Draw;
 use App\Models\Battlefloor;
 use App\Events\Battlefloor\CreateDraws;
+use App\Events\Battlefloor\DeleteDraws;
 use Auth;
 
 class BattlefloorController extends Controller
@@ -17,9 +18,7 @@ class BattlefloorController extends Controller
     {
         // Declarations
         $draws = [];
-        // dd($request->draws);
-        // $draws = $request->draws;
-        // dd($draws);
+
         // Create each new draw
         foreach ($request->draws as $key => $draw) {
             // Create the specific draw type
@@ -84,5 +83,46 @@ class BattlefloorController extends Controller
             "src"=> $object["src"],
         ]);
         return $icon;
+    }
+
+    public function deleteDraw(Request $request){
+        // Declarations
+        $deletedDraws = [];
+
+        // Create each new draw
+        foreach ($request->draws as $key => $draw) {
+            // dd($request->draws);
+            // Draw was never saved
+            if(!$draw["id"]){
+                continue;
+            }
+
+            $type = $draw["drawable_type"];
+
+            // Make draw morph relationship
+            $foundDraw = Draw::find($draw["id"]);
+            if ($foundDraw) {
+                $subObject = $foundDraw->drawable();
+                
+                // Add to the response object
+                $deletedDraws[] = $foundDraw->withMorph();
+
+                $subObject->delete();
+                $foundDraw->delete();
+            }
+
+            // try {
+            //     $subObject = $foundDraw->drawable();
+            // } catch (\Throwable $th) {
+            //     dd("Failed!",$draw,$foundDraw);
+            // }
+            
+        }
+        
+        // Fire event on listeners for socket.io
+        event(new DeleteDraws($deletedDraws, $request->conn_string, $request->userId));
+
+        // Respond
+        return response()->json($deletedDraws);
     }
 }

@@ -19,13 +19,13 @@
 
 {{-- Main app --}}
 <script src="{{r_asset("js/room/show.bundle.js")}}"></script>
+<script src="{{asset('js/room/sidebar.js')}}"></script>
 
 {{-- post init --}}
 @if (Auth::User()->id == $room->Owner->id && !$room->battleplan)
-<script type="text/javascript">
-    $("#mapModal").modal("show")
-
-</script>
+    <script type="text/javascript">
+        $("#mapModal").modal("show")
+    </script>
 @endif
 <script type="text/javascript">
     $(document).ready(function () {
@@ -39,12 +39,12 @@
 @endpush
 
 @section ('content')
-@include('room.collapse-topbar')
+{{-- @include('room.collapse-topbar') --}}
+{{-- Engine --}}
 <div class="row bg-dark" id="EngineContainer">
     <div id="viewport">
         <canvas id="background" class="fixed"></canvas>
         <canvas id="overlay" class="fixed" onmouseleave="app.engine.canvasLeave(event)" onmouseenter="app.engine.canvasEnter(event)"
-            {{-- ondragover="app.engine.canvasAllowDrop(event)" --}} {{-- ondrop="app.engine.canvasDrop(event)" --}}
             onmousemove="app.engine.canvasMove(event)"
             onmousedown="app.engine.canvasDown(event)"
             onmouseup="app.engine.canvasUp(event)"
@@ -54,6 +54,99 @@
     </div>
 </div>
 
+{{-- Sidebar --}}
+<div class="toggletag toggled"><i class="fas fa-arrow-left fa-lg"></i></div>
+    <div class="nav-side-menu toggled">
+        <div class="brand">Options</div>
+
+        <div class="menu-list">
+
+            <ul id="menu-content" class="menu-content collapse out">
+                
+                {{-- Information --}}
+                <li data-toggle="collapse" data-target="#info" class="collapsed active">
+                    <a href="#"><i class="fas fa-info-circle"></i> Info </a>
+                </li>
+
+                <ul class="sub-menu collapse" id="info">
+                    @include('room.sidebar-info')
+                </ul>
+
+                {{-- Tools --}}
+                <li data-toggle="collapse" data-target="#tools" class="collapsed active">
+                    <a href="#"> <i class="fas fa-sliders-h"></i> Tools</a>
+                </li>
+
+                <ul class="sub-menu collapse" id="tools">
+                    @include('room.sidebar-tools')
+                </ul>
+
+                {{-- Controls --}}
+                <li data-toggle="collapse" data-target="#controls" class="collapsed active">
+                    <a href="#"> <i class="fas fa-sliders-h"></i> Controls</a>
+                </li>
+
+                <ul class="sub-menu collapse" id="controls">
+                        @include('room.sidebar-controls')
+                </ul>
+
+                {{-- notes --}}
+                <li data-toggle="collapse" data-target="#notes" class="collapsed active">
+                    <a href="#"><i class="fas fa-pen"></i> Notes</a>
+                </li>
+
+                <ul class="sub-menu collapse" id="notes">
+                        @include('room.sidebar-notes')
+                </ul>
+
+                {{-- Icons --}}
+                <li data-toggle="collapse" data-target="#icons" class="collapsed active">
+                    <a href="#"><i class="fas fa-image"></i> Icons</a>
+                </li>
+
+                <ul class="sub-menu collapse" id="icons">
+                        @include('room.sidebar-icons')
+                </ul>
+
+                {{-- Controls --}}
+                <li data-toggle="collapse" class="collapsed active">
+                    <a href="#" data-toggle="modal" data-target="#helpModal"><i class="fas fa-image"></i> Help</a>
+                </li>
+    
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="operatorContainer float-right">
+        <div class="col-md-12 col-sm-12" id="operatorSlotList">
+                @if ($room->battleplan != null)
+                    @foreach ($room->battleplan->slots as $key => $slot)
+                        <div class="row">
+                            @if ($room->Owner == Auth::User())
+                                @if (!$slot->operator || !$slot->operator->exists)
+                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png"
+                                        class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))"
+                                        style="border-color: black" />
+                                @else
+                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}"
+                                        class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))"
+                                        style="border-color: #{{$slot->operator->colour}}" />
+                                @endif
+                            @else
+                                @if (!$slot->operator || !$slot->operator->exists)
+                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png"
+                                        class="op-icon operator-slot operator-border" style="border-color: black" />
+                                @else
+                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}"
+                                        class="op-icon operator-slot operator-border" style="border-color: #{{$slot->operator->colour}}" />
+                                @endif
+                            @endif
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+</div>
 @endsection
 
 @push('modals')
