@@ -21,6 +21,9 @@ class Ui {
         this.offsetX = 0;
         this.offsetY = 0;
 
+        // info vars
+        this.imgHeight = 0;
+        this.imgWidth = 0;
         // updateFlags
         this.floorChange = true;
         this.overlayUpdate = false;
@@ -186,7 +189,7 @@ class Ui {
         var newDom = "";
         for (var i = 0; i < this.app.battleplan.slots.length; i++) {
             newDom += "<div class=\"row\">";
-                newDom += this.app.battleplan.slots[i].generateDom(this.app.user_id == this.app.battleplan.owner);
+            newDom += this.app.battleplan.slots[i].generateDom(this.app.user_id == this.app.battleplan.owner);
             newDom += "</div>";
         }
         $("#operatorSlotList").html(newDom);
@@ -200,8 +203,10 @@ class Ui {
         // Fill background color
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        this.imgWidth = this.backgroundImage.width * this.ratio;
+        this.imgHeight = this.backgroundImage.height * this.ratio;
 
-        ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY, this.backgroundImage.width * this.ratio, this.backgroundImage.height * this.ratio);
+        ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY, this.imgWidth, this.imgHeight);
         this.overlayUpdate = true;
     }
 
@@ -212,7 +217,6 @@ class Ui {
     zoomCanvases(step, x, y) {
         // update ratio and dimentions
         this.ratio = this.ratio + step;
-        var dir = Math.sign(step);
     }
 
     move(distanceX, distanceY) {
