@@ -9,35 +9,39 @@ class Battlefloor extends Helpers {
             Constructor
     **************************/
 
-    constructor(Battlefloor) {
+    constructor() {
         // Super Class constructor call
         super();
-
-        // Instantiatable class types
         this.Draw = require('./Draw.js').default;
-        
-        // Identifiers
-        this.type = "Battlefloor"; // Json identifier
-        this.id = Battlefloor.id;
-        this.number = Battlefloor.floor.floorNum;
-        this.src = Battlefloor.floor.src;
-
         this.draws = []
         this.draws_unpushed = [];
         this.draws_transit = [];
 
-
     }
+
+	init(){
+		this.initDraws()
+	}
+
+	initDraws(){
+		for (var i = 0; i < this.draws.length; i++) {
+			this.draws[i] = Object.assign(new this.Draw, this.draws[i]);
+            this.draws[i].init();
+		}
+	}
 
     /**************************
              Public methods
     **************************/
-    draw(originCoordinates,currentCoordinates, color){
-      this.draws_unpushed.push(new this.Draw(originCoordinates,currentCoordinates, color, this.id));
-    }
+	
+	addDraw(draw){
+		this.draws_unpushed.push(draw);
+	}
 
-    serverDraw(originCoordinates,currentCoordinates, color){
-      this.draws.push(new this.Draw(originCoordinates,currentCoordinates, color, this.id));
+    serverDraw(draw){
+      draw = Object.assign(new this.Draw, draw);
+      draw.init();
+      this.draws.push(draw);
     }
 
     /**************************

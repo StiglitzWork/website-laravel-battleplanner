@@ -7,6 +7,8 @@ use App\Models\Battleplan;
 use App\Models\Battlefloor;
 use App\Models\Operator;
 use App\Models\OperatorSlot;
+use App\Models\Gadget;
+
 use Illuminate\Http\Request;
 use App\Events\Room\BattleplanChange;
 use Auth;
@@ -41,7 +43,6 @@ class RoomController extends Controller
   public function setBattleplan(Request $request){
     // define variables
     $room = Room::Connection($request->conn_string);
-    // return $request->all();
     $battleplan = Battleplan::findOrFail($request->battleplanId);
 
     // make sure the deleter is also the owner of the map
@@ -85,6 +86,7 @@ class RoomController extends Controller
     $maps = Map::orderBy('name', 'asc')->get();
     $atk_operators = Operator::attackers();
     $def_operators = Operator::defenders();
+    $gadgets = Gadget::all();
     $battleplans = Battleplan::where('owner', Auth::User()->id)
         ->where('saved', true)
         ->get();
@@ -93,7 +95,7 @@ class RoomController extends Controller
     if($room == null){
       return redirect()->route('Room.join')->with("error", ["error" => "Room not found!"]);
     } else{
-      return view("room.show", compact("maps", "room", 'battleplans', 'atk_operators', 'def_operators','listenSocket'));
+      return view("room.show", compact("maps", "room", 'battleplans', 'atk_operators', 'def_operators','listenSocket','gadgets'));
     }
 
   }

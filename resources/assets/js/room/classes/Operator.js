@@ -15,34 +15,34 @@ class Operator extends Helpers {
 
         // Instantiatable class types
         this.Gadget = require('./Gadget.js').default;
-
-        // Identifiers
-        this.id = operator.id;
-        this.type = "Operator"; // Json identifier
-
-        // Variables
-        this.gadgetPrime = null;
-        this.gadgetsSecond = [];
-        this.atk = operator.atk;
-        this.name = operator.name;
-
-        this.initialization(gadgets);
+		//
+        // // Identifiers
+        // this.id = operator.id;
+        // this.type = "Operator"; // Json identifier
+		//
+        // // Variables
+        // this.gadgetPrime = null;
+        // this.gadgetsSecond = [];
+        // this.atk = operator.atk;
+        // this.name = operator.name;
+		//
+        // this.initialization(gadgets);
     }
 
-    initialization(gadgetSources) {
-        // Initialize the gadgets
-        this.loadGadgets(gadgetSources);
-    }
-
-    loadGadgets(gadgetSources) {
-        for (var i = 0; i < gadgetSources.length; i++) {
-            if (gadgetSources[i].prime) {
-                this.gadgetPrime = gadgetSources[i];
-            } else {
-                this.gadgetsSecond.push(new this.Gadget(gadgetSources[i]));
-            }
-        }
-    }
+    // initialization(gadgetSources) {
+    //     // Initialize the gadgets
+    //     this.loadGadgets(gadgetSources);
+    // }
+	//
+    // loadGadgets(gadgetSources) {
+    //     for (var i = 0; i < gadgetSources.length; i++) {
+    //         if (gadgetSources[i].prime) {
+    //             this.gadgetPrime = gadgetSources[i];
+    //         } else {
+    //             this.gadgetsSecond.push(new this.Gadget(gadgetSources[i]));
+    //         }
+    //     }
+    // }
 
 
 }

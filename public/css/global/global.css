@@ -1,9 +1,0 @@
-.dropdown-item:focus, .dropdown-item:hover{
-  color: white !important;
-  text-decoration: none !important;
-  background-color: #212529 !important;
-}
-.dropdown-item{
-  color: rgba(255,255,255,.5) !important;
-  cursor: pointer !important;
-}

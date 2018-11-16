@@ -9,36 +9,57 @@ class Battleplan extends Helpers {
             Constructor
     **************************/
 
-    constructor(battleplan, isOwner) {
+    constructor() {
         // Super Class constructor call
         super();
 
         // Instantiatable class types
         this.Battlefloor = require('./Battlefloor.js').default;
-        this.OperatorSlot = require('./OperatorSlot.js').default;
-
-        // Identifiers
-        this.id = battleplan.id;
-        this.type = "Battleplan"; // Json identifier
+        this.Slot = require('./Slot.js').default;
 
         // Variables
         this.battlefloor = null;
-        this.battlefloors = [];
-        this.operatorSlots = [];
-        this.isOwner = isOwner;
-        this.notes = battleplan.notes;
+    		this.draws_transit = [];
 
-        this.initialization(battleplan.battlefloors)
+    }
+
+	/**************************
+		Initialisation functions
+	**************************/
+
+	init() {
+		this.initFloors();
+		this.initSlots();
+	}
+
+	initFloors(){
+		for (var i = 0; i < this.battlefloors.length; i++) {
+			this.battlefloors[i] = Object.assign(new this.Battlefloor, this.battlefloors[i]);
+			this.battlefloors[i].init();
+		}
+		// set default floor
+		this.battlefloor = this.battlefloors[0];
+	}
+
+	initSlots(){
+		for (var i = 0; i < this.slots.length; i++) {
+			this.slots[i] = Object.assign(new this.Slot, this.slots[i]);
+			this.slots[i].init();
+		}
+	}
+
+
+	/**************************
+		Slot Methods
+	**************************/
+
+    getSlot(id){
+        return this.slots.filter(slot => this._objectIdEquals(slot,id))[0];
     }
 
     /**************************
         Floor Methods
     **************************/
-
-    getOperatorSlot(id){
-        return this.operatorSlots.filter(slot => this._objectIdEquals(slot,id))[0];
-    }
-
     getFloor(id){
         return this.battlefloors.filter(floor => this._objectIdEquals(floor,id))[0];
     }
@@ -80,43 +101,30 @@ class Battleplan extends Helpers {
     }
 
     changeFloorById(floorId){
-        // if (this.battlefloor) {
-        //   this.battlefloor.active=false;
-        // }
        this.battlefloor = this.getFloor(floorId);
-       // this.battlefloor.active=true;
     }
 
     nextFloor(){
       if (this.hasNextFloor()) {
-        // if (this.battlefloor) {
-        //   this.battlefloor.active=false;
-        // }
-        this.battlefloor = this.battlefloors[this.battlefloor.number + 1];
-        // this.battlefloor.active=true;
+        this.battlefloor = this.battlefloors[this.battlefloor.floor.floorNum + 1];
       }
     }
 
     previousFloor(){
       if (this.hasPreviousFloor()) {
-
-        // if (this.battlefloor) {
-        //   this.battlefloor.active=false;
-        // }
-        this.battlefloor = this.battlefloors[this.battlefloor.number - 1];
-        // this.battlefloor.active=true;
+        this.battlefloor = this.battlefloors[this.battlefloor.floor.floorNum - 1];
       }
     }
 
     hasNextFloor(){
-      if(this.battlefloor.number < this.battlefloors.length -1 ){
+      if(this.battlefloor.floor.floorNum < this.battlefloors.length -1 ){
         return true;
       }
       return false;
     }
 
     hasPreviousFloor(){
-        if(this.battlefloor.number - 1 >= 0){
+        if(this.battlefloor.floor.floorNum - 1 >= 0){
           return true;
         }
         return false;
@@ -125,88 +133,22 @@ class Battleplan extends Helpers {
     setFloor(id){
       var floor = this.getFloor(id)
       if (floor) {
-
-        // if (this.battlefloor) {
-        //   this.battlefloor.active=false;
-        // }
         this.battlefloor = floor;
-        // this.battlefloor.active=true;
       }
     }
 
     /**************************
-        Display Methods
+        Gather draw functions
     **************************/
-
-    /**
-     * @description innitialisation of the DOM. Sets the size of background and overlay and paints the background. Also creates all the questions from sidebar
-     * @method _initialization
-     * @return {undefined}
-     */
-    initialization(floorSources) {
-        // Innitialize the floors
-        this.loadFloors(floorSources);
-        $("#battleplan_notes").val(this.notes);
-    }
-
-    loadSlots(slots){
-       this.operatorSlots = [];
-       for (var i = 0; i < slots.length; i++) {
-           var operatorSlot = new this.OperatorSlot(slots[i].id, this.isOwner);
-           if (slots[i].operator != null) {
-               operatorSlot.setOperator(slots[i].operator);
-           }
-           this.operatorSlots.push(operatorSlot);
-       }
-       this.updateSlotsDom();
-    }
-
-    updateSlotsDom(){
-        var newDom = "";
-        for (var i = 0; i < this.operatorSlots.length; i++) {
-            newDom += this.operatorSlots[i].generateDom();
-        }
-        $("#operatorSlotList").html(newDom);
-    }
-
-    loadFloors(floorSources){
-        for (var i = 0; i < floorSources.length; i++) {
-          var battlefloor = new this.Battlefloor(floorSources[i])
-          this.battlefloors.push(battlefloor);
-
-          for (var j = 0; j < floorSources[i].draws.length; j++) {
-
-
-              battlefloor.serverDraw({
-                  "x":floorSources[i].draws[j]["originX"],
-                  "y":floorSources[i].draws[j]["originY"],
-              },
-              {
-                  "x":floorSources[i].draws[j]["destinationX"],
-                  "y":floorSources[i].draws[j]["destinationY"],
-              },
-              floorSources[i].draws[j].color);
-          }
-
-        }
-
-        // init the current floor
-        this.battlefloor = this.battlefloors[0];
-    }
-
-
-    /**
-     * @description updates the active subclasses
-     * @method _update
-     * @return {undefined}
-     */
-    _update() {
-      this.battlefloor.update();
-    }
-
-    /**************************
-        Helper functions
-    **************************/
+	acquireUnsavedDraws(){
+		var draws_transit = [];
+		// Acquire the drawings that have not been saved
+		for (var i = 0; i < this.battlefloors.length; i++) {
+			draws_transit = draws_transit.concat(this.battlefloors[i].draws_unpushed);
+			this.battlefloors[i].draws_unpushed = [];
+		}
+		return draws_transit;
+	}
 
 }
 export {

@@ -1,110 +1,117 @@
+import {
+    throws
+} from "assert";
+
 class Ui {
 
     /**************************
             Constructor
     **************************/
 
-    constructor(viewportId, canvasBackgroundId, canvasOverlayId, map) {
-        // Identifiers
-        this.type = "Ui"; // Json identifier
+    constructor(app) {
 
-        // Document Ids
-        this.canvasBackgroundId = canvasBackgroundId;
-        this.canvasOverlayId = canvasOverlayId;
-        this.viewportId = viewportId;
+        // Save the app for access later
+        this.app = app;
 
-        // Public variables
+        // reload variables
         this.backgroundImage = null;
 
         // Zoom variables
         this.ratio = 1;
-        this.height = 0;
-        this.width = 0;
         this.offsetX = 0;
         this.offsetY = 0;
-        this.vpx = 0;
-        this.vpy = 0;
-        this.vpw = $("#" + this.viewportId).innerWidth;
-        this.vph = $("#" + this.viewportId).innerHeight;
-
-        // Subscribed objects
-        this.battleplan = map;
 
         // updateFlags
         this.floorChange = true;
         this.overlayUpdate = false;
         this.backgroundUpdate = false;
+        this.slotUpdate = false;
 
-        this._initViewports();
-        this.update();
+        this.init();
     }
 
     /**************************
         Initialisation methods
     **************************/
-    _initFloor(){
+    init() {
+        this.initViewports();
+        this.initBackground();
+        this.updateSlots();
+        this.update();
+    }
+
+    showViewports() {
+        for (var property in this.app.viewports) {
+            $("#" + this.app.viewports[property]).show();
+        }
+    }
+
+    // Set the size of the viewports
+    initViewports() {
+
+        // show the viewport now that we have a battleplan
+        this.showViewports()
+
+        // Acquire DOMS
+        var background = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
+        var overlay = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
+        var viewport = document.getElementById(this.app.viewports.VIEWPORT_ID);
+
+        // Set Heights
+        background.height = $(viewport).height();
+        background.width = $(viewport).width();
+        overlay.height = $(viewport).height();
+        overlay.width = $(viewport).width();
+
+        // show Battleplan name
+        $("#battleplan_name").val(this.app.battleplan.name);
+        $("#battleplan_notes").val(this.app.battleplan.notes);
+        $("#sizePicker").val(this.app.lineSize);
+    }
+
+    initBackground() {
+        // Fresh slate
         this.clearAllScreen();
 
         // Variable declarations
-        var myBackground = document.getElementById(this.canvasBackgroundId);
-        var ctx = myBackground.getContext('2d');
+        var background = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
+        var ctx = background.getContext('2d');
         var img = new Image;
 
         // acquire image
-        img.src = this.battleplan.battlefloor.src;
+        img.src = this.app.battleplan.battlefloor.floor.src;
 
-        // Fille background color
+        // Fill background color
         ctx.fillStyle = 'black';
-        ctx.fillRect(0,0,myBackground.width, myBackground.height);
+        ctx.fillRect(0, 0, background.width, background.height);
 
         // Load the image in memory
-        img.onload = function() {
+        img.onload = function () {
             // Draw the image
-            ctx.drawImage(img, -this.offsetX, -this.offsetY ,img.width * this.ratio ,img.height * this.ratio);
+            ctx.drawImage(img, -this.offsetX, -this.offsetY, img.width * this.ratio, img.height * this.ratio);
             this.backgroundImage = img;
             this.overlayUpdate = true;
             this.floorChange = false;
             this.update();
-            $("#loading").hide();
         }.bind(this);
-
-        // Update floor Button
-        $(".floorSelector").removeClass("active");
-        $("#floorSelector-" + this.battleplan.battlefloor.id).addClass("active");
-    }
-
-    // Set the size of the viewports
-    _initViewports(){
-
-        // hide them until a map is chosen
-        $("#"+this.viewportId).show();
-        $("#"+this.canvasBackgroundId).show();
-        $("#"+this.canvasOverlayId).show();
-
-        var myBackground = document.getElementById(this.canvasBackgroundId);
-        var myOverlay = document.getElementById(this.canvasOverlayId);
-        myBackground.height = $("#viewport").height();
-        myBackground.width = $("#viewport").width();
-        myOverlay.height = $("#viewport").height();
-        myOverlay.width = $("#viewport").width();
     }
 
     /**************************
         Clear methods
     **************************/
-    clearAllScreen(){
+    clearAllScreen() {
         this.clearBackground()
         this.clearOverlay()
     }
 
-    clearBackground(){
-        var myCanvas = document.getElementById(this.canvasBackgroundId);
+    clearBackground() {
+        var myCanvas = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
         var ctx = myCanvas.getContext('2d');
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
     }
 
-    clearOverlay(){
-        var myCanvas = document.getElementById(this.canvasOverlayId);
+    clearOverlay() {
+        var myCanvas = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
         var ctx = myCanvas.getContext('2d');
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
     }
@@ -117,134 +124,101 @@ class Ui {
     update() {
 
         // floor needs to be initialized
-        if(this.floorChange){
-            this._initFloor();
+        if (this.floorChange) {
+            this.initBackground();
         }
 
         // floor needs to be initialized
-        if(this.backgroundUpdate){
+        if (this.backgroundUpdate) {
             this.updateBackground();
         }
 
         // floor needs to be updated
-        if(this.overlayUpdate){
+        if (this.overlayUpdate) {
             this.updateOverlay();
+        }
+
+        if (this.slotUpdate) {
+            this.updateSlots();
         }
     }
 
-    updateOverlay(){
+    updateOverlay() {
+
         // variable declaration
-        var myCanvas = document.getElementById(this.canvasOverlayId);
+        var myCanvas = document.getElementById(this.app.viewports.CANVAS_OVERLAY_ID);
         var ctx = myCanvas.getContext('2d');
 
         // Clear all
         this.clearOverlay()
 
-        // var lastDrag = null;
-
-        // Redraw saved
-        for (var i = 0; i < this.battleplan.battlefloor.draws.length; i++) {
-
-          ctx.beginPath();
-          ctx.moveTo(this.battleplan.battlefloor.draws[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws[i].origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(this.battleplan.battlefloor.draws[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws[i].destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = this.battleplan.battlefloor.draws[i].color;
-          ctx.closePath();
-          ctx.stroke();
+        // draw saved
+        for (var i = 0; i < this.app.battleplan.battlefloor.draws.length; i++) {
+            var myDraw = this.app.battleplan.battlefloor.draws[i];
+            myDraw.draw(ctx, this);
         }
 
         // Redraw unpushed ones
-        for (var i = 0; i < this.battleplan.battlefloor.draws_unpushed.length; i++) {
-
-          ctx.beginPath();
-          ctx.moveTo(this.battleplan.battlefloor.draws_unpushed[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_unpushed[i].origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(this.battleplan.battlefloor.draws_unpushed[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_unpushed[i].destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = this.battleplan.battlefloor.draws_unpushed[i].color;
-          ctx.closePath();
-          ctx.stroke();
+        for (var i = 0; i < this.app.battleplan.battlefloor.draws_unpushed.length; i++) {
+            var myDraw = this.app.battleplan.battlefloor.draws_unpushed[i];
+            myDraw.draw(ctx, this);
         }
 
         // Redraw transit ones
-        for (var i = 0; i < this.battleplan.battlefloor.draws_transit.length; i++) {
-
-          ctx.beginPath();
-          ctx.moveTo(this.battleplan.battlefloor.draws_transit[i].origin.x * this.ratio - this.offsetX, this.battleplan.battlefloor.draws_transit[i].origin.y * this.ratio - this.offsetY);
-          ctx.lineTo(this.battleplan.battlefloor.draws_transit[i].destination.x * this.ratio - this.offsetX + 1, this.battleplan.battlefloor.draws_transit[i].destination.y * this.ratio - this.offsetY + 1);
-          ctx.strokeStyle = this.battleplan.battlefloor.draws_transit[i].color;
-          ctx.closePath();
-          ctx.stroke();
+        for (var i = 0; i < this.app.battleplan.draws_transit.length; i++) {
+            var myDraw = this.app.battleplan.draws_transit[i];
+            // Transit objects are not associated to a floor, so we must manually check if we are on the correct one
+            if (this.app.battleplan.battlefloor.id == myDraw.battlefloor_id) {
+                myDraw.draw(ctx, this);
+            }
         }
 
+        // Draw temporaried of tools
+        for (const key in this.app.buttonEvents) {
+            if (this.app.buttonEvents[key].tool) this.app.buttonEvents[key].tool.draw(ctx, this);
+        }
+
+        // Update flag to finished
         this.overlayUpdate = false;
     }
 
-    updateBackground(){
+    updateSlots() {
+        var newDom = "";
+        for (var i = 0; i < this.app.battleplan.slots.length; i++) {
+            newDom += this.app.battleplan.slots[i].generateDom(this.app.user_id == this.app.battleplan.owner);
+        }
+        $("#operatorSlotList").html(newDom);
+    }
+
+    updateBackground() {
         this.clearBackground();
-        var myCanvas = document.getElementById(this.canvasBackgroundId);
-        var ctx = myCanvas.getContext('2d');
+        var canvas = document.getElementById(this.app.viewports.CANVAS_BACKGROUND_ID);
+        var ctx = canvas.getContext('2d');
 
         // Fill background color
         ctx.fillStyle = 'black';
-        ctx.fillRect(0,0,myCanvas.width, myCanvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY ,this.backgroundImage.width * this.ratio ,this.backgroundImage.height * this.ratio);
+        ctx.drawImage(this.backgroundImage, -this.offsetX, -this.offsetY, this.backgroundImage.width * this.ratio, this.backgroundImage.height * this.ratio);
         this.overlayUpdate = true;
     }
 
     /**************************
         Action Methods
     **************************/
-    zoomCanvases(step, x, y){
-        // update ratio and dimentsions
-        this.ratio = this.ratio + step
-        this.vpx = x * -1
-        this.vpy = y * -1
+
+    zoomCanvases(step, x, y) {
+        // update ratio and dimentions
+        this.ratio = this.ratio + step;
+        var dir = Math.sign(step);
     }
 
-    move(distanceX, distanceY){
+    move(distanceX, distanceY) {
         this.offsetX += distanceX * this.ratio;
         this.offsetY += distanceY * this.ratio;
-        this.backgroundUpdate = true;
-        this.overlayUpdate = true;
-        this.update();
     }
-
-    /**************************
-        Id Generation Methods
-    **************************/
-
-    /**
-     * @description makes a unique id
-     * @method _makeId
-     * @return {string}
-     */
-    _makeId() {
-        var id = this._guid();
-        while (this.getQuestion(id)) {
-            id = this._guid();
-        }
-        return id;
-    }
-
-    // Helper for _makeId
-    _guid() {
-        return "UILM-" + this._s4() + this._s4() + '-' + this._s4() + '-' + this._s4() + '-' +
-            this._s4() + '-' + this._s4() + this._s4() + this._s4();
-    }
-
-    // Helper for _guid
-    _s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    }
-
-    /**************************
-        Helper Methods
-    **************************/
-
 }
 export {
     Ui as
-    default
+        default
 }

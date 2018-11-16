@@ -10,71 +10,87 @@ class App {
             Constructor
     **************************/
 
-    constructor(conn_string, viewportId, canvasBackgroundId , canvasOverlayId, listenSocket, user_id, isOwner) {
+    constructor(conn_string, viewports, user_id) {
         // Instantiatable class types
         this.Battleplan = require('./Battleplan.js').default;
         this.Battlefloor = require('./Battlefloor.js').default;
+        this.ToolLine = require('./ToolLine.js').default; // useable tool
+        this.ToolSquare = require('./ToolSquare.js').default; // useable tool
+        this.ToolMove = require('./ToolMove.js').default; // useable tool
+        this.ToolZoom = require('./ToolZoom.js').default; // useable tool
+        this.ToolIcon = require('./ToolIcon.js').default; // useable tool
         this.Ui = require('./Ui.js').default;
 
-        // Identifiers
-        this.type = "App"; // Json identifier
+        // Settings
+        this.acquisitionTime = 200; // ms oc collection before sending new draws to the server (forced ping to avoid DOS)
 
         // Varable declarations
+        this.acquisitionLock = false;
         this.color = "#e66465"; //draw color
+        this.lineSize = 3;
         this.conn_string = conn_string
-        this.viewportId = viewportId
-        this.canvasBackgroundId = canvasBackgroundId
-        this.canvasOverlayId = canvasOverlayId
-        this.socket = listenSocket;
+        this.viewports = viewports
         this.user_id = user_id;
-        this.isOwner = isOwner;
 
-        // When we draw once, we start a timer to send to server so that we do not send a request per draw
-        this.acquiringDelayedDraws = false;
-        this.delayUpdateTimer = 200;
+        this.toolLine; // useable tool
+        this.toolSquare; // useable tool
+        this.toolMove; // useable tool
+        this.toolZoom; // useable tool
+        this.toolImage; // useable tool
 
-        // hide them until a map is chosen
-        $("#" + this.viewportId).hide();
-        $("#" + this.canvasBackgroundId).hide();
-        $("#" + this.canvasOverlayId).hide();
-
-        // Event variables
-        this.lastCoordinates = {
-            "x": 0,
-            "y": 0
+        this.buttonEvents = {
+            "lmb": {
+                "active": false,
+                "tool": null
+            },
+            "rmb": {
+                "active": false,
+                "tool": null
+            },
+            "mmb": {
+                "active": false,
+                "tool": null
+            },
         }
-        this.originPoints = {
-            "x": 0,
-            "y": 0
-        }
 
-        // Eventing variables
-        this.lmb = false;
-        this.rmb = false;
 
-        this.resizeRangeX = false;
-        this.resizeRangeY = false;
-        this.placeholderResizing = null;
+        this.init();
 
-        // load battleplan if already set
-        this.getRoomsBattleplan(this.load.bind(this));
     }
 
     /**************************
             App Methods
     **************************/
+    init() {
+        // Set curent tool type
+        this.toolLine = new this.ToolLine(this);
+        this.toolSquare = new this.ToolSquare(this);
+        this.toolMove = new this.ToolMove(this);
+        this.toolZoom = new this.ToolZoom(this);
+        this.toolIcon = new this.ToolIcon(this);
 
-    zoom(amount, x, y) {
-        var coordinates = this._calculateOffset(x, y);
-        this.ui.zoomCanvases(amount, x, y);
-        this.ui.backgroundUpdate = true;
-        this.ui.overlayUpdate = true;
-        this.ui.update();
+        // Set defaults
+        this.buttonEvents.lmb.tool = this.toolLine
+        this.buttonEvents.rmb.tool = this.toolMove
+
+        // hide them until a map is chosen
+        for (var property in this.viewports) {
+            $("#" + this.viewports[property]).hide();
+        }
+
+        // load battleplan if already set
+        this.getRoomsBattleplan(
+            this.load.bind(this)
+        );
     }
 
     changeColor(newColor) {
         this.color = newColor
     }
+
+    /**************************
+        Battleplan Methods
+    **************************/
 
     createBattleplan(mapId) {
         var self = this;
@@ -85,42 +101,55 @@ class App {
                 map: mapId,
                 room: this.conn_string
             },
-            success: function(battleplan) {
+            success: function (battleplan) {
                 self.setRoomsBattleplan(battleplan.id);
             },
-            error: function(result, code) {
+            error: function (result) {
+                console.log(result);
+            }
+        });
+    }
+
+    getRoomsBattleplan(callback) {
+        $.ajax({
+            method: "GET",
+            url: `${this.conn_string}/getBattleplan`,
+            success: function (result) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error: function (result) {
                 console.log(result);
             }
         });
     }
 
     deleteBattlePlan(battleplanId) {
-        var r = confirm("Are you sure you want to delete? There is no goint back!");
+        var r = confirm("Are you sure you want to delete? There is no going back!");
         if (r == true) {
-            var self = this;
             $.ajax({
                 method: "POST",
                 url: "/battleplan/delete",
                 data: {
                     "battleplanId": battleplanId
                 },
-                success: function(result) {
+                success: function () {
                     alert("Successfully deleted! Refresh page to update 'load' list");
                 },
-                error: function(result, code) {
+                error: function (result) {
                     console.log(result);
                 }
             });
         }
-
     }
 
+    // Loading a saved battleplan
     loadBattlePlan(battleplanId) {
-        // set the battleplan
         var self = this;
-        this.setRoomsBattleplan(battleplanId, function() {
+        this.setRoomsBattleplan(battleplanId, function () {
             // Reset
-            self.getRoomsBattleplan(function(result) {
+            self.getRoomsBattleplan(function (result) {
                 if (result != null) {
                     self.load(result.battleplan, result.battlefloors);
                 }
@@ -128,9 +157,8 @@ class App {
         });
     }
 
+    // Tell the server to save its current state
     save() {
-        var tmp = $("#battleplan_notes").val();
-        var self = this;
         $.ajax({
             method: "POST",
             url: "/battleplan/save",
@@ -139,28 +167,30 @@ class App {
                 name: $("#battleplan_name").val(),
                 notes: $("#battleplan_notes").val()
             },
-            success: function(result) {
+            success: function () {
                 alert("Saved!");
             },
-            error: function(result, code) {
+            error: function (result) {
                 console.log(result);
             }
         });
     }
 
+    // Load a battle plan into the app
     load(battleplan) {
         if (battleplan) {
-            $("#battleplan_name").val(battleplan.name);
-            this.battleplan = new this.Battleplan(battleplan, this.isOwner);
-            this.ui = new this.Ui(this.viewportId, this.canvasBackgroundId, this.canvasOverlayId, this.battleplan);
 
-            // Update operator doms
-            this.battleplan.loadSlots(battleplan.slots);
+            // Init battleplan
+            this.battleplan = Object.assign(new this.Battleplan, battleplan);
+            this.battleplan.init();
+
+            // Init UI class
+            this.ui = new this.Ui(this);
         }
     }
 
+    // Set the rooms to a battleplan
     setRoomsBattleplan(battleplanId, callback = null) {
-        var self = this;
         $.ajax({
             method: "POST",
             url: "/room/setBattleplan",
@@ -168,83 +198,73 @@ class App {
                 battleplanId: battleplanId,
                 conn_string: this.conn_string
             },
-            success: function(result) {
+            success: function (result) {
                 if (callback) {
                     callback(result)
                 }
             },
-            error: function(result, code) {
+            error: function (result) {
                 console.log(result);
             }
         });
     }
 
-    getRoomsBattleplan(callback) {
-        var self = this;
-        $.ajax({
-            method: "GET",
-            url: `${this.conn_string}/getBattleplan`,
-            // data: { conn_string : this.conn_string},
-            success: function(result) {
-                if (callback) {
-                    callback(result);
+    // Push changes to the server to propagate to others on the socket + add them to the DB
+    pushServer() {
+
+        // Var declarations
+        this.battleplan.draws_transit = [];
+        this.battleplan.draws_transit = this.battleplan.acquireUnsavedDraws();
+
+        // Don't waste API call is empty
+        if (this.battleplan.draws_transit.length > 0) {
+            // Push to server API
+            $.ajax({
+                method: "POST",
+                url: "/battlefloor/draw",
+                data: {
+                    conn_string: this.conn_string,
+                    userId: this.user_id,
+                    "draws": JSON.parse(JSON.stringify(this.battleplan.draws_transit))
+                },
+                success: function () {
+                    this.battleplan.draws_transit = [];
+                    this.acquisitionLock = false;
+                    this.ui.overlayUpdate = true;
+                    this.ui.update();
+                }.bind(this),
+                error: function (result) {
+                    this.acquisitionLock = false;
+                    console.log(result);
                 }
-            },
-            error: function(result, code) {
-                console.log(result);
-            }
-        });
-    }
-
-    pushDrawServer() {
-        this.acquiringDelayedDraws = false;
-        var draws_transit = [];
-
-        for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
-            draws_transit = draws_transit.concat(this.battleplan.battlefloors[i].draws_unpushed);
-            this.battleplan.battlefloors[i].draws = this.battleplan.battlefloors[i].draws.concat(this.battleplan.battlefloors[i].draws_unpushed);
-            this.battleplan.battlefloors[i].draws_unpushed = [];
+            });
         }
 
-        this.draws_transit = this.draws_unpushed;
-        this.draws_unpushed = [];
-        var self = this;
-
-        $.ajax({
-            method: "POST",
-            url: "/battlefloor/draw",
-            data: {
-                conn_string: this.conn_string,
-                userId: this.user_id,
-                "draws": draws_transit
-            },
-            success: function(result) {
-                // debugging only
-            },
-            error: function(result, code) {
-                console.log(result);
-            }
-        });
     }
 
+    // Tell the server to start the push timer
+    logPush() {
+        // Push new lines to server
+        if (!this.acquisitionLock) {
+            this.acquisitionLock = true;
+            setTimeout(this.pushServer.bind(this), this.acquisitionTime);
+        }
+    }
+
+    // Draw the object that the server has propagated to you
     serverDraw(result) {
         for (var i = 0; i < result.draws.length; i++) {
 
             var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
 
-            battlefloor.serverDraw({
-                    "x": result.draws[i]["originX"],
-                    "y": result.draws[i]["originY"],
-                }, {
-                    "x": result.draws[i]["destinationX"],
-                    "y": result.draws[i]["destinationY"],
-                },
-                result.draws[i].color);
+            battlefloor.serverDraw(result.draws[i]);
         }
         this.ui.overlayUpdate = true;
         this.ui.update();
+
     }
 
+    // Tell the server to change the operator in a given slot
     changeOperatorSlot(slotId, operatorId) {
 
         $.ajax({
@@ -256,21 +276,26 @@ class App {
                 operatorSlotId: slotId,
                 operatorId: operatorId
             },
-            success: function(result) {
+            success: function (result) {
                 this.changeOperatorSlotDom(result.operatorSlot.id, result.operator)
             }.bind(this),
-            error: function(result, code) {
+            error: function (result) {
                 console.log(result);
             }
         });
     }
 
-    changeOperatorSlotDom(operatorSlotId,operator){
-        var slot = this.battleplan.getOperatorSlot(operatorSlotId);
+    // Update the DOM to reflect an operator change
+    changeOperatorSlotDom(operatorSlotId, operator) {
+        var slot = this.battleplan.getSlot(operatorSlotId);
         slot.setOperator(operator);
-        this.battleplan.updateSlotsDom();
+        this.ui.slotUpdate = true;
+        this.ui.update();
     }
 
+    changeSize(newSize) {
+        this.lineSize = newSize;
+    }
     /**************************
           Floor Methods
     **************************/
@@ -287,6 +312,13 @@ class App {
         this.ui.update();
     }
 
+    /**************************
+          Floor Methods
+    **************************/
+
+    changeTool(tool) {
+        this.buttonEvents.lmb.tool = tool;
+    }
 
     /**************************
         Canvas Methods
@@ -294,94 +326,97 @@ class App {
 
     canvasUp(ev) {
         var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
-        this._clickDeactivateEventListen(ev);
-
-        if (!this.lmb) {
-            this.ui.overlayUpdate = true;
-            this.ui.update();
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionUp(coordinates);
         }
-
+        this._clickDeactivateEventListen(ev);
+        this.ui.update();
     }
 
     canvasDown(ev) {
-        // var eventX = (ev.offsetX)/ this.ui.ratio;
-        // var eventY = (ev.offsetY) / this.ui.ratio;
         var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._clickActivateEventListen(ev)
-        if (this.lmb) {
-            this.battleplan.battlefloor.draw(coordinates, coordinates, this.color);
-
-            // Push new drawings to server
-            if (!this.acquiringDelayedDraws) {
-                this.acquiringDelayedDraws = true;
-                setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
-            }
-
-            this.lastCoordinates = coordinates;
-            // Update UI
-            this.ui.overlayUpdate = true;
-            this.ui.update();
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionDown(coordinates);
         }
+        this.ui.update();
     }
 
     canvasMove(ev) {
         var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
-
-        if (this.rmb) {
-            this.ui.move(this.originPoints["x"] - (ev.offsetX / this.ui.ratio), this.originPoints["y"] - (ev.offsetY / this.ui.ratio));
-            this.ui.backgroundUpdate = true;
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionMove(coordinates);
         }
-
-        if (this.lmb) {
-            this.battleplan.battlefloor.draw(this.lastCoordinates, coordinates, this.color);
-
-            // Push new drawings to server
-            if (!this.acquiringDelayedDraws) {
-                this.acquiringDelayedDraws = true;
-                setTimeout(this.pushDrawServer.bind(this), this.delayUpdateTimer);
-            }
-
-            this.ui.overlayUpdate = true;
-            this.ui.update();
-
-        } else {
-            // Resize event check
-            this.resizeRangeY = false;
-            this.resizeRangeX = false;
-        }
-
-        if (this.rmb || this.lmb) {
-            this.lastCoordinates = coordinates;
-            this.originPoints = {
-                "x": (ev.offsetX / this.ui.ratio),
-                "y": (ev.offsetY / this.ui.ratio)
-            } //2 dimentional
-        }
-
+        this.ui.update();
     }
 
     canvasEnter(ev) {
         var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionEnter(coordinates);
+        }
         this._deactivateClickEventListen();
-
         // Update UI
-        this.ui.overlayUpdate = true;
         this.ui.update();
     }
 
     canvasLeave(ev) {
-        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
         this._deactivateClickEventListen();
-
-        if (this.lmb) {
-
-            // Update UI
-            this.ui.overlayUpdate = true;
-            this.ui.update();
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionLeave(coordinates);
         }
         // Update UI
-        this.ui.overlayUpdate = true;
         this.ui.update();
+    }
+
+    canvasScroll(ev) {
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
+
+        var direction = 1;
+        if (ev.originalEvent.wheelDelta / 120 < 0) {
+            direction = -direction;
+        }
+
+        this.toolZoom.actionScroll(direction, coordinates);
+
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionScroll();
+        }
+
+        // Update UI
+        this.ui.update();
+    }
+
+    canvasDrop(ev) {
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
+
+        ev.preventDefault();
+        var src = ev.dataTransfer.getData("src");
+
+        this.toolIcon.actionDrop(coordinates, src);
+
+        for (const key in this.buttonEvents) {
+            if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionDrop();
+        }
+
+        // Update UI
+        this.ui.update();
+    }
+
+    canvasDrag(ev) {
+        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
+
+        // Update UI
+        this.ui.update();
+    }
+
+    allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    drag(ev) {
+        ev.dataTransfer.setData("src", ev.target.src);
     }
 
     /**************************
@@ -395,14 +430,9 @@ class App {
      * @return {undefined}
      */
     _clickActivateEventListen(ev) {
-        var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
-
-        this.originPoints = {
-            "x": ev.offsetX / this.ui.ratio,
-            "y": ev.offsetY / this.ui.ratio
-        } //2 dimentional
-        if (ev.button == 0) this.lmb = true;
-        if (ev.button == 2) this.rmb = true;
+        if (ev.button == 0) this.buttonEvents.lmb.active = true;
+        if (ev.button == 1) this.buttonEvents.mmb.active = true;
+        if (ev.button == 2) this.buttonEvents.rmb.active = true;
     }
 
     /**
@@ -412,11 +442,9 @@ class App {
      * @return {undefined}
      */
     _clickDeactivateEventListen(ev) {
-        if (ev.button == 0) this.lmb = false;
-        if (ev.button == 2) this.rmb = false;
-        this.resizeRangeY = false;
-        this.resizeRangeX = false;
-        this.placeholderResizing = null;
+        if (ev.button == 0) this.buttonEvents.lmb.active = false;
+        if (ev.button == 1) this.buttonEvents.mmb.active = false;
+        if (ev.button == 2) this.buttonEvents.rmb.active = false;
     }
 
     /**
@@ -425,26 +453,14 @@ class App {
      * @return {undefined}
      */
     _deactivateClickEventListen() {
-        this.lmb = false;
-        this.rmb = false;
+        this.buttonEvents.lmb.active = false;
+        this.buttonEvents.mmb.active = false;
+        this.buttonEvents.rmb.active = false;
     }
 
     /**************************
         Helper Methods
     **************************/
-
-    /**
-     * @description determine if an array contains one or more items from another array.
-     * @param {array} haystack the array to search.
-     * @param {array} arr the array providing items to check for in the haystack.
-     * @return {boolean} true|false if haystack contains at least one item from arr.
-     */
-    _contains(haystack, arr) {
-        return arr.some(function(v) {
-            return haystack.indexOf(v) >= 0;
-        });
-    };
-
     _calculateOffset(evx, evy) {
         var jsonResponse = {}
         jsonResponse.x = (evx / this.ui.ratio) + (this.ui.offsetX / this.ui.ratio);
@@ -455,5 +471,5 @@ class App {
 }
 export {
     App as
-    default
+        default
 }

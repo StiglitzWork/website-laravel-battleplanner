@@ -23,7 +23,7 @@ class CreateDraws implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($draws,$identifier,$creator)
+    public function __construct($draws, $identifier, $creator)
     {
         $this->draws = $draws;
         $this->identifier = $identifier;
