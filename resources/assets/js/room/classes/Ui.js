@@ -65,6 +65,7 @@ class Ui {
 
         // show Battleplan name
         $("#battleplan_name").val(this.app.battleplan.name);
+        $("#battleplan_notes").val(this.app.battleplan.notes);
         $("#sizePicker").val(this.app.lineSize);
     }
 
@@ -219,5 +220,5 @@ class Ui {
 }
 export {
     Ui as
-    default
+        default
 }

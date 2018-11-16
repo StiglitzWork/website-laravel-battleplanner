@@ -18,10 +18,10 @@ class BattlefloorController extends Controller
         // Declarations
         $draws = [];
         // dd($request->draws);
-        $draws = $request->draws;
+        // $draws = $request->draws;
         // dd($draws);
         // Create each new draw
-        foreach ($draws as $key => $draw) {
+        foreach ($request->draws as $key => $draw) {
             // Create the specific draw type
             $subDraw;
             switch ($draw["drawable_type"]) {

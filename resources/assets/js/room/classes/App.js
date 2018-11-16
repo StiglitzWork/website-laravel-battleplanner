@@ -87,7 +87,7 @@ class App {
     changeColor(newColor) {
         this.color = newColor
     }
-    
+
     /**************************
         Battleplan Methods
     **************************/
@@ -213,7 +213,6 @@ class App {
     pushServer() {
 
         // Var declarations
-        this.acquisitionLock = false;
         this.battleplan.draws_transit = [];
         this.battleplan.draws_transit = this.battleplan.acquireUnsavedDraws();
 
@@ -229,10 +228,13 @@ class App {
                     "draws": JSON.parse(JSON.stringify(this.battleplan.draws_transit))
                 },
                 success: function () {
+                    this.battleplan.draws_transit = [];
+                    this.acquisitionLock = false;
                     this.ui.overlayUpdate = true;
                     this.ui.update();
                 }.bind(this),
                 error: function (result) {
+                    this.acquisitionLock = false;
                     console.log(result);
                 }
             });
@@ -291,8 +293,8 @@ class App {
         this.ui.update();
     }
 
-    changeSize(newSize){
-        this.lineSize = newSize;        
+    changeSize(newSize) {
+        this.lineSize = newSize;
     }
     /**************************
           Floor Methods
@@ -392,7 +394,7 @@ class App {
         ev.preventDefault();
         var src = ev.dataTransfer.getData("src");
 
-        this.toolIcon.actionDrop(coordinates,src);
+        this.toolIcon.actionDrop(coordinates, src);
 
         for (const key in this.buttonEvents) {
             if (this.buttonEvents[key].active && this.buttonEvents[key].tool) this.buttonEvents[key].tool.actionDrop();
@@ -469,5 +471,5 @@ class App {
 }
 export {
     App as
-    default
+        default
 }

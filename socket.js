@@ -9,7 +9,7 @@ redis.subscribe('BattlefloorDraw', function(err, count) {});
 redis.subscribe('ChangeOperatorSlot', function(err, count) {});
 
 redis.on('message', function(channel, message) {
-    console.log('Message Received: ' + message);
+    // console.log('Message Received: ' + message);
     message = JSON.parse(message);
     io.emit(channel + '.' + message.data.identifier + ':' + message.event, message.data);
 });
