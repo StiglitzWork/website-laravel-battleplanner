@@ -13,8 +13,8 @@ class ToolIcon extends Tool {
         // Super Class constructor call
         super(app);
         this.Draw = require('./Draw.js').default;
-        this.height = 40;
-        this.width = 40;
+        this.height = 25;
+        this.width = 25;
     }
 
     actionDrop(coordinates,src) {

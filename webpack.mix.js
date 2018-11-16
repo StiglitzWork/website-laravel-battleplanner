@@ -61,5 +61,6 @@ mix.copy('resources/assets/js/login/*', 'public/js/login')
 // Rooms
 mix.js('resources/assets/js/room/join.js', 'public/js/room/join.js')
     .js('resources/assets/js/room/index.js', 'public/js/room/index.js')
+    .js('resources/assets/js/room/sidebar.js', 'public/js/room/sidebar.js')
     .js('resources/assets/js/room/show.js', 'public/js/room/show.bundle.js')
     .copy('resources/assets/sass/room/*', 'public/css/room');

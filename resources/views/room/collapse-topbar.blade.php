@@ -94,9 +94,10 @@
                 @endif
             </div>
 
-            <div class="col-md-3 col-sm-12 mt-2" id="operatorSlotList">
-                <button type="button" name="button" class="btn btn-primary col-6" onclick="app.engine.changeTool(app.engine.toolLine)"><i class="fas fa-paint-brush"></i></button>
-                <button type="button" name="button" class="btn btn-primary col-6" onclick="app.engine.changeTool(app.engine.toolSquare)"><i class="fas fa-square"></i></button>    
+            <div class="col-md-3 col-sm-12 mt-2" id="">
+                <button type="button" name="button" class="btn btn-warning col-4" onclick="app.engine.changeTool(app.engine.toolLine)"><i class="fas fa-paint-brush"></i></button>
+                <button type="button" name="button" class="btn btn-info col-4" onclick="app.engine.changeTool(app.engine.toolSquare)"><i class="fas fa-square"></i></button>    
+                <button type="button" name="button" class="btn btn-danger col-4" onclick="app.engine.changeTool(app.engine.toolErase)"><i class="fas fa-eraser"></i></button>    
             </div>
 
             <div class="col-md-3 col-sm-12 text-center">

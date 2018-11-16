@@ -185,7 +185,9 @@ class Ui {
     updateSlots() {
         var newDom = "";
         for (var i = 0; i < this.app.battleplan.slots.length; i++) {
-            newDom += this.app.battleplan.slots[i].generateDom(this.app.user_id == this.app.battleplan.owner);
+            newDom += "<div class=\"row\">";
+                newDom += this.app.battleplan.slots[i].generateDom(this.app.user_id == this.app.battleplan.owner);
+            newDom += "</div>";
         }
         $("#operatorSlotList").html(newDom);
     }

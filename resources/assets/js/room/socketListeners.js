@@ -10,6 +10,11 @@ function init(LISTEN_SOCKET,ROOM_CONN_STRING,app){
     });
 
     //listen for someone elses draws
+    LISTEN_SOCKET.on(`BattlefloorDelete.${ROOM_CONN_STRING}:App\\Events\\Battlefloor\\DeleteDraws`, function(message){
+        app.serverDelete(message);
+    });
+
+    //listen for someone elses draws
     LISTEN_SOCKET.on(`ChangeOperatorSlot.${ROOM_CONN_STRING}:App\\Events\\Battleplan\\ChangeOperatorSlot`, function(message){
         app.changeOperatorSlotDom(message.operatorSlot.id,message.operator);
     });

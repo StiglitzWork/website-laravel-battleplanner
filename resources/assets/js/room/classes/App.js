@@ -19,13 +19,15 @@ class App {
         this.ToolMove = require('./ToolMove.js').default; // useable tool
         this.ToolZoom = require('./ToolZoom.js').default; // useable tool
         this.ToolIcon = require('./ToolIcon.js').default; // useable tool
+        this.ToolErase = require('./ToolErase.js').default; // useable tool
         this.Ui = require('./Ui.js').default;
 
         // Settings
         this.acquisitionTime = 200; // ms oc collection before sending new draws to the server (forced ping to avoid DOS)
 
         // Varable declarations
-        this.acquisitionLock = false;
+        this.acquisitionLockCreate = false;
+        this.acquisitionLockDelete = false;
         this.color = "#e66465"; //draw color
         this.lineSize = 3;
         this.conn_string = conn_string
@@ -53,7 +55,6 @@ class App {
             },
         }
 
-
         this.init();
 
     }
@@ -68,6 +69,7 @@ class App {
         this.toolMove = new this.ToolMove(this);
         this.toolZoom = new this.ToolZoom(this);
         this.toolIcon = new this.ToolIcon(this);
+        this.toolErase = new this.ToolErase(this);
 
         // Set defaults
         this.buttonEvents.lmb.tool = this.toolLine
@@ -210,7 +212,7 @@ class App {
     }
 
     // Push changes to the server to propagate to others on the socket + add them to the DB
-    pushServer() {
+    pushServerCreate() {
 
         // Var declarations
         this.battleplan.draws_transit = [];
@@ -229,25 +231,68 @@ class App {
                 },
                 success: function () {
                     this.battleplan.draws_transit = [];
-                    this.acquisitionLock = false;
+                    this.acquisitionLockCreate = false;
                     this.ui.overlayUpdate = true;
                     this.ui.update();
                 }.bind(this),
                 error: function (result) {
-                    this.acquisitionLock = false;
+                    this.acquisitionLockCreate = false;
                     console.log(result);
                 }
             });
+        } else{
+            this.acquisitionLockCreate = false;
         }
 
+    }
+
+    pushServerDelete() {
+
+        // Var declarations
+        this.battleplan.deletes_transit = [];
+        this.battleplan.deletes_transit = this.battleplan.acquireUnsavedDeletes();
+
+        // Don't waste API call is empty
+        if (this.battleplan.deletes_transit.length > 0) {
+            // Push to server API
+            $.ajax({
+                method: "POST",
+                url: "/battlefloor/deleteDraw",
+                data: {
+                    conn_string: this.conn_string,
+                    userId: this.user_id,
+                    "draws": JSON.parse(JSON.stringify(this.battleplan.deletes_transit))
+                },
+                success: function () {
+                    this.battleplan.deletes_transit = [];
+                    this.acquisitionLockDelete = false;
+                    this.ui.overlayUpdate = true;
+                    this.ui.update();
+                }.bind(this),
+                error: function (result) {
+                    this.acquisitionLockDelete = false;
+                    console.log(result);
+                }
+            });
+        } else{
+            this.acquisitionLockDelete = false;
+        }
     }
 
     // Tell the server to start the push timer
     logPush() {
         // Push new lines to server
-        if (!this.acquisitionLock) {
-            this.acquisitionLock = true;
-            setTimeout(this.pushServer.bind(this), this.acquisitionTime);
+        if (!this.acquisitionLockCreate) {
+            this.acquisitionLockCreate = true;
+            setTimeout(this.pushServerCreate.bind(this), this.acquisitionTime);
+        }
+    }
+
+    logDelete() {
+        // Push new lines to server
+        if (!this.acquisitionLockDelete) {
+            this.acquisitionLockDelete = true;
+            setTimeout(this.pushServerDelete.bind(this), this.acquisitionTime);
         }
     }
 
@@ -261,7 +306,15 @@ class App {
         }
         this.ui.overlayUpdate = true;
         this.ui.update();
+    }
 
+    serverDelete(result){
+        for (var i = 0; i < result.draws.length; i++) {
+            var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
+            battlefloor.serverDelete(result.draws[i]);
+        }
+        this.ui.overlayUpdate = true;
+        this.ui.update();
     }
 
     // Tell the server to change the operator in a given slot
@@ -316,7 +369,9 @@ class App {
           Floor Methods
     **************************/
 
-    changeTool(tool) {
+    changeTool(tool, seletor) {
+        $(".toolSelector").removeClass("active");
+        $(seletor).addClass("active");
         this.buttonEvents.lmb.tool = tool;
     }
 

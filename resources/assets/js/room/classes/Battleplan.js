@@ -148,7 +148,18 @@ class Battleplan extends Helpers {
 			this.battlefloors[i].draws_unpushed = [];
 		}
 		return draws_transit;
-	}
+  }
+  
+  
+  acquireUnsavedDeletes(){
+		var deletes_transit = [];
+		// Acquire the drawings that have not been saved
+		for (var i = 0; i < this.battlefloors.length; i++) {
+			deletes_transit = deletes_transit.concat(this.battlefloors[i].draws_deleted);
+			this.battlefloors[i].draws_deleted = [];
+		}
+		return deletes_transit;
+  }
 
 }
 export {
