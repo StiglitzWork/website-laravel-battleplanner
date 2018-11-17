@@ -58,15 +58,6 @@ class Battlefloor extends Helpers {
         }
 	}
 
-    // removeLocalDraw(draw){
-    //     var index = this.draws.indexOf(draw);
-    //     if(index > 0){
-    //         this.draws.splice(index, 1);
-    //     }
-
-    //     index = this.unpushed_draws.indexOf(draw);
-    // }
-
     serverDraw(draw){
       draw = Object.assign(new this.Draw, draw);
       draw.init();

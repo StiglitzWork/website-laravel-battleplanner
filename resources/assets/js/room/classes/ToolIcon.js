@@ -13,8 +13,6 @@ class ToolIcon extends Tool {
         // Super Class constructor call
         super(app);
         this.Draw = require('./Draw.js').default;
-        this.height = 25;
-        this.width = 25;
     }
 
     actionDrop(coordinates,src) {
@@ -28,11 +26,11 @@ class ToolIcon extends Tool {
     icon(coordinates, src) {
         var start = JSON.parse(JSON.stringify(coordinates));
         var end = JSON.parse(JSON.stringify(coordinates));
-        start.x = coordinates.x - (this.width/2);
-        start.y = coordinates.y - (this.height/2);
+        start.x = coordinates.x - (this.app.iconSize/2);
+        start.y = coordinates.y - (this.app.iconSize/2);
 
-        end.x = coordinates.x + (this.width/2);
-        end.y = coordinates.y + (this.height/2);
+        end.x = coordinates.x + (this.app.iconSize/2);
+        end.y = coordinates.y + (this.app.iconSize/2);
 
 
         var draw = {

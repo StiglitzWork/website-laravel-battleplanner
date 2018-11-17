@@ -19,7 +19,8 @@ class Battleplan extends Helpers {
 
         // Variables
         this.battlefloor = null;
-    		this.draws_transit = [];
+        this.draws_transit = [];
+        // this.draws_limbo = [];//draws that have been sent for saving
 
     }
 
@@ -57,6 +58,12 @@ class Battleplan extends Helpers {
         return this.slots.filter(slot => this._objectIdEquals(slot,id))[0];
     }
 
+    /**************************
+		  Battlefloor Methods
+	  **************************/
+    getBattlefloor(id){
+      return this.battlefloors.filter(battlefloor => this._objectIdEquals(battlefloor,id))[0];
+    }
     /**************************
         Floor Methods
     **************************/
@@ -144,7 +151,8 @@ class Battleplan extends Helpers {
 		var draws_transit = [];
 		// Acquire the drawings that have not been saved
 		for (var i = 0; i < this.battlefloors.length; i++) {
-			draws_transit = draws_transit.concat(this.battlefloors[i].draws_unpushed);
+      draws_transit = draws_transit.concat(this.battlefloors[i].draws_unpushed);
+      // this.battlefloors[i].draws = this.battlefloors[i].draws.concat(draws_transit);
 			this.battlefloors[i].draws_unpushed = [];
 		}
 		return draws_transit;

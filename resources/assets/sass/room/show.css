@@ -7,7 +7,8 @@
 }
 
 .cursor-click:hover{
-    border-style: solid;
+    /* border-style: solid; */
+    background-color: lightgray; 
 }
  #EngineContainer {
     margin: 0px;
@@ -162,4 +163,15 @@ label {
     }
     .toolSelector.active{
         background-color: green !important; 
+    }
+
+    #iconSizePicker,#lineSizePicker{
+        line-height: 1px;
+        max-height: 20px;
+        margin-top: 17px;
+    }
+
+    /* Map loading */
+    .map-name{
+        top:-10px;
     }

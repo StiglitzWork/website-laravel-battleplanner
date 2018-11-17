@@ -30,6 +30,7 @@ class App {
         this.acquisitionLockDelete = false;
         this.color = "#e66465"; //draw color
         this.lineSize = 3;
+        this.iconSize = 25;
         this.conn_string = conn_string
         this.viewports = viewports
         this.user_id = user_id;
@@ -171,6 +172,7 @@ class App {
             },
             success: function () {
                 alert("Saved!");
+                location.reload();
             },
             error: function (result) {
                 console.log(result);
@@ -218,8 +220,9 @@ class App {
         this.acquisitionLockCreate = false;
         this.battleplan.draws_transit = [];
         this.battleplan.draws_transit = this.battleplan.acquireUnsavedDraws();
+        // this.battleplan.draws_limbo = this.battleplan.draws_limbo.concat(this.battleplan.draws_transit);
 
-        // Don't waste API call is empty
+        // Don't waste API call if empty
         if (this.battleplan.draws_transit.length > 0) {
             // Push to server API
             $.ajax({
@@ -230,8 +233,21 @@ class App {
                     userId: this.user_id,
                     "draws": JSON.parse(JSON.stringify(this.battleplan.draws_transit))
                 },
-                success: function () {
+                success: function (result) {
                     this.battleplan.draws_transit = [];
+
+                    // for (let index = 0; index < result.length; index++) {
+                    //     const element = result[index];
+                    //     // remove limbos
+                    //     this.battleplan.draws_limbo = this.battleplan.draws_limbo.filter(function(draw){
+                    //         var found = draw.originX == element.originX && draw.originY == element.originY;
+                    //         if(found){
+                    //             var battlefloor = this.battleplan.getBattlefloor(element.battlefloor_id);
+                    //             battlefloor.serverDraw(element);
+                    //         }
+                    //     }.bind(this))
+                    // }
+                    
                     this.ui.overlayUpdate = true;
                     this.ui.update();
                 }.bind(this),
@@ -249,6 +265,7 @@ class App {
     pushServerDelete() {
 
         // Var declarations
+        this.acquisitionLockDelete = false;
         this.battleplan.deletes_transit = [];
         this.battleplan.deletes_transit = this.battleplan.acquireUnsavedDeletes();
 
@@ -265,7 +282,6 @@ class App {
                 },
                 success: function () {
                     this.battleplan.deletes_transit = [];
-                    this.acquisitionLockDelete = false;
                     this.ui.overlayUpdate = true;
                     this.ui.update();
                 }.bind(this),
@@ -298,19 +314,21 @@ class App {
 
     // Draw the object that the server has propagated to you
     serverDraw(result) {
-        // Draw new draws from server
-        for (var i = 0; i < result.draws.length; i++) {
-            var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
-            battlefloor.serverDraw(result.draws[i]);
-        }
-
+        // if(result.creator != this.user_id){
+            // Draw new draws from server if you did not create them
+            for (var i = 0; i < result.draws.length; i++) {
+                var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
+                battlefloor.serverDraw(result.draws[i]);
+            }
+        // }
+        
         // check your deleted transit draws and delete them from server
         for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
             var battlefloor = this.battleplan.battlefloors[i];
 
             for (let index = 0; index < battlefloor.draws_deleted.length; index++) {
                 const draw = battlefloor.draws_deleted[index];
-                var potentialIndex = battlefloor.draw.indexOf(draw);
+                var potentialIndex = battlefloor.draws.indexOf(draw);
                 if(potentialIndex >= 0){
                     battlefloor.addDelete(draw)
                 }
@@ -360,8 +378,11 @@ class App {
         this.ui.update();
     }
 
-    changeSize(newSize) {
+    changeLineSize(newSize) {
         this.lineSize = newSize;
+    }
+    changeIconSize(newSize) {
+        this.iconSize = newSize;
     }
     /**************************
           Floor Methods

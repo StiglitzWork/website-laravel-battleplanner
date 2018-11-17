@@ -29,6 +29,7 @@
 @endif
 <script type="text/javascript">
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
         $('#battleplan_load_table').DataTable();
     });
 

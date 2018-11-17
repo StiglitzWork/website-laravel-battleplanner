@@ -13,22 +13,29 @@
 <div class="row">
         <div class="col-6">
                 
-            <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(-1)">Floor
+            <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(-1)" data-toggle="tooltip" data-placement="top" title="Keybind: Up arrow">Floor
                 &darr;</button>
         </div>
         <div class="col-6">
-                <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(1)">Floor
+                <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(1)" data-toggle="tooltip" data-placement="top" title="Keybind: Down arrow">Floor
                     &uarr;</button>
         </div>
 </div>
 
 <div class="row">
-    <div class="col-6">
-        <label for="color">color</label><br>
-        <input type="color" id='colorPicker' name="color" value="#e66465" onChange="app.engine.changeColor(this.value)" />
+    <div class="col-12">
+        <input type="color" class="col-12" id='colorPicker' name="color" value="#e66465" onChange="app.engine.changeColor(this.value)" />
     </div>
-    <div class="col-6">
-        <label for="color">Pen Size</label>
-        <input type="number" id='sizePicker' name="size" onChange="app.engine.changeSize(this.value)" />
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-4">Pen size</div>
+            <input type="number" id='lineSizePicker'  class="col-8" name="size" onChange="app.engine.changeLineSize(this.value)" />
+        </div>
+        <div class="row">
+                <div class="col-4">Icon size</div>
+                <input type="number" id='iconSizePicker'  class="col-8" name="size" onChange="app.engine.changeIconSize(this.value)" />
+        </div>
     </div>
 </div>

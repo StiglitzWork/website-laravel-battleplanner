@@ -93,30 +93,21 @@ class BattlefloorController extends Controller
         foreach ($request->draws as $key => $draw) {
             // dd($request->draws);
             // Draw was never saved
-            if(!$draw["id"]){
-                continue;
+            if(isset($draw["id"])){
+                $type = $draw["drawable_type"];
+
+                // Make draw morph relationship
+                $foundDraw = Draw::find($draw["id"]);
+                if ($foundDraw) {
+                    $subObject = $foundDraw->drawable();
+                    
+                    // Add to the response object
+                    $deletedDraws[] = $foundDraw->withMorph();
+
+                    $subObject->delete();
+                    $foundDraw->delete();
+                }
             }
-
-            $type = $draw["drawable_type"];
-
-            // Make draw morph relationship
-            $foundDraw = Draw::find($draw["id"]);
-            if ($foundDraw) {
-                $subObject = $foundDraw->drawable();
-                
-                // Add to the response object
-                $deletedDraws[] = $foundDraw->withMorph();
-
-                $subObject->delete();
-                $foundDraw->delete();
-            }
-
-            // try {
-            //     $subObject = $foundDraw->drawable();
-            // } catch (\Throwable $th) {
-            //     dd("Failed!",$draw,$foundDraw);
-            // }
-            
         }
         
         // Fire event on listeners for socket.io

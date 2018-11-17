@@ -69,7 +69,8 @@ class Ui {
         // show Battleplan name
         $("#battleplan_name").val(this.app.battleplan.name);
         $("#battleplan_notes").val(this.app.battleplan.notes);
-        $("#sizePicker").val(this.app.lineSize);
+        $("#lineSizePicker").val(this.app.lineSize);
+        $("#iconSizePicker").val(this.app.iconSize);
     }
 
     initBackground() {
@@ -175,6 +176,15 @@ class Ui {
                 myDraw.draw(ctx, this);
             }
         }
+
+        // Redraw limbo ones
+        // for (var i = 0; i < this.app.battleplan.draws_limbo.length; i++) {
+        //     var myDraw = this.app.battleplan.draws_limbo[i];
+        //     // Transit objects are not associated to a floor, so we must manually check if we are on the correct one
+        //     if (this.app.battleplan.battlefloor.id == myDraw.battlefloor_id) {
+        //         myDraw.draw(ctx, this);
+        //     }
+        // }
 
         // Draw temporaried of tools
         for (const key in this.app.buttonEvents) {
