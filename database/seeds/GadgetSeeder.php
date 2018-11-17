@@ -14,7 +14,7 @@ class GadgetSeeder extends Seeder
     {
       $gadgetArray = [
         /*Clash*/['name'=> "Clash", 'icon'=> "/media/tools/unique/Clash.png", 'prime'=> true, 'general'=> false],
-        /*Maverick*/['name'=> "Clash", 'icon'=> "/media/tools/unique/Clash.png", 'prime'=> true, 'general'=> false],
+        /*Maverick*/['name'=> "Maverick", 'icon'=> "/media/tools/unique/Maverick.png", 'prime'=> true, 'general'=> false],
         /*Maestro*/['name'=> "Maestro", 'icon'=> "/media/tools/unique/Maestro.png", 'prime'=> true, 'general'=> false],
         /*Alibi*/['name'=> "Alibi", 'icon'=> "/media/tools/unique/Alibi.png", 'prime'=> true, 'general'=> false],
         /*Lion*/['name'=> "Lion", 'icon'=> "/media/tools/unique/Lion.png", 'prime'=> true, 'general'=> false],
@@ -67,14 +67,14 @@ class GadgetSeeder extends Seeder
         /*Secondary: Smoke*/['name'=> "Smoke", 'icon'=> "/media/tools/secondary/Smoke.png", 'prime'=> false, 'general'=> false],
         /*Secondary: Stun*/['name'=> "Stun", 'icon'=> "/media/tools/secondary/Stun.png", 'prime'=> false, 'general'=> false],
 
-        /*General: 1*/['name'=> "1", 'icon'=> "/media/tools/secondary/1.png", 'prime'=> false, 'general'=> true],
-        /*General: 2*/['name'=> "2", 'icon'=> "/media/tools/secondary/2.png", 'prime'=> false, 'general'=> true],
-        /*General: 3*/['name'=> "3", 'icon'=> "/media/tools/secondary/3.png", 'prime'=> false, 'general'=> true],
-        /*General: Barricade*/['name'=> "Barricade", 'icon'=> "/media/tools/secondary/Barricade.png", 'prime'=> false, 'general'=> true],
-        /*General: Drone*/['name'=> "Drone", 'icon'=> "/media/tools/secondary/Drone.png", 'prime'=> false, 'general'=> true],
-        /*General: Obj*/['name'=> "Obj", 'icon'=> "/media/tools/secondary/Obj.png", 'prime'=> false, 'general'=> true],
-        /*General: Rappel*/['name'=> "Rappel", 'icon'=> "/media/tools/secondary/Rappel.png", 'prime'=> false, 'general'=> true],
-        /*General: Reinforcement*/['name'=> "Reinforcement", 'icon'=> "/media/tools/secondary/Reinforcement.png", 'prime'=> false, 'general'=> true],
+        /*General: 1*/['name'=> "1", 'icon'=> "/media/tools/general/1.png", 'prime'=> false, 'general'=> true],
+        /*General: 2*/['name'=> "2", 'icon'=> "/media/tools/general/2.png", 'prime'=> false, 'general'=> true],
+        /*General: 3*/['name'=> "3", 'icon'=> "/media/tools/general/3.png", 'prime'=> false, 'general'=> true],
+        /*General: Barricade*/['name'=> "Barricade", 'icon'=> "/media/tools/general/Barricade.png", 'prime'=> false, 'general'=> true],
+        /*General: Drone*/['name'=> "Drone", 'icon'=> "/media/tools/general/Drone.png", 'prime'=> false, 'general'=> true],
+        /*General: Obj*/['name'=> "Obj", 'icon'=> "/media/tools/general/Obj.png", 'prime'=> false, 'general'=> true],
+        /*General: Rappel*/['name'=> "Rappel", 'icon'=> "/media/tools/general/Rappel.png", 'prime'=> false, 'general'=> true],
+        /*General: Reinforcement*/['name'=> "Reinforcement", 'icon'=> "/media/tools/general/Reinforcement.png", 'prime'=> false, 'general'=> true],
       ];
 
       Gadget::insert($gadgetArray);
