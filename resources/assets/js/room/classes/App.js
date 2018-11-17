@@ -215,6 +215,7 @@ class App {
     pushServerCreate() {
 
         // Var declarations
+        this.acquisitionLockCreate = false;
         this.battleplan.draws_transit = [];
         this.battleplan.draws_transit = this.battleplan.acquireUnsavedDraws();
 
@@ -231,7 +232,6 @@ class App {
                 },
                 success: function () {
                     this.battleplan.draws_transit = [];
-                    this.acquisitionLockCreate = false;
                     this.ui.overlayUpdate = true;
                     this.ui.update();
                 }.bind(this),
@@ -298,12 +298,26 @@ class App {
 
     // Draw the object that the server has propagated to you
     serverDraw(result) {
+        // Draw new draws from server
         for (var i = 0; i < result.draws.length; i++) {
-
             var battlefloor = this.battleplan.getFloor(result.draws[i].battlefloor_id);
-
             battlefloor.serverDraw(result.draws[i]);
         }
+
+        // check your deleted transit draws and delete them from server
+        for (var i = 0; i < this.battleplan.battlefloors.length; i++) {
+            var battlefloor = this.battleplan.battlefloors[i];
+
+            for (let index = 0; index < battlefloor.draws_deleted.length; index++) {
+                const draw = battlefloor.draws_deleted[index];
+                var potentialIndex = battlefloor.draw.indexOf(draw);
+                if(potentialIndex >= 0){
+                    battlefloor.addDelete(draw)
+                }
+            }
+            
+        }
+
         this.ui.overlayUpdate = true;
         this.ui.update();
     }

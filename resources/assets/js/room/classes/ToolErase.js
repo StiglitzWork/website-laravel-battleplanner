@@ -86,7 +86,7 @@ class ToolErase extends Tool {
             const element = drawsToDelete[index];
             this.app.battleplan.battlefloor.addDelete(element);
         }
-
+        this.app.ui.overlayUpdate = true;
         this.app.logDelete();
     }
     
