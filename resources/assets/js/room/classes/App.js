@@ -138,7 +138,7 @@ class App {
                     "battleplanId": battleplanId
                 },
                 success: function () {
-                    alert("Successfully deleted! Refresh page to update 'load' list");
+                    alert("Successfully deleted! Refresh page to refresh the list");
                 },
                 error: function (result) {
                     console.log(result);
