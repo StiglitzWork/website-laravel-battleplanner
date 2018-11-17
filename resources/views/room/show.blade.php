@@ -110,7 +110,9 @@
 
                 {{-- Controls --}}
                 <li data-toggle="collapse" class="collapsed active">
-                    <a href="#" data-toggle="modal" data-target="#helpModal"><i class="fas fa-image"></i> Help</a>
+                    <div style="height:100%;width:100%;" data-toggle="modal" data-target="#helpModal">
+                            <a href="#"><i class="fas fa-image"></i> Help</a>
+                    </div>
                 </li>
     
             </ul>
