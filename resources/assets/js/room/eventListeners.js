@@ -17,7 +17,7 @@ function init(VIEWPORTS, app){
     /**************************
         Scroll event listener
     **************************/
-    $("#" + VIEWPORTS.VIEWPORT_ID).on('mousewheel', function (ev) {
+    $("#" + VIEWPORTS.VIEWPORT_ID).on('wheel', function (ev) {
         ev.preventDefault();
         app.canvasScroll(ev);
     });

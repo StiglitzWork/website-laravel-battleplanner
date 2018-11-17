@@ -464,8 +464,9 @@ class App {
         var coordinates = this._calculateOffset(ev.offsetX, ev.offsetY);
 
         var direction = 1;
-        if (ev.originalEvent.wheelDelta / 120 < 0) {
-            direction = -direction;
+        // if (ev.originalEvent.wheelDelta / 120 < 0) {
+        if (ev.originalEvent.deltaY) {
+            direction = -direction * Math.sign(ev.originalEvent.deltaY);
         }
 
         this.toolZoom.actionScroll(direction, coordinates);
