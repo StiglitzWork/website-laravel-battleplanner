@@ -14,11 +14,7 @@
 <script type="text/javascript">
     const ROOM_CONN_STRING = "{{$room->connection_string}}";
     const LISTEN_SOCKET = io('{{$listenSocket}}');
-    const USER_ID = {
-        {
-            Auth::User() - > id
-        }
-    }
+    const USER_ID = {{Auth::User()->id}}
 </script>
 
 {{-- Main app --}}
@@ -78,6 +74,7 @@
                 </li>
 
                 <ul class="sub-menu collapse" id="info" style="">
+                  @include('room.sidebar-info')
                 </ul>
             </div>
 
