@@ -12,12 +12,12 @@
 @endif
 <div class="row">
         <div class="col-6">
-                
-            <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(-1)" data-toggle="tooltip" data-placement="top" title="Keybind: Up arrow">Floor
+
+            <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(-1)" data-toggle="tooltip" data-placement="top" title="Keybind: Down arrow">Floor
                 &darr;</button>
         </div>
         <div class="col-6">
-                <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(1)" data-toggle="tooltip" data-placement="top" title="Keybind: Down arrow">Floor
+                <button type="button" name="button" class="btn btn-primary col-12" onclick="app.engine.changeFloor(1)" data-toggle="tooltip" data-placement="top" title="Keybind: Up arrow">Floor
                     &uarr;</button>
         </div>
 </div>
