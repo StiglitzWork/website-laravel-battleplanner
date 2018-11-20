@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row margin10">
     <div class="col-12">
         @if (Auth::user() == $room->Owner)
             @if ($room->battleplan && $room->battleplan->notes)
@@ -15,4 +15,3 @@
         @endif
     </div>
 </div>
-

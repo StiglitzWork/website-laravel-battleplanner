@@ -14,7 +14,11 @@
 <script type="text/javascript">
     const ROOM_CONN_STRING = "{{$room->connection_string}}";
     const LISTEN_SOCKET = io('{{$listenSocket}}');
-    const USER_ID = {{Auth::User()->id}}
+    const USER_ID = {
+        {
+            Auth::User() - > id
+        }
+    }
 </script>
 
 {{-- Main app --}}
@@ -23,17 +27,17 @@
 
 {{-- post init --}}
 @if (Auth::User()->id == $room->Owner->id && !$room->battleplan)
-    <script type="text/javascript">
-        $("#mapModal").modal("show")
-    </script>
+<script type="text/javascript">
+    $("#mapModal").modal("show")
+</script>
 @endif
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
         $('#battleplan_load_table').DataTable();
     });
 
-    function setEditingSlot(id){
+    function setEditingSlot(id) {
         $("#EditingOperatorSlot").val(id);
     }
 </script>
@@ -45,110 +49,106 @@
 <div class="row bg-dark" id="EngineContainer">
     <div id="viewport">
         <canvas id="background" class="fixed"></canvas>
-        <canvas id="overlay" class="fixed" onmouseleave="app.engine.canvasLeave(event)" onmouseenter="app.engine.canvasEnter(event)"
-            onmousemove="app.engine.canvasMove(event)"
-            onmousedown="app.engine.canvasDown(event)"
-            onmouseup="app.engine.canvasUp(event)"
-            onmousedown="app.engine.canvasDown(event)"
-            ondrop="app.engine.canvasDrop(event)" ondragover="app.engine.allowDrop(event)">
+        <canvas id="overlay" class="fixed" onmouseleave="app.engine.canvasLeave(event)" onmouseenter="app.engine.canvasEnter(event)" onmousemove="app.engine.canvasMove(event)" onmousedown="app.engine.canvasDown(event)" onmouseup="app.engine.canvasUp(event)"
+          onmousedown="app.engine.canvasDown(event)" ondrop="app.engine.canvasDrop(event)" ondragover="app.engine.allowDrop(event)">
         </canvas>
     </div>
 </div>
 
 {{-- Sidebar --}}
 <div class="toggletag toggled"><i class="fas fa-arrow-left fa-lg"></i></div>
-    <div class="nav-side-menu toggled">
-        <div class="brand">Options</div>
+<div class="nav-side-menu toggled">
+    <div class="brand">Options</div>
 
-        <div class="menu-list">
+    <div class="menu-list">
 
-            <ul id="menu-content" class="menu-content collapse out">
-                
+        <ul id="menu-content" class="menu-content collapse out">
+
+            <div class="row no-margin">
                 {{-- Information --}}
-                <li data-toggle="collapse" data-target="#info" class="collapsed active">
+                <li data-toggle="collapse" data-target="#info" class="active collapsed col-6" aria-expanded="false">
                     <a href="#"><i class="fas fa-info-circle"></i> Info </a>
                 </li>
 
-                <ul class="sub-menu collapse" id="info">
-                    @include('room.sidebar-info')
-                </ul>
-
-                {{-- Tools --}}
-                <li data-toggle="collapse" data-target="#tools" class="collapsed active">
-                    <a href="#"> <i class="fas fa-sliders-h"></i> Tools</a>
+                {{-- Help --}}
+                <li data-toggle="collapse" class="collapsed active col-6">
+                    <div style="height:100%;width:100%;" data-toggle="modal" data-target="#helpModal">
+                        <a href="#"><i class="fas fa-list"></i> Help</a>
+                    </div>
                 </li>
 
-                <ul class="sub-menu collapse" id="tools">
-                    @include('room.sidebar-tools')
+                <ul class="sub-menu collapse" id="info" style="">
                 </ul>
+            </div>
+
+            <div class="row no-margin">
+                {{-- Notes --}}
+                <li data-toggle="collapse" data-target="#notes" class="active collapsed col-6" aria-expanded="false">
+                    <a href="#"><i class="fas fa-edit"></i> Notes</a>
+                </li>
 
                 {{-- Controls --}}
-                <li data-toggle="collapse" data-target="#controls" class="collapsed active">
+                <li data-toggle="collapse" data-target="#controls" class="active col-6 collapsed" aria-expanded="false">
                     <a href="#"> <i class="fas fa-sliders-h"></i> Controls</a>
                 </li>
 
-                <ul class="sub-menu collapse" id="controls">
-                        @include('room.sidebar-controls')
+                <ul class="sub-menu collapse" id="notes" style="">
+                    @include('room.sidebar-notes')
                 </ul>
+                <ul class="sub-menu collapse" id="controls" style="">
+                    @include('room.sidebar-controls')
+                </ul>
+            </div>
 
-                {{-- notes --}}
-                <li data-toggle="collapse" data-target="#notes" class="collapsed active">
-                    <a href="#"><i class="fas fa-pen"></i> Notes</a>
+            <div class="row no-margin">
+                {{-- Tools --}}
+                <li data-toggle="collapse" data-target="#tools" class="active collapsed col-6" aria-expanded="false">
+                    <a href="#"> <i class="fas fa-wrench"></i> Tools</a>
                 </li>
 
-                <ul class="sub-menu collapse" id="notes">
-                        @include('room.sidebar-notes')
-                </ul>
-
                 {{-- Icons --}}
-                <li data-toggle="collapse" data-target="#icons" class="collapsed active">
+                <li data-toggle="collapse" data-target="#icons" class="active col-6 collapsed" aria-expanded="false">
                     <a href="#"><i class="fas fa-image"></i> Icons</a>
                 </li>
 
-                <ul class="sub-menu collapse" id="icons">
-                        @include('room.sidebar-icons')
+                <ul class="sub-menu collapse" id="tools" style="">
+                    @include('room.sidebar-tools')
                 </ul>
 
-                {{-- Controls --}}
-                <li data-toggle="collapse" class="collapsed active">
-                    <div style="height:100%;width:100%;" data-toggle="modal" data-target="#helpModal">
-                            <a href="#"><i class="fas fa-image"></i> Help</a>
-                    </div>
-                </li>
-    
-            </ul>
-        </div>
+                <ul class="sub-menu col-12 collapse" id="icons" style="">
+                    @include('room.sidebar-icons')
+                </ul>
+            </div>
+
+        </ul>
     </div>
+</div>
 </div>
 
 <div class="operatorContainer float-right">
-        <div class="col-md-12 col-sm-12" id="operatorSlotList">
-                @if ($room->battleplan != null)
-                    @foreach ($room->battleplan->slots as $key => $slot)
-                        <div class="row">
-                            @if ($room->Owner == Auth::User())
-                                @if (!$slot->operator || !$slot->operator->exists)
-                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png"
-                                        class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))"
-                                        style="border-color: black" />
-                                @else
-                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}"
-                                        class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))"
-                                        style="border-color: #{{$slot->operator->colour}}" />
-                                @endif
-                            @else
-                                @if (!$slot->operator || !$slot->operator->exists)
-                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png"
-                                        class="op-icon operator-slot operator-border" style="border-color: black" />
-                                @else
-                                    <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}"
-                                        class="op-icon operator-slot operator-border" style="border-color: #{{$slot->operator->colour}}" />
-                                @endif
-                            @endif
-                        </div>
-                    @endforeach
-                @endif
-            </div>
+    <div class="col-md-12 col-sm-12" id="operatorSlotList">
+        @if ($room->battleplan != null)
+        @foreach ($room->battleplan->slots as $key => $slot)
+        <div class="row">
+            @if ($room->Owner == Auth::User())
+            @if (!$slot->operator || !$slot->operator->exists)
+            <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))"
+              style="border-color: black" />
+            @else
+            <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}" class="op-icon operator-slot operator-border" data-toggle="modal" data-target="#opModal" onclick="setEditingOperatorSlot($(this).data('id'))"
+              style="border-color: #{{$slot->operator->colour}}" />
+            @endif
+            @else
+            @if (!$slot->operator || !$slot->operator->exists)
+            <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="/media/ops/empty.png" class="op-icon operator-slot operator-border" style="border-color: black" />
+            @else
+            <input type="image" id="operatorSlot-{{$slot->id}}" data-id="{{$slot->id}}" src="{{$slot->operator->icon}}" class="op-icon operator-slot operator-border" style="border-color: #{{$slot->operator->colour}}" />
+            @endif
+            @endif
+        </div>
+        @endforeach
+        @endif
+    </div>
 </div>
 @endsection
 
@@ -168,12 +168,10 @@
                 {{-- Pillbox --}}
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new"
-                            aria-selected="true">New Map</a>
+                        <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true">New Map</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="load-tab" data-toggle="tab" href="#load" role="tab" aria-controls="load"
-                            aria-selected="false">Load Saved</a>
+                        <a class="nav-link" id="load-tab" data-toggle="tab" href="#load" role="tab" aria-controls="load" aria-selected="false">Load Saved</a>
                     </li>
                 </ul>
 
@@ -213,12 +211,10 @@
                 {{-- Pillbox --}}
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="atk-tab" data-toggle="tab" href="#atk" role="tab" aria-controls="atk"
-                            aria-selected="true">Attackers</a>
+                        <a class="nav-link active" id="atk-tab" data-toggle="tab" href="#atk" role="tab" aria-controls="atk" aria-selected="true">Attackers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#def" role="tab" aria-controls="def"
-                            aria-selected="false">Defenders</a>
+                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#def" role="tab" aria-controls="def" aria-selected="false">Defenders</a>
                     </li>
                 </ul>
 
@@ -257,18 +253,15 @@
                 {{-- Pillbox --}}
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="atk-tab" data-toggle="tab" href="#help_general" role="tab"
-                            aria-controls="atk" aria-selected="true">General</a>
+                        <a class="nav-link active" id="atk-tab" data-toggle="tab" href="#help_general" role="tab" aria-controls="atk" aria-selected="true">General</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#help_functions" role="tab"
-                            aria-controls="def" aria-selected="false">Functions</a>
+                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#help_functions" role="tab" aria-controls="def" aria-selected="false">Functions</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#help_features" role="tab"
-                            aria-controls="def" aria-selected="false">Features</a>
+                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#help_features" role="tab" aria-controls="def" aria-selected="false">Features</a>
                     </li>
                 </ul>
 
