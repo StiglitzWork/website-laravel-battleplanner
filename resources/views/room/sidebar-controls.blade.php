@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-6">
                 <button type="button" name="button" class="btn btn-info col-12" data-toggle="modal"
-                    data-target="#mapModal">Load</button>
+                    data-target="#mapModal">Load/New</button>
         </div>
         <div class="col-6">
                 <button type="button" name="button" class="btn btn-success col-12" onclick="app.engine.save()">Save</button>

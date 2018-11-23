@@ -7,7 +7,7 @@
   @foreach($maps as $map)
     @if($map->comp)
       <div class="col-6 cursor-click">
-        <a onclick="app.engine.createBattleplan({{$map->id}})" class="text-center">
+        <a onclick="app.engine.createBattleplan({{$map->id}})" class="text-center" data-dismiss="modal">
           <div class="container text-center map-container">
             <img src="{{$map->thumbsrc}}" class="map-thumb col-12">
             <div class="map-name stroke-text">
@@ -31,7 +31,7 @@
   @foreach($maps as $map)
     @if(!$map->comp)
       <div class="col-6 cursor-click">
-        <a onclick="app.engine.createBattleplan({{$map->id}})" class="text-center">
+        <a onclick="app.engine.createBattleplan({{$map->id}})" class="text-center" data-dismiss="modal">
           <div class="container text-center map-container">
             <img src="{{$map->thumbsrc}}" class="map-thumb col-12">
             <div class="map-name stroke-text">
