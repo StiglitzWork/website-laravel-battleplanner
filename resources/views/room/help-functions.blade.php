@@ -24,7 +24,7 @@
   How do I change floors?
 </h3>
 <p>
- Again, check out the <strong>Controls</strong> tab. (We're looking into making a key bind for simplicity)
+ Again, check out the <strong>Controls</strong> tab. You can also use the up and down arrow keys to change floors.
 </p>
 
 <h3>
