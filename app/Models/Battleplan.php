@@ -52,8 +52,16 @@ class Battleplan extends Model
         // $bp = Battleplan::where('id', $id)
         ->with("battlefloors")
         ->with("battlefloors.floor")
-        ->with("battlefloors.draws")
-        ->with("battlefloors.draws.drawable")
+
+        ->with(['battlefloors.draws' => function ($q) {
+                $q->notDeleted()->with("drawable");
+            }])
+        // ->with("battlefloors.draws.drawable")
+        
+        // ->with("battlefloors.draws")
+        // ->with("battlefloors.draws.drawable")
+
+
         ->with("slots")
         ->with("slots.operator")
         ->first();

@@ -32,7 +32,6 @@ class BattleplanController extends Controller
     public function update(Request $request){
 
       // Variable declaration
-
       $battleplan = Room::Connection($request->conn_string)->battleplan;
 
         // make sure the deleter is also the owner of the map

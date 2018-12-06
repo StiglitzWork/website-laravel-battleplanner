@@ -29,17 +29,29 @@ class Battlefloor extends Model
         return $this->hasMany('App\Models\Draw', 'battlefloor_id');
     }
 
+    // public function drawsNotDeleted()
+    // {
+    //     return $this->hasMany('App\Models\Draw', 'battlefloor_id')->where("draws.deleted", true);
+    // }
+
     /*****
       Public methods
     *****/
-
     public function saveValues()
     {
 
-    // Save the new lines
+        // Save the new lines
         foreach ($this->draws as $key => $draw) {
-            $draw->saved = true;
-            $draw->save();
+
+            // delete draws
+            if($draw->deleted){
+                $draw->drawable()->delete();
+                $draw->delete();
+            } else{
+                $draw->saved = true;
+                $draw->save();
+            }
+
         }
         $this->save();
     }
@@ -50,6 +62,10 @@ class Battlefloor extends Model
         foreach ($this->draws as $this->draws => $draw) {
             if (!$draw->saved) {
                 $draw->delete();
+            }
+
+            if ($draw->deleted) {
+                $draw->restore();
             }
         }
     }
