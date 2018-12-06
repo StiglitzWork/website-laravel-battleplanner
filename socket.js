@@ -15,6 +15,6 @@ redis.on('message', function(channel, message) {
     io.emit(channel + '.' + message.data.identifier + ':' + message.event, message.data);
 });
 
-http.listen(3000, function(){
+http.listen(3000, function() {
     console.log('Node server is live!');
 });
