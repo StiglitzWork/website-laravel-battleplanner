@@ -12,6 +12,10 @@
     margin-left: 0px;
 }
 
+.sidebar-btn {
+    min-width: 105px;
+}
+
 .no-pointer {
     cursor: default !important;
 }

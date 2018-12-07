@@ -30,7 +30,7 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <button type="button" class="btn btn-success col-12" onclick="app.engine.loadBattlePlan({{$battleplan->id}})">load</button>
+                                <button type="button" class="btn btn-success col-12" onclick="app.engine.loadBattlePlan({{$battleplan->id}})">Load</button>
                             </div>
                         </div>
                     </td>
