@@ -168,7 +168,8 @@ class App {
             data: {
                 conn_string: this.conn_string,
                 name: $("#battleplan_name").val(),
-                notes: $("#battleplan_notes").val()
+                notes: $("#battleplan_notes").val(),
+                public: this.battleplan.public
             },
             success: function () {
                 alert("Saved!");
@@ -381,8 +382,17 @@ class App {
     changeLineSize(newSize) {
         this.lineSize = newSize;
     }
+
     changeIconSize(newSize) {
         this.iconSize = newSize;
+    }
+
+    togglePublic(toggleTo){
+        if(toggleTo){
+            this.battleplan.public = 1;
+        } else{
+            this.battleplan.public = 0;
+        }
     }
     /**************************
           Floor Methods

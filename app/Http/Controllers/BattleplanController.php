@@ -42,7 +42,7 @@ class BattleplanController extends Controller
             ]);
         }
         
-        $battleplan->saveValues($request->name, $request->notes);
+        $battleplan->saveValues($request->name, $request->notes,  $request->public);
 
         // Respond
         return response()->json([

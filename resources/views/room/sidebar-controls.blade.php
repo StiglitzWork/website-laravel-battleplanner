@@ -6,7 +6,7 @@
                     data-target="#mapModal">Load/New</button>
         </div>
         <div class="col-6">
-                <button type="button" name="button" class="btn btn-success" onclick="app.engine.save()">Save</button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#save">Save</button>
         </div>
     </div>
 @endif

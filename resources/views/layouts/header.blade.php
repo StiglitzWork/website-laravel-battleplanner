@@ -18,18 +18,18 @@
             {{Auth::User()->username}}
           </a>
           <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href='#' onclick='logout()'>logout</a>
+              <a class="dropdown-item" href='#' onclick='logout()'>Logout</a>
           </div>
         </li>
       @endauth
 
       @guest
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="/login">login</a>
+          <a class="nav-link js-scroll-trigger" href="/login">Login</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="/register">register</a>
+          <a class="nav-link js-scroll-trigger" href="/register">Register</a>
         </li>
       @endguest
     </ul>

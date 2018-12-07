@@ -68,6 +68,12 @@ class Ui {
 
         // show Battleplan name
         $("#battleplan_name").val(this.app.battleplan.name);
+        $("#battleplan_name_display").val(this.app.battleplan.name);
+
+        if(this.app.battleplan.public == 1 ){
+            $("#battleplan_public").click();
+        }
+
         $("#battleplan_notes").val(this.app.battleplan.notes);
         $("#lineSizePicker").val(this.app.lineSize);
         $("#iconSizePicker").val(this.app.iconSize);

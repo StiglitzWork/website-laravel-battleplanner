@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Battleplan extends Model
 {
     protected $fillable = [
-        'name', 'description', 'owner', 'gametype_id', 'map_id', 'saved', 'notes'
+        'name', 'description', 'owner', 'gametype_id', 'map_id', 'saved', 'notes', "public"
     ];
 
 
@@ -49,23 +49,14 @@ class Battleplan extends Model
     public static function json($id)
     {
         return Battleplan::where('id', $id)
-        // $bp = Battleplan::where('id', $id)
-        ->with("battlefloors")
-        ->with("battlefloors.floor")
-
-        ->with(['battlefloors.draws' => function ($q) {
-                $q->notDeleted()->with("drawable");
-            }])
-        // ->with("battlefloors.draws.drawable")
-        
-        // ->with("battlefloors.draws")
-        // ->with("battlefloors.draws.drawable")
-
-
-        ->with("slots")
-        ->with("slots.operator")
-        ->first();
-        // dd($bp);
+            ->with("battlefloors")
+            ->with("battlefloors.floor")
+            ->with(['battlefloors.draws' => function ($q) {
+                    $q->notDeleted()->with("drawable");
+                }])
+            ->with("slots")
+            ->with("slots.operator")
+            ->first();
     }
 
 
@@ -80,11 +71,12 @@ class Battleplan extends Model
         }
     }
 
-    public function saveValues($name = "", $notes = "")
+    public function saveValues($name = "", $notes = "", $public = false)
     {
         $this->name = $name;
         $this->saved = true;
         $this->notes = $notes;
+        $this->public = $public;
 
         // save every battlefloor
         foreach ($this->battlefloors as $key => $battlefloor) {
