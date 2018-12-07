@@ -31,15 +31,46 @@
 @endif
 
 <script type="text/javascript">
+
+    // init elements
     $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
         $('#battleplan_load_table').DataTable();
     });
 
-    function setEditingSlot(id) {
-        $("#EditingOperatorSlot").val(id);
+    // Toggle operator modal + copy color
+    function setEditingSlot(id, event, dom) {
+        if( event.which == 2 ) {
+            event.preventDefault();
+            if(dom.src.indexOf("/media/ops/empty.png") == -1){
+                var hex = "#" + fullColorHex(dom.style.borderColor);
+                $("#colorPicker").val(hex);
+                app.engine.changeColor(hex);
+                toast("Operator Color Copied",1000);
+            }
+        } else{
+            $("#EditingOperatorSlot").val(id);
+        }
     }
 
+    // Helper function
+    function fullColorHex(str) {
+        var array = str.replace("rgb(",'').replace(")",'').replace(" ",'').split(",");
+        var red = rgbToHex(array[0]);
+        var green = rgbToHex(array[1]);
+        var blue = rgbToHex(array[2]);
+        return red+green+blue;
+    };
+
+    function rgbToHex(rgb){
+        var hex = Number(rgb).toString(16);
+        if (hex.length < 2) {
+            hex = "0" + hex;
+        }
+        return hex;
+    }
+
+    // Public switch
     var switchStatus = false;
     $("#battleplan_public").on('change', function() {
         if ($(this).is(':checked')) {
@@ -50,6 +81,19 @@
         }
         app.engine.togglePublic(switchStatus);
     });
+
+    // Toast the snackbar
+    function toast(message,time){
+        // Get the snackbar DIV
+        var x = document.getElementById("snackbar");
+        $(x).html(message);
+        // Add the "show" class to DIV
+        x.className = "show";
+
+        // After 3 seconds, remove the show class from DIV
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, time);
+    }
+
 </script>
 @endpush
 
@@ -63,6 +107,7 @@
           onmousedown="app.engine.canvasDown(event)" ondrop="app.engine.canvasDrop(event)" ondragover="app.engine.allowDrop(event)">
         </canvas>
     </div>
+    <div id="snackbar"></div>
 </div>
 
 {{-- Sidebar --}}

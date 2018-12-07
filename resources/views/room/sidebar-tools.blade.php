@@ -1,16 +1,16 @@
 <div class="row margin10">
     <div class="col-6">
-        <button type="button" name="button" class="toolSelector btn btn-info col-12 active" onclick="app.engine.changeTool(app.engine.toolLine,this)"><i class="fas fa-paint-brush"></i></button>
+        <button type="button" name="button" id="pencil" class="toolSelector btn btn-info col-12 active" onclick="app.engine.changeTool(app.engine.toolLine,this)" data-toggle="tooltip" data-placement="top" title="Keybind: q"><i class="fas fa-paint-brush"></i></button>
     </div>
 
     <div class="col-6">
-        <button type="button" name="button" class="toolSelector btn btn-info col-4 col-12" onclick="app.engine.changeTool(app.engine.toolSquare,this)"><i class="fas fa-square"></i></button>
+        <button type="button" name="button" id="square" class="toolSelector btn btn-info col-4 col-12" onclick="app.engine.changeTool(app.engine.toolSquare,this)" data-toggle="tooltip" data-placement="top" title="Keybind: w"><i class="fas fa-square"></i></button>
     </div>
   </div>
 
 <div class="row margin10">
     <div class="col-6">
-        <button type="button" name="button" class="toolSelector btn btn-info col-4 col-12" onclick="app.engine.changeTool(app.engine.toolErase,this)"><i class="fas fa-eraser"></i></button>
+        <button type="button" name="button" id="eraser" class="toolSelector btn btn-info col-4 col-12" onclick="app.engine.changeTool(app.engine.toolErase,this)" data-toggle="tooltip" data-placement="top" title="Keybind: z"><i class="fas fa-eraser"></i></button>
     </div>
 
     <div class="col-6">

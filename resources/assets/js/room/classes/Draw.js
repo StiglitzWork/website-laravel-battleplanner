@@ -19,16 +19,22 @@ class Draw extends Helpers {
 
     init(){
         var type = this.getType(this);
-        // this.draws.push(new this[type](originCoordinates,destinationCoordinates, draw.morph.color, this.id));
-
-        this.checkSides()
-
+        
         this.drawable = Object.assign(new this[type], this.drawable);
+
+        if (this.drawable instanceof this.Square) {
+            this.checkSides()
+        }
+        
         this.drawable.init();
     }
 
     draw(ctx,ui){
-        this.checkSides()
+        
+        if (this.drawable instanceof this.Square) {
+            this.checkSides()
+        }
+
         this.drawable.draw(this,ctx,ui);//.bind(this.drawable);
     }
 
