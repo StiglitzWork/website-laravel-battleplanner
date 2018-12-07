@@ -311,20 +311,19 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h2>Battleplan name</h2>
-                <input class="col-4 form-control inline col-12" id="battleplan_name" value="" type="text">
-                
-                <hr>
-
-                <!-- Rectangular switch -->
-                <h2>Show public?</h2>
-                {{-- <strong>Show public?</strong>( --}}
-                <small>(This will list your battleplan in the battleplans page)</small> <br>
-                <label class="switch">
-                    <input type="checkbox" value="public" id="battleplan_public">
-                    <span class="slider"></span>
-                </label>
-            
+                    <h2>Battleplan name</h2>
+                    <input class="col-4 form-control inline col-12" id="battleplan_name" value="" type="text">
+                    
+                    <hr>
+    
+                    <!-- Rectangular switch -->
+                    <h2>Show public?</h2>
+                    {{-- <strong>Show public?</strong>( --}}
+                    <small>(This will list your battleplan in the battleplans page)</small> <br>
+                    <label class="switch">
+                        <input type="checkbox" value="public" id="battleplan_public">
+                        <span class="slider"></span>
+                    </label>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -11,6 +11,26 @@ use App\Models\Map;
 use Auth;
 class BattleplanController extends Controller
 {
+    public function copy(Request $request){
+        $battleplan = Battleplan::findOrFail($request->battleplanId);
+        if($request->name){
+            return Battleplan::copy($battleplan, Auth::user(), $request->name);
+        }
+        return Battleplan::copy($battleplan, Auth::user(), "");
+    }
+
+    public function vote(Request $request){
+        $value = $request->value;
+        $battleplan = Battleplan::findOrFail($request->battleplanId);
+        $battleplan->vote($value,Auth::user());
+        return $battleplan->voteSum();
+    }
+
+    public function index(Request $request){
+        $battleplans = Battleplan::publics();
+        return view("battleplan.index", compact("battleplans") );
+    }
+
     public function create(Request $request){
       // Declarations
       $floorCollection = [];
@@ -76,5 +96,7 @@ class BattleplanController extends Controller
     private function isOwner($battleplan){
         return $battleplan->Owner == Auth::User();
     }
+
+
 
 }

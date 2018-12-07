@@ -34,4 +34,16 @@ class OperatorSlot extends Model
        }
        $this->save();
    }
+
+   public function copy($slot){
+      $fields = $slot->toArray();
+
+      unset($fields["id"]);
+      unset($fields["battleplan_id"]);
+      
+      // replicate slot
+      $this->fill($fields);
+      $this->save();
+
+    }
 }

@@ -4,7 +4,8 @@ namespace App\Models;
 
 use App\Models\OperatorSlot;
 use App\Models\Map;
-
+use App\Models\Vote;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Battleplan extends Model
@@ -42,6 +43,54 @@ class Battleplan extends Model
         return $this->hasMany('App\Models\OperatorSlot', 'battleplan_id');
     }
 
+    public function votes()
+    {
+        return $this->hasMany('App\Models\Vote');
+    }
+
+    /*****
+     public methods
+    *****/
+    public function vote($value, $user){
+
+        $voteFound = Vote::search($user,$this);
+
+        // Cannot divide by 0
+        if($value == "0"){
+            return false;
+        }
+
+        if( $voteFound){
+            $voteFound->value = $value / abs($value);
+            $voteFound->save();
+        } else {
+            Vote::create([
+                "user_id" => $user->id,
+                "battleplan_id" => $this->id,
+                "value" => $value
+            ]);
+        }
+    }
+
+    public function voteSum(){
+        $sum = 0;
+        foreach ($this->votes as $key => $vote) {
+            $sum += $vote->value;
+        }
+        return $sum;
+    }
+
+    public function voted($value){
+        return Vote::search(Auth::user(), $this) && Vote::search(Auth::user(), $this)->value == $value;
+    }
+
+    /*****
+     search
+    *****/
+    public static function publics(){
+        return Battleplan::where("public" , true)
+            ->where("saved", true)->get();
+    }
 
     /*****
     Static methods
@@ -59,6 +108,30 @@ class Battleplan extends Model
             ->first();
     }
 
+    public static function copy($battleplan, $user, $name){
+        // replicate battleplan
+        $newBattleplan = Battleplan::create([
+            'map_id' => $battleplan->map->id,
+            'owner' => $user->id,
+            'name' => $name,
+            'description' => $battleplan->description,
+            'notes' => $battleplan->notes,
+            'saved' => "1"
+        ]);
+        
+        // replicate floors
+        foreach ($newBattleplan->battlefloors as $key => $newFloor) {
+            $oldFloor = $battleplan->battlefloors[$key];
+            $newFloor->copy($oldFloor);
+        }
+
+        // replicate Slots
+        foreach ($newBattleplan->slots as $key => $newSlot) {
+            $oldSlot = $battleplan->slots[$key];
+            $newSlot->copy($oldSlot);
+        }
+
+    }
 
     /*****
     Public methods

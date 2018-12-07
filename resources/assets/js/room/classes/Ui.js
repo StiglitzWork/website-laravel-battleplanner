@@ -70,7 +70,9 @@ class Ui {
         $("#battleplan_name").val(this.app.battleplan.name);
         $("#battleplan_name_display").val(this.app.battleplan.name);
 
-        if(this.app.battleplan.public == 1 ){
+        if(this.app.battleplan.public == 1 && !$("#battleplan_public").is(':checked')){
+            $("#battleplan_public").click();
+        } else if(this.app.battleplan.public == 0 && $("#battleplan_public").is(':checked')){
             $("#battleplan_public").click();
         }
 
