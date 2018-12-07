@@ -319,7 +319,7 @@
                     <!-- Rectangular switch -->
                     <h2>Show public?</h2>
                     {{-- <strong>Show public?</strong>( --}}
-                    <small>(This will list your battleplan in the battleplans page)</small> <br>
+                    <small>(This will list your battleplan in the "Public Plans" page)</small> <br>
                     <label class="switch">
                         <input type="checkbox" value="public" id="battleplan_public">
                         <span class="slider"></span>
