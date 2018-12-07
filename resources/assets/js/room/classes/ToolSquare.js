@@ -18,6 +18,7 @@ class ToolSquare extends Tool {
     }
 
     draw(ctx, ui) {
+        
         if (this.creating) {
             this.creating.draw(ctx, ui);
         }

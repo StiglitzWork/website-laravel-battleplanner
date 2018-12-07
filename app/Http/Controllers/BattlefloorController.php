@@ -14,6 +14,7 @@ use Auth;
 
 class BattlefloorController extends Controller
 {
+    
     public function draw(Request $request)
     {
         // Declarations

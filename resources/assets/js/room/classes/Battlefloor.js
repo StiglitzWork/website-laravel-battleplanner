@@ -18,6 +18,7 @@ class Battlefloor extends Helpers {
         this.draws_deleted = [];
         this.draws_transit = [];
         this.transit_deleted = [];
+        this.drawStack = [];
     }
 
 	init(){

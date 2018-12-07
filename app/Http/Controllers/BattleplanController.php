@@ -11,6 +11,12 @@ use App\Models\Map;
 use Auth;
 class BattleplanController extends Controller
 {
+    // Tells laravel you must be logged in to see any of these routes
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => ["copy", "vote", "delete", "update", "create", "delete"]]);
+    }
+
     public function copy(Request $request){
         $battleplan = Battleplan::findOrFail($request->battleplanId);
         if($request->name){

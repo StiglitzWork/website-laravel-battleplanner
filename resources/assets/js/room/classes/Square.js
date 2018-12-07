@@ -14,7 +14,7 @@ class Square extends Draw {
     }
 
     init() {
-
+        
     }
 
     draw(draw, ctx, ui) {
@@ -40,7 +40,6 @@ class Square extends Draw {
     /**************************
         Helper functions
     **************************/
-
 }
 export {
     Square as
