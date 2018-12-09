@@ -3,12 +3,14 @@
 @push('css')
 <link rel="stylesheet" href="{{r_asset("css/room/show.css")}}">
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
 @endpush
 
 @push ('js')
 {{-- requisits --}}
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js" charset="utf-8"></script>
+
 
 {{-- init --}}
 <script type="text/javascript">
@@ -27,15 +29,71 @@
     $("#mapModal").modal("show")
 </script>
 @endif
+
 <script type="text/javascript">
+
+    // init elements
     $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
         $('#battleplan_load_table').DataTable();
     });
 
-    function setEditingSlot(id) {
-        $("#EditingOperatorSlot").val(id);
+    // Toggle operator modal + copy color
+    function setEditingSlot(id, event, dom) {
+        if( event.which == 2 ) {
+            event.preventDefault();
+            if(dom.src.indexOf("/media/ops/empty.png") == -1){
+                var hex = "#" + fullColorHex(dom.style.borderColor);
+                $("#colorPicker").val(hex);
+                app.engine.changeColor(hex);
+                toast("Operator Color Copied",1000);
+            }
+        } else{
+            $("#EditingOperatorSlot").val(id);
+        }
     }
+
+    // Helper function
+    function fullColorHex(str) {
+        var array = str.replace("rgb(",'').replace(")",'').replace(" ",'').split(",");
+        var red = rgbToHex(array[0]);
+        var green = rgbToHex(array[1]);
+        var blue = rgbToHex(array[2]);
+        return red+green+blue;
+    };
+
+    function rgbToHex(rgb){
+        var hex = Number(rgb).toString(16);
+        if (hex.length < 2) {
+            hex = "0" + hex;
+        }
+        return hex;
+    }
+
+    // Public switch
+    var switchStatus = false;
+    $("#battleplan_public").on('change', function() {
+        if ($(this).is(':checked')) {
+            switchStatus = $(this).is(':checked');
+        }
+        else {
+            switchStatus = $(this).is(':checked');
+        }
+        app.engine.togglePublic(switchStatus);
+    });
+
+    // Toast the snackbar
+    function toast(message,time){
+        // Get the snackbar DIV
+        var x = document.getElementById("snackbar");
+        $(x).html(message);
+        // Add the "show" class to DIV
+        x.className = "show";
+
+        // After 3 seconds, remove the show class from DIV
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, time);
+    }
+
 </script>
 @endpush
 
@@ -49,6 +107,7 @@
           onmousedown="app.engine.canvasDown(event)" ondrop="app.engine.canvasDrop(event)" ondragover="app.engine.allowDrop(event)">
         </canvas>
     </div>
+    <div id="snackbar"></div>
 </div>
 
 {{-- Sidebar --}}
@@ -150,6 +209,9 @@
 @endsection
 
 @push('modals')
+
+{{-- only load this modal if room owner --}}
+@if (Auth::User()->id == $room->Owner->id)
 <div class="modal" id="mapModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -190,10 +252,10 @@
         </div>
     </div>
 </div>
+@endif
 
 
 <!-- OPERATOR MODAL -->
-
 <div class="modal" id="opModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -233,7 +295,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Help MODAL -->
 <div class="modal" id="helpModal" tabindex="-1" role="dialog">
@@ -280,6 +341,38 @@
             <div class="modal-footer">
                 {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="save" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Save</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <h2>Battleplan name</h2>
+                    <input class="col-4 form-control inline col-12" id="battleplan_name" value="" type="text">
+                    
+                    <hr>
+    
+                    <!-- Rectangular switch -->
+                    <h2>Show public?</h2>
+                    {{-- <strong>Show public?</strong>( --}}
+                    <small>(This will list your battleplan in the "Public Plans" page)</small> <br>
+                    <label class="switch">
+                        <input type="checkbox" value="public" id="battleplan_public">
+                        <span class="slider"></span>
+                    </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" name="button" class="btn btn-success" onclick="app.engine.save()">Save</button>
             </div>
         </div>
     </div>

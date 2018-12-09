@@ -10,7 +10,7 @@ class Draw extends Model
         "battlefloor_id", "originX",
         "originY", "destinationX",
         "destinationY", "user_id", "saved",
-        "drawable_id", "drawable_type"
+        "drawable_id", "drawable_type", "deleted"
     ];
 
     /*****
@@ -27,6 +27,20 @@ class Draw extends Model
     }
 
     /**
+     * public Methods
+     */
+    
+     public function restore(){
+        $this->deleted = false;
+        $this->save();
+     }
+
+     public function setDeleted(){
+        $this->deleted = true;
+        $this->save();
+     }
+
+    /**
      * Morph Productable
      *
      * @var array
@@ -36,10 +50,12 @@ class Draw extends Model
         return $this->morphTo();
     }
 
-    public function withMorph(){
-        $morph = $this->drawable()->first();
-        $this["drawable"] = $morph;
-        return $this;
+    /**
+     * Scopes
+     */
+    public function scopeNotDeleted($query)
+    {
+        return $query->where('deleted', '=', false);
     }
 
 }

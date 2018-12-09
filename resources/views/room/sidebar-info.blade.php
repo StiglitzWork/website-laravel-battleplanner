@@ -20,10 +20,6 @@
         <label class="inline connection" for="connection">Name :</label>
     </div>
     <div class="col-8">
-      @if ($room->Owner == Auth::User())
-          <input class="col-4 form-control inline col-12" id="battleplan_name" value="" type="text">
-      @else
-          <input class="col-4 form-control inline col-12" id="battleplan_name" value="" type="text" disabled>
-      @endif
+          <input class="col-4 form-control inline col-12" id="battleplan_name_display" value="" type="text" disabled>
     </div>
 </div>

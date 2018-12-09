@@ -14,6 +14,7 @@ use Auth;
 
 class BattlefloorController extends Controller
 {
+    
     public function draw(Request $request)
     {
         // Declarations
@@ -50,7 +51,9 @@ class BattlefloorController extends Controller
             ]);
 
             // Add to the response object
-            $draws[] = $draw->withMorph();
+            $builtDraw = $draw;
+            $builtDraw["drawable"] = $draw->drawable()->first();
+            $draws[] = $builtDraw;
         }
         
         // Fire event on listeners for socket.io
@@ -99,13 +102,17 @@ class BattlefloorController extends Controller
                 // Make draw morph relationship
                 $foundDraw = Draw::find($draw["id"]);
                 if ($foundDraw) {
-                    $subObject = $foundDraw->drawable();
                     
-                    // Add to the response object
-                    $deletedDraws[] = $foundDraw->withMorph();
+                    // Delete object
+                    $foundDraw->setDeleted();
 
-                    $subObject->delete();
-                    $foundDraw->delete();
+                    // build draw for response
+                    $builtDraw = $foundDraw;
+                    $builtDraw["drawable"] = $foundDraw->drawable()->first();
+
+                    // Add to list
+                    $deletedDraws[] = $builtDraw;
+
                 }
             }
         }

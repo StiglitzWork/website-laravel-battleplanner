@@ -65,3 +65,7 @@ mix.js('resources/assets/js/room/join.js', 'public/js/room/join.js')
     .js('resources/assets/js/room/sidebar.js', 'public/js/room/sidebar.js')
     .js('resources/assets/js/room/show.js', 'public/js/room/show.bundle.js')
     .copy('resources/assets/sass/room/*', 'public/css/room');
+
+// Battleplan
+mix.copy('resources/assets/js/battleplan', 'public/js/battleplan')
+    .copy('resources/assets/sass/battleplan/*', 'public/css/battleplan');
