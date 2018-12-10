@@ -17,6 +17,23 @@ class BattleplanController extends Controller
         $this->middleware('auth', ['only' => ["copy", "vote", "delete", "update", "create", "delete"]]);
     }
 
+    
+    public function show(Request $request, Battleplan $battleplan){
+        if ($battleplan->public) {
+            return view("battleplan.show", compact("battleplan"));
+        }
+
+        if (Auth::user() && Auth::user()->id == $battleplan->owner) {
+            return view("battleplan.show", compact("battleplan"));
+        }
+
+        if(Auth::user() && Auth::user()->isAdmin){
+            return view("battleplan.show", compact("battleplan"));
+        }
+
+        abort("404");
+    }
+
     public function copy(Request $request){
         $battleplan = Battleplan::findOrFail($request->battleplanId);
         if($request->name){
@@ -97,6 +114,10 @@ class BattleplanController extends Controller
           "success" => true,
           "message" => "Successfully deleted!"
       ]);
+    }
+
+    public function getBattleplan(Request $request, Battleplan $battleplan){
+        return response()->json(Battleplan::json($battleplan->id));
     }
 
     private function isOwner($battleplan){

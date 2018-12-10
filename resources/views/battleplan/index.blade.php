@@ -53,6 +53,7 @@
                     <td id="vote-value-{{$battleplan->id}}">{{$battleplan->voteSum()}}</td>
                     
                      <td>
+                            @if(Auth::user())
 
                       @if ($battleplan->voted(1))
                         <i class="fas fa-arrow-circle-up cursor-click vote-green" id="vote-up-{{$battleplan->id}}" onclick="vote(1,{{$battleplan->id}}, this)" data-toggle="tooltip" data-placement="top" title="Up Vote"></i>
@@ -72,6 +73,11 @@
                       
                       <i class="fas fa-clone cursor-click" id="copy-{{$battleplan->id}}" data-toggle="tooltip" data-placement="top" title="Copy to my account" onclick="copyModal({{$battleplan->id}})"></i>
                       
+                      |
+
+                      @endif
+                     <a href="/battleplan/{{$battleplan->id}}">Details</a>
+                     
                     </td>
 
                     <td>{{$battleplan->id}}</td>

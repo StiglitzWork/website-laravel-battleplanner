@@ -9,14 +9,15 @@
   <div class="collapse navbar-collapse" id="navbarText">
 
     <ul class="navbar-nav mr-auto">
+      
+        <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/battleplan">Public Plans</a>
+          </li>
       @auth
         <li class="nav-item">
           <a class="nav-link js-scroll-trigger" href="/room">Rooms</a>
         </li>
         
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="/battleplan">Public Plans</a>
-        </li>
         
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

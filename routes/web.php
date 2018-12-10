@@ -32,8 +32,10 @@ Route::prefix('/battleplan')->group(function () {
     Route::post('save', 'BattleplanController@update')->name("Battleplan.update");
     Route::post('delete', 'BattleplanController@delete')->name("Battleplan.delete");
     Route::get('/', 'BattleplanController@index')->name("Battleplan.index");
+    Route::get('/{battleplan}', 'BattleplanController@show')->name("Battleplan.show");
     Route::post('vote', 'BattleplanController@vote')->name("Battleplan.vote");
     Route::post('copy', 'BattleplanController@copy')->name("Battleplan.copy");
+    Route::get('{battleplan}/getBattleplan', 'BattleplanController@getBattleplan')->name("Battleplan.getBattleplan");
 });
 
 Route::prefix('/operatorSlot')->group(function () {
