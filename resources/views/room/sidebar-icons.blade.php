@@ -1,7 +1,4 @@
-{{-- @foreach ($gadgets as $key => $gadget)
-    <img src="{{$gadget->icon}}" draggable="true" ondragstart="app.engine.drag(event)"  alt="" height="50px" width="50px">
-@endforeach --}}
-<input type="text" id="myInput" class="col-12" onkeyup="search()" placeholder="Search by names..">
+<input type="text" id="iconInput" class="col-12" onkeyup="search('iconInput', 'iconList')" placeholder="Search by names..">
 
 <ul id="iconList">
     @foreach ($gadgets as $key => $gadget)
@@ -16,12 +13,12 @@
 
 @push('js')
   <script>
-    function search() {
+    function search(inputBar, listToSearch) {
         // Declare variables
         var input, filter, ul, li, a, i;
-        input = document.getElementById('myInput');
+        input = document.getElementById(inputBar);
         filter = input.value.toUpperCase();
-        ul = document.getElementById("iconList");
+        ul = document.getElementById(listToSearch);
         li = ul.getElementsByTagName('li');
 
         // Loop through all list items, and hide those who don't match the search query
