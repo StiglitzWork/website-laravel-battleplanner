@@ -178,7 +178,7 @@
 
             <div class="row no-margin">
                 {{-- Operator Icons --}}
-                <li data-toggle="collapse" data-target="#operatorIcons" class="active col-6 collapsed" aria-expanded="false">
+                <li data-toggle="collapse" data-target="#operatorIcons" class="active col-12 text-center collapsed" aria-expanded="false">
                     <a href="#"><i class="far fa-user"></i> Operator Icons</a>
                 </li>
 
