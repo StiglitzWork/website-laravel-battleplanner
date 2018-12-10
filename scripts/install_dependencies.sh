@@ -19,8 +19,8 @@ today=`date '+%Y_%m_%d__%H_%M_%S'`;
 mysqldump --databases $DB_DATABASE > /var/www/html/$DEPLOYMENT_GROUP_NAME/database/$today.db
 
 #migrate new
-sudo php artisan migrate:fresh --seed
-sudo php artisan key:generate
+sudo php artisan migrate
+# sudo php artisan key:generate
 #sudo npm install --unsafe-perm
 
 #give permission to the public directory
