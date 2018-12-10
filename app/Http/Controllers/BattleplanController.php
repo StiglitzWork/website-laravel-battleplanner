@@ -19,6 +19,7 @@ class BattleplanController extends Controller
 
     
     public function show(Request $request, Battleplan $battleplan){
+        // dd( Auth::user()->isAdmin());
         if ($battleplan->public) {
             return view("battleplan.show", compact("battleplan"));
         }
@@ -27,9 +28,11 @@ class BattleplanController extends Controller
             return view("battleplan.show", compact("battleplan"));
         }
 
-        if(Auth::user() && Auth::user()->isAdmin){
+        if(Auth::user() && Auth::user()->isAdmin()){
             return view("battleplan.show", compact("battleplan"));
         }
+
+        // return view("battleplan.show", compact("battleplan"));
 
         abort("404");
     }

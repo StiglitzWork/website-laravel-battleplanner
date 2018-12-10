@@ -37,4 +37,7 @@ class User extends Authenticatable
     public function room() {
       return $this->hasMany('App\Models\Room', 'owner');
     }
+    public function isAdmin(){
+      return $this->id == 1;
+    }
 }
