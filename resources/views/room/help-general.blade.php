@@ -1,9 +1,9 @@
-<h1 class="text-center">Hey there!</h1>
+<h1 class="text-center">Welcome to the Battleplanner!</h1>
 <h3>
   For starters...
 </h3>
 <p>
-   I'm glad you decided to try the app!
+   Thank you for trying this app!
 </p>
 <p>
    You can load and save maps as you see fit. Everything is dynamically updated for everyone in the room instantly. Anyone connected to the room will see what the room owner sets as the current map.

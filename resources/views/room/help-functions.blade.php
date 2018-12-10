@@ -35,6 +35,13 @@
 </p>
 
 <h3>
+  Smart Operator Colour Selection
+</h3>
+<p>
+  Middle mouse-clicking on a selected operator icon automatically selects that operator's colour for your pencil tool!
+</p>
+
+<h3>
   Naming the map, where is it!?
 </h3>
 <p>

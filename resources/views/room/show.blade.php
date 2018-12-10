@@ -319,7 +319,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#help_features" role="tab" aria-controls="def" aria-selected="false">Features</a>
+                        <a class="nav-link" id="def-tab" data-toggle="tab" href="#help_about" role="tab" aria-controls="def" aria-selected="false">About Us</a>
                     </li>
                 </ul>
 
@@ -332,8 +332,8 @@
                         @include('room.help-functions')
                     </div>
 
-                    <div class="tab-pane fade" id="help_features" role="tabpanel" aria-labelledby="profile-tab">
-                        @include('room.help-features')
+                    <div class="tab-pane fade" id="help_about" role="tabpanel" aria-labelledby="profile-tab">
+                        @include('room.help-about')
                     </div>
                 </div>
             </div>
@@ -358,9 +358,9 @@
             <div class="modal-body">
                     <h2>Battleplan name</h2>
                     <input class="col-4 form-control inline col-12" id="battleplan_name" value="" type="text">
-                    
+
                     <hr>
-    
+
                     <!-- Rectangular switch -->
                     <h2>Show public?</h2>
                     {{-- <strong>Show public?</strong>( --}}
