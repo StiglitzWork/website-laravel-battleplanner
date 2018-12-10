@@ -128,11 +128,11 @@
                 {{-- Help --}}
                 <li data-toggle="collapse" class="collapsed active col-6">
                     <div style="height:100%;width:100%;" data-toggle="modal" data-target="#helpModal">
-                        <a href="#"><i class="fas fa-list"></i> Help</a>
+                        <a href="#"><i class="fas fa-question"></i> Help</a>
                     </div>
                 </li>
 
-                <ul class="sub-menu collapse" id="info" style="">
+                <ul class="sub-menu collapse" id="info">
                   @include('room.sidebar-info')
                 </ul>
             </div>
@@ -148,10 +148,10 @@
                     <a href="#"> <i class="fas fa-sliders-h"></i> Controls</a>
                 </li>
 
-                <ul class="sub-menu collapse" id="notes" style="">
+                <ul class="sub-menu collapse" id="notes">
                     @include('room.sidebar-notes')
                 </ul>
-                <ul class="sub-menu collapse" id="controls" style="">
+                <ul class="sub-menu collapse" id="controls">
                     @include('room.sidebar-controls')
                 </ul>
             </div>
@@ -164,15 +164,26 @@
 
                 {{-- Icons --}}
                 <li data-toggle="collapse" data-target="#icons" class="active col-6 collapsed" aria-expanded="false">
-                    <a href="#"><i class="fas fa-image"></i> Icons</a>
+                    <a href="#"><i class="far fa-image"></i> Icons</a>
                 </li>
 
-                <ul class="sub-menu collapse" id="tools" style="">
+                <ul class="sub-menu collapse" id="tools">
                     @include('room.sidebar-tools')
                 </ul>
 
-                <ul class="sub-menu col-12 collapse" id="icons" style="">
+                <ul class="sub-menu col-12 collapse" id="icons">
                     @include('room.sidebar-icons')
+                </ul>
+            </div>
+
+            <div class="row no-margin">
+                {{-- Operator Icons --}}
+                <li data-toggle="collapse" data-target="#operatorIcons" class="active col-6 collapsed" aria-expanded="false">
+                    <a href="#"><i class="far fa-user"></i> Operator Icons</a>
+                </li>
+
+                <ul class="sub-menu col-12 collapse" id="operatorIcons">
+                    @include('room.sidebar-op-icons')
                 </ul>
             </div>
 
