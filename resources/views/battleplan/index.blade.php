@@ -25,10 +25,10 @@
 @endpush
 
 @section('content')
-  
+
   <div class="row">
     <div class="col-12 text-center">
-      <h1>Battleplans</h1>
+      <h1>Public Battleplans</h1>
     </div>
   </div>
 
@@ -38,8 +38,8 @@
         <table id="battleplan_load_table" class="datatable" style="width:100%">
             <thead>
                 <tr>
-                    <th>Votes</th>
-                    <th>functions</th>
+                    <th>Total Votes</th>
+                    <th>Functions</th>
                     <th>ID</th>
                     <th>Map</th>
                     <th>Name</th>
@@ -49,9 +49,9 @@
             <tbody>
                 @foreach($battleplans as $battleplan)
                 <tr>
-                  
+
                     <td id="vote-value-{{$battleplan->id}}">{{$battleplan->voteSum()}}</td>
-                    
+
                      <td>
                             @if(Auth::user())
 
@@ -70,14 +70,14 @@
                       @endif
 
                       |
-                      
+
                       <i class="fas fa-clone cursor-click" id="copy-{{$battleplan->id}}" data-toggle="tooltip" data-placement="top" title="Copy to my account" onclick="copyModal({{$battleplan->id}})"></i>
-                      
+
                       |
 
                       @endif
-                     <a href="/battleplan/{{$battleplan->id}}">Details</a>
-                     
+                     <a href="/battleplan/{{$battleplan->id}}">View Plan</a>
+
                     </td>
 
                     <td>{{$battleplan->id}}</td>
@@ -107,7 +107,7 @@
                 <input type="hidden" id="copy-id">
                 <h2>Save battleplan as</h2>
                 <input class="col-4 form-control inline col-12" id="battleplan_name" value="" type="text">
-              
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
