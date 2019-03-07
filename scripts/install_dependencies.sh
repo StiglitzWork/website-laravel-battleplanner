@@ -10,16 +10,16 @@ cd /var/www/html/$DEPLOYMENT_GROUP_NAME
 # sudo cp .env.example .env
 
 #Read .env File, we need database name
-# set -a
-# 	. /var/www/html/$DEPLOYMENT_GROUP_NAME/.env
-# set +a
+set -a
+	. /var/www/html/$DEPLOYMENT_GROUP_NAME/.env
+set +a
 
 #Save DB incase it already exists with date
-# today=`date '+%Y_%m_%d__%H_%M_%S'`;
-# mysqldump --databases $DB_DATABASE > /var/www/html/$DEPLOYMENT_GROUP_NAME/database/$today.db
+today=`date '+%Y_%m_%d__%H_%M_%S'`;
+mysqldump --databases $DB_DATABASE > /var/www/html/$DEPLOYMENT_GROUP_NAME/database/$today.db
 
 #migrate new
-# sudo php artisan migrate
+sudo php artisan migrate
 # sudo php artisan key:generate
 #sudo npm install --unsafe-perm
 
