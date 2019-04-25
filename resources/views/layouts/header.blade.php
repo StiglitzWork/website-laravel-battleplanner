@@ -38,6 +38,13 @@
           <a class="nav-link js-scroll-trigger" href="/register">Register</a>
         </li>
       @endguest
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="https://tavernsidepodcast.com">
+          <!-- <i class="fas fa-certificate new-tag"></i> -->
+          <div class="new-tag">new</div>
+          Podcast
+        </a>
+      </li>
     </ul>
 
   </div>
