@@ -3,8 +3,8 @@ os: linux
 files:
   - source: /
     destination: /var/www/html/r6-maps-group
-hooks:
-  AfterInstall:
-    - location: scripts/install_dependencies.sh
-      timeout: 1000
-      runas: root
+#hooks:
+#  AfterInstall:
+#    - location: scripts/install_dependencies.sh
+#      timeout: 1000
+#      runas: root
