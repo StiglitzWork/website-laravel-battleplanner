@@ -21,7 +21,6 @@ Route::get('/test', function(){
 Route::prefix('/room')->group(function () {
     Route::get('/', 'RoomController@index')->name("Room.index");
     Route::get('/create', 'RoomController@create')->name("Room.create");
-    Route::get('/join', 'RoomController@join')->name("Room.join");
     Route::get('/{conn_string}', 'RoomController@show')->name("Room.show");
     Route::post('/setBattleplan', 'RoomController@setBattleplan')->name("Room.setBattleplan");
     Route::get('/{conn_string}/getBattleplan', 'RoomController@getBattleplan')->name("Room.getBattleplan");

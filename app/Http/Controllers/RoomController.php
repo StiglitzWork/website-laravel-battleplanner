@@ -24,10 +24,6 @@ class RoomController extends Controller
     return view("room.index");
   }
 
-  public function join(Request $request){
-    return view("room.join");
-  }
-
   public function create(Request $request){
 
     // Create the room
@@ -100,7 +96,7 @@ class RoomController extends Controller
 
     // Error handle room DNE
     if($room == null){
-      return redirect()->route('Room.join')->with("error", ["error" => "Room not found!"]);
+      return redirect()->route('Room.index')->with("error", ["error" => "Room not found!"]);
     } else{
       return view("room.show", compact("maps", "room", 'battleplans', 'atk_operators', 'def_operators', 'all_operators', 'listenSocket','gadgets'));
     }
