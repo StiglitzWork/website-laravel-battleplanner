@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GadgetSeeder::class);
         $this->call(OperatorSeeder::class);
         $this->call(WBSeeder::class);
+        $this->call(BHSeeder::class);
     }
 }
