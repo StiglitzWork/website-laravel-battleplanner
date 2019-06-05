@@ -46,6 +46,7 @@ class Draw extends Helpers {
         return exploded[exploded.length -1];
     }
 
+    // Top left needs to be origin
     checkSides(){
         var tmp;
 
