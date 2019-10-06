@@ -40,6 +40,7 @@
       <button>Register</button>
       <p class="message">Already registered? <a href="/login">Sign In</a></p>
     </form>
+    <p class="message">Forgot password? <a href="/password/reset">reset password</a></p>
 
   </div>
 
