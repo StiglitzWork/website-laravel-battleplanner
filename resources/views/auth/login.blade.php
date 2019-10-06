@@ -28,6 +28,7 @@
 
     <button>login</button>
     <p class="message">Not registered? <a href="/register">Create an account</a></p>
+    <p class="message">Forgot password? <a href="/password/reset">reset password</a></p>
   </form>
 
 </div>
