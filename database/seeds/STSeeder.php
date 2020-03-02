@@ -15,8 +15,8 @@ class STSeeder extends Seeder
     public function run()
     {
       $opArray = [
-        /*Wamai*/['name'=> "Wamai", 'icon'=> "/media/ops/Wamai.png", 'colour'=> "69192199", 'atk'=> false],
-        /*Kali*/['name'=> "Kali", 'icon'=> "/media/ops/Kali.png", 'colour'=> "69192199", 'atk'=> true]
+        /*Wamai*/['name'=> "Wamai", 'icon'=> "/media/ops/Wamai.png", 'colour'=> "29c0cd", 'atk'=> false],
+        /*Kali*/['name'=> "Kali", 'icon'=> "/media/ops/Kali.png", 'colour'=> "29c0cd", 'atk'=> true]
       ];
 
       Operator::insert($opArray);
