@@ -35,6 +35,7 @@ class OperatorSeeder extends Seeder
           /*Bandit*/['name'=> "Bandit", 'icon'=> "/media/ops/Bandit.png", 'colour'=> "f8c334", 'atk'=> false],
           /*Tachanka*/['name'=> "Tachanka", 'icon'=> "/media/ops/Tachanka.png", 'colour'=> "ab1513", 'atk'=> false],
           /*Kapkan*/['name'=> "Kapkan", 'icon'=> "/media/ops/Kapkan.png", 'colour'=> "ab1513", 'atk'=> false],
+          /*Oryx*/['name'=> "Oryx", 'icon'=> "/media/ops/Oryx.png", 'colour'=> "7e587e", 'atk'=> false],
 
           /* ATTACKERS */
           /*Maverick*/['name'=> "Maverick", 'icon'=> "/media/ops/Maverick.png", 'colour'=> "718190", 'atk'=> true],
@@ -58,6 +59,7 @@ class OperatorSeeder extends Seeder
           /*IQ*/['name'=> "IQ", 'icon'=> "/media/ops/Iq.png", 'colour'=> "f8c334", 'atk'=> true],
           /*Fuze*/['name'=> "Fuze", 'icon'=> "/media/ops/Fuze.png", 'colour'=> "ab1513", 'atk'=> true],
           /*Glaz*/['name'=> "Glaz", 'icon'=> "/media/ops/Glaz.png", 'colour'=> "ab1513", 'atk'=> true],
+          /*Iana*/['name'=> "Iana", 'icon'=> "/media/ops/Iana.png", 'colour'=> "98719b", 'atk'=> true],
         ];
         Operator::insert($operatorArray);
     }
