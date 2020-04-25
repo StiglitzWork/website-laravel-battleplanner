@@ -60,6 +60,8 @@ class FloorSeeder extends Seeder
         /*Oregon First*/ ['name'=> "first", 'src'=> "/media/maps/Clean/Oregon/First.jpg", 'floorNum'=>1, 'map_id'=>Map::byName("oregon")->id],
         /*Oregon Second*/ ['name'=> "second", 'src'=> "/media/maps/Clean/Oregon/Second.jpg", 'floorNum'=>2, 'map_id'=>Map::byName("oregon")->id],
         /*Oregon Tower*/ ['name'=> "tower", 'src'=> "/media/maps/Clean/Oregon/Tower.jpg", 'floorNum'=>3, 'map_id'=>Map::byName("oregon")->id],
+        /*Oregon Roof*/ ['name'=> "roof", 'src'=> "/media/maps/Clean/Oregon/Roof.jpg", 'floorNum'=>4, 'map_id'=>Map::byName("oregon")->id],
+
 
         /*------------------SKYSCRAPER--------------------------------*/
         /*Skyscraper First*/ ['name'=> "first", 'src'=> "/media/maps/Clean/Skyscraper/First.jpg", 'floorNum'=>0, 'map_id'=>Map::byName("skyscraper")->id],
